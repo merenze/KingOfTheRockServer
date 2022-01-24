@@ -1,4 +1,4 @@
-# <project-title>
+# Project Title
 
 
 ## Description
@@ -6,9 +6,7 @@
 
 
 ### Dependencies
-
-
-### Development Dependencies 
+ 
 
 
 ## Installation  
