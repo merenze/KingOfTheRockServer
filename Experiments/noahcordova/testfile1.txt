@@ -1,2 +1,0 @@
-Simple Text File 1
-Purpose: Testing to see if you can only push when something is different about files, not directories; ie can I push to the git repository if I only created a folder
