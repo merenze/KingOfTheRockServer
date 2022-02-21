@@ -23,7 +23,7 @@ public class StringRequestActivity extends Activity {
 
     private String TAG = StringRequestActivity.class.getSimpleName();
     private Button btnStringReq;
-    //private TextView msgResponse;
+    private TextView msgResponse;
     private ProgressDialog pDialog;
     private String tag_string_req = "string_req";
 
@@ -33,7 +33,7 @@ public class StringRequestActivity extends Activity {
         setContentView(R.layout.activity_string_request);
 
         btnStringReq = (Button) findViewById(R.id.activity_string_request_button);
-        //msgResponse = (TextView) findViewById(R.id.string_request_text);
+        msgResponse = (TextView) findViewById(R.id.activity_string_request_textview_response);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
@@ -57,7 +57,7 @@ public class StringRequestActivity extends Activity {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, response.toString());
-                //msgResponse.setText(response.toString());
+                msgResponse.setText(response.toString());
                 //hideProgressDialog
                 if (pDialog.isShowing())
                     pDialog.hide();

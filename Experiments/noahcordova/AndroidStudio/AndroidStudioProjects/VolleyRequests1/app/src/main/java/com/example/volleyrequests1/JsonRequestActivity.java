@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request.Method;
@@ -30,7 +31,7 @@ import org.json.JSONObject;
 public class JsonRequestActivity extends Activity implements OnClickListener {
     private String TAG = JsonRequestActivity.class.getSimpleName();
     private Button btnJsonObj, btnJsonArray;
-    //private TextView msgResponse;
+    private TextView msgResponse;
     private ProgressDialog pDialog;
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
 
@@ -41,7 +42,7 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
 
         btnJsonObj = (Button) findViewById(R.id.activity_json_request_object_request_button);
         btnJsonArray = (Button) findViewById(R.id.activity_json_request_array_request_button);
-        //msgResponse = (TextView) findViewById(R.id.json_response_text);
+        msgResponse = (TextView) findViewById(R.id.activity_json_request_textview_response);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
@@ -76,7 +77,7 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
-                        //msgResponse.setText(response.toString());
+                        msgResponse.setText(response.toString());
                         //hideProgressDialog();
                         if (pDialog.isShowing())
                             pDialog.hide();
@@ -126,7 +127,7 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, response.toString());
-                        //msgResponse.setText(response.toString());
+                        msgResponse.setText(response.toString());
                         //hideProgressDialog();
                         if (pDialog.isShowing())
                             pDialog.hide();

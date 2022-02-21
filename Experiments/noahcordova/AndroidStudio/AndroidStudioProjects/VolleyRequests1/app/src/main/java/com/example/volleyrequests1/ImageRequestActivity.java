@@ -1,7 +1,5 @@
 package com.example.volleyrequests1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,8 +25,8 @@ public class ImageRequestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_request);
         btnImageReq = (Button) findViewById(R.id.activity_image_request_button);
-        imgNetWorkView = (NetworkImageView) findViewById(R.id.image_network_image);
-        imageView = (ImageView) findViewById(R.id.image_image_view);
+        imgNetWorkView = (NetworkImageView) findViewById(R.id.activity_image_request_network_image);
+        imageView = (ImageView) findViewById(R.id.activity_image_request_image_view);
         btnImageReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
