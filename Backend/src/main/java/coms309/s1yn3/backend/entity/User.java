@@ -71,4 +71,16 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public void patch(User user) {
+		if (user.email != null) {
+			this.email = user.email;
+		}
+		if (user.username != null) {
+			this.username = user.username;
+		}
+		if (user.password != null) {
+			this.password = user.password;
+		}
+	}
 }
