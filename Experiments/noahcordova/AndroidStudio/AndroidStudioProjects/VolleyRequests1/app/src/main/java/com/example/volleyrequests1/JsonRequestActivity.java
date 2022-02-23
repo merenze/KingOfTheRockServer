@@ -70,7 +70,7 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
         if (!pDialog.isShowing())
             pDialog.show();
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.GET,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.POST,
                 Const.URL_JSON_OBJECT, null,
                 new Response.Listener<JSONObject>() {
 
@@ -106,9 +106,9 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("name", "Androidhive");
-                params.put("email", "abc@androidhive.info");
-                params.put("pass", "password123");
+                params.put("username", "John Wick");
+                //params.put("email", "abc@androidhive.info");
+                params.put("password", "password");
                 return params;
             }
         };
