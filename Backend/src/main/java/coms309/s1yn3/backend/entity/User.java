@@ -29,6 +29,11 @@ public class User {
 	private String password;
 
 	/**
+	 * Admin status for this user.
+	 */
+	private boolean isAdmin;
+
+	/**
 	 * @return Unique ID for this user.
 	 */
 	public int getId() {
@@ -70,6 +75,17 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * @return Admin status for this user.
+	 */
+	public boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(boolean admin) {
+		isAdmin = admin;
 	}
 
 	public void patch(User user) {
