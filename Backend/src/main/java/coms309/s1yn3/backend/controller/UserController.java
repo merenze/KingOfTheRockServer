@@ -61,7 +61,7 @@ public class UserController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public @ResponseBody ResponseEntity login(@RequestBody Map<String, String> request) {
 		String username = request.get("username");
 		String password = request.get("password");
