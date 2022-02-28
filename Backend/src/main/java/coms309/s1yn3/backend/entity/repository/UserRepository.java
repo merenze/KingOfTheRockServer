@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("SELECT new User(u.id, u.email, u.username, u.password, u.isAdmin) FROM User u where u.username = ?1")
 	List<User> getUsersByUsername(String username);
 
-	@Query("SELECT new User(u.id, u.email, u.username, u.password, u.isAdmin) FROM User u where u.username = ?1")
+	@Query("SELECT new User(u.id, u.email, u.username, u.password, u.isAdmin) FROM User u where u.email = ?1")
 	List<User> getUsersByEmail(String email);
 
 	@Query("SELECT new User(u.id, u.email, u.username, u.password, u.isAdmin) FROM User u where u.username = ?1 OR u.email = ?1")
