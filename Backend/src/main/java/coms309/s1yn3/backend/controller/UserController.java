@@ -25,37 +25,40 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}")
-	public @ResponseBody User show(@PathVariable int id) {
-		return users.findById(id);
+	public @ResponseBody ResponseEntity show(@PathVariable int id) {
+		User user = users.findById(id);
+		if (user == null) {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+		else {
+			return new ResponseEntity(user, HttpStatus.OK);
+		}
 	}
 
 	@PostMapping("/users")
-	public @ResponseBody String create(@RequestBody User user) {
+	public @ResponseBody ResponseEntity create(@RequestBody User user) {
 		users.save(user);
-		// TODO
-		return "Saved.";
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@PatchMapping("/users/{id}")
-	public @ResponseBody String create(@PathVariable int id, @RequestBody User request) {
+	public @ResponseBody ResponseEntity update(@PathVariable int id, @RequestBody User request) {
 		User user = users.getById(id);
 		if (user == null) {
-			// TODO
-			return "Not found";
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		user.patch(request);
 		users.save(user);
-		return "Success";
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@DeleteMapping("/users/{id}")
-	public @ResponseBody String delete(@PathVariable int id) {
+	public @ResponseBody ResponseEntity delete(@PathVariable int id) {
 		if (users.getById(id) == null) {
-			// TODO
-			return "Not found";
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		users.deleteById(id);
-		return "Success";
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@GetMapping("/login")
