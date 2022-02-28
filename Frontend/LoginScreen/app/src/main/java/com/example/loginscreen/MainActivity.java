@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText usernameOrEmail;
     private EditText password;
     private Button loginButton;
-    private TextView loginCredentials;
     private String tag_json_obj = "jobj_req";
 
     @Override
@@ -41,14 +40,13 @@ public class MainActivity extends AppCompatActivity {
         usernameOrEmail = (EditText)findViewById(R.id.activity_main_et_name);
         password = (EditText)findViewById(R.id.activity_main_et_password);
         loginButton = (Button)findViewById(R.id.activity_main_button_login);
-        loginCredentials = (TextView)findViewById(R.id.activity_after_login_screen_tv_loginCredentials);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                makeJsonObjReq();
                 if (isValidLogin()){
                     startActivity(new Intent(v.getContext(), AfterLoginScreen.class));
-                    makeJsonObjReq();
                 }
             }
         });
@@ -78,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
-                        loginCredentials.setText(response.toString());
                     }
                 }, new Response.ErrorListener() {
                     @Override
