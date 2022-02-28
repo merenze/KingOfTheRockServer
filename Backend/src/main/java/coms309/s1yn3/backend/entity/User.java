@@ -14,13 +14,13 @@ public class User {
 	/**
 	 * Email address associated with this user.
 	 */
-	@Column(unique=true)
+	@Column(unique = true)
 	private String email;
 
 	/**
 	 * Username associated with this user.
 	 */
-	@Column(unique=true)
+	@Column(unique = true)
 	private String username;
 
 	/**
@@ -32,6 +32,17 @@ public class User {
 	 * Admin status for this user.
 	 */
 	private boolean isAdmin;
+
+	public User(int id, String email, String username, String password, boolean isAdmin) {
+		this.id = id;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.isAdmin = isAdmin;
+	}
+
+	public User() {
+	}
 
 	/**
 	 * @return Unique ID for this user.
