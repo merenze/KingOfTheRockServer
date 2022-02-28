@@ -12,6 +12,14 @@ public class UserProviderService {
 	@Autowired
 	UserRepository users;
 
+	public User getByUsernameOrEmail(String usernameOrEmail) {
+		List<User> userList = users.getUsersByUsernameOrEmail(usernameOrEmail);
+		if (userList.size() <= 0) {
+			return null;
+		}
+		return userList.get(0);
+	}
+
 	public User getLoginUser(String username, String password) {
 		List<User> userList = users.getUsers(username, password);
 		if (userList.size() <= 0) {
