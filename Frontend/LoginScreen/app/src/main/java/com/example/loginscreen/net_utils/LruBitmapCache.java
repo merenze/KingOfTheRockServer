@@ -1,8 +1,9 @@
-package com.example.volleyrequests1.net_utils;
+package com.example.loginscreen.net_utils;
 
-import com.android.volley.toolbox.ImageLoader.ImageCache;
 import android.graphics.Bitmap;
 import android.util.LruCache;
+
+import com.android.volley.toolbox.ImageLoader.ImageCache;
 
 public class LruBitmapCache extends LruCache<String, Bitmap> implements ImageCache {
     public static int getDefaultLruCacheSize() {
