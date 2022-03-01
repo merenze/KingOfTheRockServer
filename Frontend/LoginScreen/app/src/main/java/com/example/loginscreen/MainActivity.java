@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.loginscreen.app.AppController;
 import com.example.loginscreen.net_utils.Const;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -44,7 +45,13 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                makeJsonObjReq();
+                try{
+                    makeJsonObjReq(makeJsonObjectForLogin(usernameOrEmail.getText().toString(), password.getText().toString()));
+                }
+                catch (JSONException exception) {
+                    exception.printStackTrace();
+                }
+
                 if (isValidLogin()){
                     startActivity(new Intent(v.getContext(), AfterLoginScreen.class));
                 }
@@ -68,14 +75,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //JSON object request
-    private void makeJsonObjReq() {
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                Const.URL_JSON_OBJECT, null,
+    private void makeJsonObjReq(JSONObject jsonObject) {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                Const.URL_JSON_OBJECT, jsonObject,
                 new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
+                        //TODO parse json object here
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -98,6 +106,15 @@ public class MainActivity extends AppCompatActivity {
 
         //add request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+    }
+
+    private JSONObject makeJsonObjectForLogin(String usernameOrEmail, String password) throws JSONException {
+        JSONObject loginCredentialsJsonObject = new JSONObject();
+        //currently only accepts username, change as project moves along
+        loginCredentialsJsonObject.put("username", usernameOrEmail);
+        loginCredentialsJsonObject.put("password", password);
+
+        return loginCredentialsJsonObject;
     }
 
 }
