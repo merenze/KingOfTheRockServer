@@ -103,8 +103,10 @@ public class UserController {
 		String password = request.get("password");
 		User user = userProvider.getLoginUser(username, password);
 		if (user == null) {
+			JSONObject responseBody = new JSONObject();
+			responseBody.put("status", HttpStatus.NOT_FOUND);
 			return new ResponseEntity(
-					"Username or password incorrect.",
+					responseBody.toMap(),
 					HttpStatus.NOT_FOUND
 			);
 		}
