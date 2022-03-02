@@ -1,0 +1,13 @@
+[Unit]
+Description="King of the Rock Game Server"
+After=syslog.target
+
+[Service]
+WorkingDirectory=/opt/KingOfTheRockServer-DEMO
+ExecStart=java -jar /opt/KingOfTheRockServer-DEMO/KingOfTheRockServer-DEMO.jar
+User=kingoftherock
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
