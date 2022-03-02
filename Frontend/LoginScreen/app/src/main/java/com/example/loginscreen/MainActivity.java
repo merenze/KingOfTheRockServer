@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (isValidLogin()){
-                    startActivity(new Intent(v.getContext(), AfterLoginScreen.class));
+                    //startActivity(new Intent(v.getContext(), AfterLoginScreen.class));
                 }
             }
         });
@@ -93,15 +93,13 @@ public class MainActivity extends AppCompatActivity {
         })
         //headers (not necessary?)
         {
-            /*
-             * Passing some request headers
+            //Passing some request headers
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json");
                 return headers;
             }
-             */
         };
 
         //add request to request queue
