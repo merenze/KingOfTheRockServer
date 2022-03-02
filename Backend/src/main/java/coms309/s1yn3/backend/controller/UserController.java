@@ -35,9 +35,34 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/users")
-	public @ResponseBody ResponseEntity create(@RequestBody User user) {
-		users.save(user);
+	@PostMapping("/register")
+	public @ResponseBody ResponseEntity create(@RequestBody User requestUser) {
+		JSONObject responseBody = null;
+		User user = userProvider.getByUsername(requestUser.getUsername());
+		boolean ok = true;
+		// Check for duplicate username
+		if (user != null) {
+			responseBody = new JSONObject();
+			responseBody.put("username", "Username is already taken.");
+			ok = false;
+		}
+		// Check for duplicate email
+		user = userProvider.getByEmail(requestUser.getEmail());
+		if (user != null) {
+			if (responseBody == null) {
+				responseBody = new JSONObject();
+			}
+			responseBody.put("email", "Email address is already in use.");
+			ok = false;
+		}
+		// User could not be created
+		if (!ok) {
+			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
+		}
+		// User could be created
+		responseBody = new JSONObject();
+		responseBody.put("status", HttpStatus.OK);
+		users.save(requestUser);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
