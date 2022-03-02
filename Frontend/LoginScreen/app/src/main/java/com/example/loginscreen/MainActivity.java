@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try{
-                    makeJsonObjReq(makeJsonObjectForLogin(usernameOrEmail.getText().toString(), password.getText().toString()));
+                    JSONObject jsonObjectForLogin = makeJsonObjectForLogin(usernameOrEmail.getText().toString(), password.getText().toString());
+                    makeJsonObjReq(jsonObjectForLogin);
                 }
                 catch (JSONException exception) {
                     exception.printStackTrace();
@@ -91,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                         VolleyLog.d(TAG, "Error: " + error.getMessage());
                     }
         })
-        //headers (not necessary?)
         {
             //Passing some request headers
             @Override
