@@ -18,7 +18,7 @@ To install the server API as a service,
 To run the server API without installing as a service,
 * Set properties in `Backend/application.properties` (see example file)
 * Build the executable JAR: `mvn -f Backend/ clean package`
-* Run the JAR: `java -jar Backend/target/KingOfTheRock-DEMO.jar`
+* Run the JAR: `java -jar Backend/target/KingOfTheRockServer-DEMO.jar`
 
 ## Contributors 
 * Dave Arlt (dcarlt@iastate.edu)
