@@ -29,7 +29,9 @@ public class UserController {
 	public @ResponseBody ResponseEntity show(@PathVariable int id) {
 		User user = users.findById(id);
 		if (user == null) {
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
+			JSONObject responseBody = new JSONObject();
+			responseBody.put("status", HttpStatus.NOT_FOUND);
+			return new ResponseEntity(responseBody.toMap(), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity(user, HttpStatus.OK);
 	}
