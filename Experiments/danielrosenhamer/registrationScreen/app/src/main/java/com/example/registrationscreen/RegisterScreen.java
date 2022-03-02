@@ -1,5 +1,6 @@
 package com.example.registrationscreen;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -62,17 +63,18 @@ public class RegisterScreen extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(parameters);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, "http://coms-309-015.class.las.iastate.edu:8080/users", jsonObject, new Response.Listener<JSONObject>() {
+                    (Request.Method.POST, URL + "/register", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                if(response.getString("status").equals("OK")) {
+                                if(response.getString("status").equals("OK")){
                                     startActivity(new Intent(view.getContext(), LoginScreen.class));
+                                } else {
+                                    startActivity(new Intent(view.getContext(), RegisterScreen.class));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Log.d("Response: ", response.toString());
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -83,7 +85,7 @@ public class RegisterScreen extends AppCompatActivity {
                         }
                     }){
                 @Override
-                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                protected Response<JSONObject> parseNetworkResponse(@NonNull NetworkResponse response) {
                     statusCode = response.statusCode;
                     Log.d("STATUS CODE RESPONSE: ", "" + statusCode);
                     return super.parseNetworkResponse(response);
