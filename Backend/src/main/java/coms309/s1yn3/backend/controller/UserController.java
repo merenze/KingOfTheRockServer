@@ -3,6 +3,7 @@ package coms309.s1yn3.backend.controller;
 import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.entity.repository.UserRepository;
 import coms309.s1yn3.backend.service.UserProviderService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,7 @@ public class UserController {
 		if (user == null) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
-		else {
-			return new ResponseEntity(user, HttpStatus.OK);
-		}
+		return new ResponseEntity(user, HttpStatus.OK);
 	}
 
 	@PostMapping("/register")
@@ -62,6 +61,11 @@ public class UserController {
 		// User could be created
 		responseBody = new JSONObject();
 		responseBody.put("status", HttpStatus.OK);
+		// User could not be created
+		if (responseBody != null) {
+			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
+		}
+		// User could be created
 		users.save(requestUser);
 		return new ResponseEntity(HttpStatus.OK);
 	}
