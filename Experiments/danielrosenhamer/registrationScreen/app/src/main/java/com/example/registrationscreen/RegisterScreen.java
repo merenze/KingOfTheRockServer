@@ -35,6 +35,7 @@ public class RegisterScreen extends AppCompatActivity {
     private EditText etEmail, etUsername, etPassword;
     private String email, username, password;
     private String URL = "http://coms-309-015.class.las.iastate.edu:8080";
+    private int statusCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +62,33 @@ public class RegisterScreen extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(parameters);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, (URL + "/users"), jsonObject, response -> {
-                        if(response.equals("Saved.")) {
-                            startActivity(new Intent(view.getContext(), HomeScreen.class));
+                    (Request.Method.POST, "http://coms-309-015.class.las.iastate.edu:8080/users", jsonObject, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if(response.getString("status").equals("OK")) {
+                                    startActivity(new Intent(view.getContext(), LoginScreen.class));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("Response: ", response.toString());
                         }
-                    }, error -> {
-                        // TODO: Handle error
-                        Log.e("LOG_VOLLEY: ", error.getMessage());
-                        startActivity(new Intent(view.getContext(), LoginScreen.class));
-                    });
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            Log.e("LOG_VOLLEY: ", error.getMessage());
+                            //RegisterScreen.this.startActivity(new Intent(view.getContext(), HomeScreen.class));
+                        }
+                    }){
+                @Override
+                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                    statusCode = response.statusCode;
+                    Log.d("STATUS CODE RESPONSE: ", "" + statusCode);
+                    return super.parseNetworkResponse(response);
+                }
+            };
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(jsonObjectRequest);
