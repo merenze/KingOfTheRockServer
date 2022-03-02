@@ -29,7 +29,9 @@ public class UserController {
 	public @ResponseBody ResponseEntity show(@PathVariable int id) {
 		User user = users.findById(id);
 		if (user == null) {
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
+			JSONObject responseBody = new JSONObject();
+			responseBody.put("status", HttpStatus.NOT_FOUND);
+			return new ResponseEntity(responseBody.toMap(), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity(user, HttpStatus.OK);
 	}
@@ -38,10 +40,12 @@ public class UserController {
 	public @ResponseBody ResponseEntity create(@RequestBody User requestUser) {
 		JSONObject responseBody = null;
 		User user = userProvider.getByUsername(requestUser.getUsername());
+		boolean ok = true;
 		// Check for duplicate username
 		if (user != null) {
 			responseBody = new JSONObject();
 			responseBody.put("username", "Username is already taken.");
+			ok = false;
 		}
 		// Check for duplicate email
 		user = userProvider.getByEmail(requestUser.getEmail());
@@ -50,14 +54,22 @@ public class UserController {
 				responseBody = new JSONObject();
 			}
 			responseBody.put("email", "Email address is already in use.");
+			ok = false;
 		}
+		// User could not be created
+		if (!ok) {
+			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
+		}
+		// User could be created
+		responseBody = new JSONObject();
+		responseBody.put("status", HttpStatus.OK);
 		// User could not be created
 		if (responseBody != null) {
 			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
 		}
 		// User could be created
 		users.save(requestUser);
-		return new ResponseEntity(HttpStatus.OK);
+		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 
 	@PatchMapping("/users/{id}")
@@ -68,16 +80,21 @@ public class UserController {
 		}
 		user.patch(request);
 		users.save(user);
-		return new ResponseEntity(HttpStatus.OK);
+		JSONObject responseBody = new JSONObject();
+		responseBody.put("status", HttpStatus.OK);
+		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/users/{id}")
 	public @ResponseBody ResponseEntity delete(@PathVariable int id) {
+		JSONObject responseBody = new JSONObject();
 		if (users.getById(id) == null) {
+			responseBody.put("status", HttpStatus.NOT_FOUND);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		users.deleteById(id);
-		return new ResponseEntity(HttpStatus.OK);
+		responseBody.put("status", HttpStatus.OK);
+		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 
 	@PostMapping("/login")
