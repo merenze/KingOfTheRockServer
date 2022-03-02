@@ -79,7 +79,6 @@ public class RegisterScreen extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // TODO: Handle error
                             Log.e("LOG_VOLLEY: ", error.getMessage());
                             //RegisterScreen.this.startActivity(new Intent(view.getContext(), HomeScreen.class));
                         }
