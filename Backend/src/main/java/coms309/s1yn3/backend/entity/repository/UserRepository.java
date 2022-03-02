@@ -1,14 +1,14 @@
 package coms309.s1yn3.backend.entity.repository;
 
 import coms309.s1yn3.backend.entity.User;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-@SpringBootApplication
+@Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 	User findById(int id);
 	@Transactional
