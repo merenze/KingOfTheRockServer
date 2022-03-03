@@ -11,25 +11,31 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.loginscreen.app.AppController;
 import com.example.loginscreen.net_utils.Const;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getSimpleName();
-    private EditText usernameOrEmail;
-    private EditText password;
+    private String username;
+    private String password;
     private Button loginButton;
     private String tag_json_obj = "jobj_req";
 
@@ -38,27 +44,57 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        usernameOrEmail = (EditText)findViewById(R.id.activity_main_et_name);
-        password = (EditText)findViewById(R.id.activity_main_et_password);
         loginButton = (Button)findViewById(R.id.activity_main_button_login);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try{
-                    JSONObject jsonObjectForLogin = makeJsonObjectForLogin(usernameOrEmail.getText().toString(), password.getText().toString());
-                    makeJsonObjReq(jsonObjectForLogin);
-                }
-                catch (JSONException exception) {
-                    exception.printStackTrace();
-                }
+        loginButton.setOnClickListener(view -> {
+            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_main_et_name);
+            EditText etPassword = (EditText)findViewById(R.id.activity_main_et_password);
+            username = etUsernameOrEmail.getText().toString().trim();
+            password = etPassword.getText().toString().trim();
 
-                if (isValidLogin()){
-                    //startActivity(new Intent(v.getContext(), AfterLoginScreen.class));
-                }
-            }
+            HashMap<String, String> parameters = new HashMap<String, String>();
+            parameters.put("username", username);
+            parameters.put("password", password);
+
+            JSONObject jsonObject = new JSONObject(parameters);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, Const.URL_JSON_OBJECT + "/login", jsonObject, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, "in onResponse body");
+                            if(response.has(username)){
+                                //something?
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            NetworkResponse response = error.networkResponse;
+                            if(error instanceof ServerError && response != null){
+                                try {
+                                    String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                    JSONObject obj = new JSONObject(res);
+
+                                    if (obj.has("status")) {
+                                        try {
+                                            Log.d("Status: ", obj.getString("Incorrect Username or Password"));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } catch (UnsupportedEncodingException | JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(jsonObjectRequest);
         });
     }
+
 
     /**
      *  TODO: actually validate with correct logic, not dummy logic
