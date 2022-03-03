@@ -2,13 +2,10 @@ package com.example.loginscreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -21,7 +18,6 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.loginscreen.app.AppController;
 import com.example.loginscreen.net_utils.Const;
 
 import org.json.JSONException;
@@ -63,9 +59,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d("TestTag", "in onResponse body");
-                            if(response.has(username)){
-                                //something?
-                            }
+                            Log.d(tag_json_obj, response.toString());
+                            //TODO: do something with response
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -139,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         //add request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+        //AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
 
     private JSONObject makeJsonObjectForLogin(String usernameOrEmail, String password) throws JSONException {
