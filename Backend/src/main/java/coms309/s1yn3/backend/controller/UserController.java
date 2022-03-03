@@ -113,10 +113,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/search")
-	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParemeter) {
-		JSONObject responseBody = new JSONObject();
-		responseBody.put("q", queryParemeter);
-		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);	
+	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParemeter) {		
+		return new ResponseEntity(users.searchUsername(queryParemeter), HttpStatus.OK);	
 		
 	}
 	
