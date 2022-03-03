@@ -1,0 +1,93 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.registrationscreen"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="32" />
+9-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:5:5-67
+11-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:5:22-64
+12    <uses-permission android:name="android.permission.WAKE_LOCK" />
+12-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:6:5-68
+12-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:6:22-65
+13
+14    <application
+14-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:8:5-31:19
+15        android:allowBackup="true"
+15-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:9:9-35
+16        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+16-->[androidx.core:core:1.7.0] C:\Users\drose\.gradle\caches\transforms-3\46678933633e897331f6cbff7aabb141\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
+17        android:debuggable="true"
+18        android:icon="@mipmap/ic_launcher"
+18-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:10:9-43
+19        android:label="@string/app_name"
+19-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:11:9-41
+20        android:roundIcon="@mipmap/ic_launcher_round"
+20-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:12:9-54
+21        android:supportsRtl="true"
+21-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:13:9-35
+22        android:testOnly="true"
+23        android:theme="@style/Theme.RegistrationScreen"
+23-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:14:9-56
+24        android:usesCleartextTraffic="true" >
+24-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:15:9-44
+25        <activity
+25-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:16:9-18:40
+26            android:name="com.example.registrationscreen.RegisterScreen"
+26-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:17:13-43
+27            android:exported="false" />
+27-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:18:13-37
+28        <activity
+28-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:19:9-21:40
+29            android:name="com.example.registrationscreen.LoginScreen"
+29-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:20:13-40
+30            android:exported="false" />
+30-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:21:13-37
+31        <activity
+31-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:22:9-30:20
+32            android:name="com.example.registrationscreen.HomeScreen"
+32-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:23:13-39
+33            android:exported="true" >
+33-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:24:13-36
+34            <intent-filter>
+34-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:25:13-29:29
+35                <action android:name="android.intent.action.MAIN" />
+35-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:26:17-69
+35-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:26:25-66
+36
+37                <category android:name="android.intent.category.LAUNCHER" />
+37-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:28:17-77
+37-->C:\Users\drose\1_yn_3\Frontend\app\src\main\AndroidManifest.xml:28:27-74
+38            </intent-filter>
+39        </activity>
+40
+41        <provider
+41-->[androidx.emoji2:emoji2:1.0.0] C:\Users\drose\.gradle\caches\transforms-3\8c082c95bd529051ea549ace80b5e003\transformed\emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+42            android:name="androidx.startup.InitializationProvider"
+42-->[androidx.emoji2:emoji2:1.0.0] C:\Users\drose\.gradle\caches\transforms-3\8c082c95bd529051ea549ace80b5e003\transformed\emoji2-1.0.0\AndroidManifest.xml:27:13-67
+43            android:authorities="com.example.registrationscreen.androidx-startup"
+43-->[androidx.emoji2:emoji2:1.0.0] C:\Users\drose\.gradle\caches\transforms-3\8c082c95bd529051ea549ace80b5e003\transformed\emoji2-1.0.0\AndroidManifest.xml:28:13-68
+44            android:exported="false" >
+44-->[androidx.emoji2:emoji2:1.0.0] C:\Users\drose\.gradle\caches\transforms-3\8c082c95bd529051ea549ace80b5e003\transformed\emoji2-1.0.0\AndroidManifest.xml:29:13-37
+45            <meta-data
+45-->[androidx.emoji2:emoji2:1.0.0] C:\Users\drose\.gradle\caches\transforms-3\8c082c95bd529051ea549ace80b5e003\transformed\emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+46                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+46-->[androidx.emoji2:emoji2:1.0.0] C:\Users\drose\.gradle\caches\transforms-3\8c082c95bd529051ea549ace80b5e003\transformed\emoji2-1.0.0\AndroidManifest.xml:32:17-75
+47                android:value="androidx.startup" />
+47-->[androidx.emoji2:emoji2:1.0.0] C:\Users\drose\.gradle\caches\transforms-3\8c082c95bd529051ea549ace80b5e003\transformed\emoji2-1.0.0\AndroidManifest.xml:33:17-49
+48            <meta-data
+48-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\drose\.gradle\caches\transforms-3\1417e026bf9408eea127bab3316820d3\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+49                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+49-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\drose\.gradle\caches\transforms-3\1417e026bf9408eea127bab3316820d3\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
+50                android:value="androidx.startup" />
+50-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\drose\.gradle\caches\transforms-3\1417e026bf9408eea127bab3316820d3\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+51        </provider>
+52    </application>
+53
+54</manifest>
