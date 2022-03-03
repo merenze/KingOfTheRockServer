@@ -10,7 +10,7 @@
         android:id="@+id/activity_afterLoginScreen_tv_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login successful, welcome!"
+        android:text="Login successful!"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
