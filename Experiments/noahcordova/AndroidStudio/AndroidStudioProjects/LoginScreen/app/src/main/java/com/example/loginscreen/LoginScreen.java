@@ -2,35 +2,32 @@ package com.example.loginscreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.loginscreen.net_utils.Const;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginScreen extends AppCompatActivity {
 
-    private String TAG = MainActivity.class.getSimpleName();
+    private String TAG = LoginScreen.class.getSimpleName();
     private String username;
     private String password;
     private TextView loginCredentials;
@@ -65,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(tag_json_obj, response.toString());
                             try {
                                 loginCredentials.setText("Welcome, " + response.getString("username"));
+                                startActivity(new Intent(view.getContext(), AfterLoginScreen.class));
                             } catch (JSONException exception) {
                                 exception.printStackTrace();
                             }
@@ -97,29 +95,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    /**
-     *  TODO: actually validate with correct logic, not dummy logic
-     *      * valid if receive JSON object as body of response
-     *      * invalid if receive String as body of response
-     */
-    private boolean isValidLogin(){
-        boolean isValid = true; //dummy value, change with logic based on backend response
-        if (isValid) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    private JSONObject makeJsonObjectForLogin(String usernameOrEmail, String password) throws JSONException {
-        JSONObject loginCredentialsJsonObject = new JSONObject();
-        //currently only accepts username, change as project moves along
-        loginCredentialsJsonObject.put("username", usernameOrEmail);
-        loginCredentialsJsonObject.put("password", password);
-
-        return loginCredentialsJsonObject;
-    }
+//    private JSONObject makeJsonObjectForLogin(String usernameOrEmail, String password) throws JSONException {
+//        JSONObject loginCredentialsJsonObject = new JSONObject();
+//        //currently only accepts username, change as project moves along
+//        loginCredentialsJsonObject.put("username", usernameOrEmail);
+//        loginCredentialsJsonObject.put("password", password);
+//
+//        return loginCredentialsJsonObject;
+//    }
 
 }
