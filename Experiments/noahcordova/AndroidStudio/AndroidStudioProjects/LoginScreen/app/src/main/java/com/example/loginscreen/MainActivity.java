@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                     (Request.Method.POST, Const.URL_JSON_OBJECT + "/login", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d(TAG, "in onResponse body");
+                            Log.d("TestTag", "in onResponse body");
                             if(response.has(username)){
                                 //something?
                             }
@@ -70,15 +70,15 @@ public class MainActivity extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            Log.d("TestTag", "in onErrorResponse body");
                             NetworkResponse response = error.networkResponse;
                             if(error instanceof ServerError && response != null){
                                 try {
                                     String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                                     JSONObject obj = new JSONObject(res);
-
-                                    if (obj.has("status")) {
+                                    if (obj.has(username)) {
                                         try {
-                                            Log.d("Status: ", obj.getString("Incorrect Username or Password"));
+                                            Log.d(TAG, obj.getString(username));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
