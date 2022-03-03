@@ -111,4 +111,13 @@ public class UserController {
 				HttpStatus.OK
 		);
 	}
+	
+	@GetMapping("/search")
+	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParemeter) {
+		JSONObject responseBody = new JSONObject();
+		responseBody.put("q", queryParemeter);
+		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);	
+		
+	}
+	
 }
