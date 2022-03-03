@@ -1,4 +1,4 @@
-package com.example.loginscreen;
+package com.example.registrationscreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
