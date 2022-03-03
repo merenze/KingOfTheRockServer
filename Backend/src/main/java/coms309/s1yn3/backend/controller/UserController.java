@@ -63,10 +63,6 @@ public class UserController {
 		// User could be created
 		responseBody = new JSONObject();
 		responseBody.put("status", HttpStatus.OK);
-		// User could not be created
-		if (responseBody != null) {
-			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
-		}
 		// User could be created
 		users.save(requestUser);
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
