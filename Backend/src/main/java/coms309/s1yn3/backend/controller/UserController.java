@@ -111,11 +111,10 @@ public class UserController {
 				HttpStatus.OK
 		);
 	}
-	
+
 	@GetMapping("/search")
-	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParemeter) {		
-		return new ResponseEntity(users.searchUsername(queryParemeter), HttpStatus.OK);	
-		
+	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParemeter) {
+		return new ResponseEntity(users.searchUsername(queryParemeter), HttpStatus.OK);
 	}
-	
+
 }
