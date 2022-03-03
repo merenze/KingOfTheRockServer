@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">registrationScreen</string>
+    <string name="activity_search_for_user_button_search_string">Enter Username</string>
 </resources>
