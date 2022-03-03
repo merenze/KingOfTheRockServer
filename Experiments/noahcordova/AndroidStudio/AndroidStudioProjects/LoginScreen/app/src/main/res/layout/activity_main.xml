@@ -54,4 +54,14 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_main_et_password" />
+
+    <TextView
+        android:id="@+id/activity_main_tv_loginCredentials"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&quot; &quot;"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main_button_login" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -32,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
     private String username;
     private String password;
+    private TextView loginCredentials;
     private Button loginButton;
     private String tag_json_obj = "jobj_req";
+    private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             EditText etPassword = (EditText)findViewById(R.id.activity_main_et_password);
             username = etUsernameOrEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
+            loginCredentials = (TextView)findViewById(R.id.activity_main_tv_loginCredentials);
 
             HashMap<String, String> parameters = new HashMap<String, String>();
             parameters.put("username", username);
@@ -55,12 +59,15 @@ public class MainActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(parameters);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, Const.URL_JSON_OBJECT + "/login", jsonObject, new Response.Listener<JSONObject>() {
+                    (Request.Method.POST, url_coms309_backend_server + "/login", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d("TestTag", "in onResponse body");
                             Log.d(tag_json_obj, response.toString());
-                            //TODO: do something with response
+                            try {
+                                loginCredentials.setText("Welcome, " + response.getString("username"));
+                            } catch (JSONException exception) {
+                                exception.printStackTrace();
+                            }
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -104,37 +111,6 @@ public class MainActivity extends AppCompatActivity {
         else {
             return false;
         }
-    }
-
-    //JSON object request
-    private void makeJsonObjReq(JSONObject jsonObject) {
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                Const.URL_JSON_OBJECT, jsonObject,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-                        //TODO parse json object here
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        VolleyLog.d(TAG, "Error: " + error.getMessage());
-                    }
-        })
-        {
-            //Passing some request headers
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-
-        //add request to request queue
-        //AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
 
     private JSONObject makeJsonObjectForLogin(String usernameOrEmail, String password) throws JSONException {
