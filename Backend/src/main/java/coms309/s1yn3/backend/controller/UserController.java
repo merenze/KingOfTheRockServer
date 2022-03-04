@@ -43,7 +43,7 @@ public class UserController {
 	public @ResponseBody ResponseEntity create(@RequestBody Map<String, String> requestBody) {
 		JSONObject responseBody = new JSONObject();
 		boolean ok = true;
-		// No username sent
+		// Check for missing username
 		if (!requestBody.containsKey("username") || requestBody.get("username").isEmpty()) {
 			responseBody.put("username", "Username cannot be empty.");
 			ok = false;
@@ -55,20 +55,28 @@ public class UserController {
 				ok = false;
 			}
 		}
-		// Check for duplicate email
-		User user = userProvider.getByEmail(requestBody.get("email"));
-		if (user != null) {
-			responseBody = new JSONObject();
-			responseBody.put("email", "Email address is already in use.");
-			ok = false;
+
+		// Check for missing email
+		if (!requestBody.containsKey("email")) {
+			responseBody.put("email", "Email cannot be empty.");
 		}
-		// Check for invalid email
-		if (!Pattern.matches(EMAIL_PATTERN, requestUser.getEmail())) {
-			if (responseBody == null) {
-				responseBody = new JSONObject();
+		else {
+			// Check for invalid email
+			if (!Pattern.matches(EMAIL_PATTERN, requestBody.get("email"))) {
+				if (responseBody == null) {
+					responseBody = new JSONObject();
+				}
+				responseBody.put("email", "Invalid email address.");
+				ok = false;
+			} else {
+				// Check for duplicate email
+				User user = userProvider.getByEmail(requestBody.get("email"));
+				if (user != null) {
+					responseBody = new JSONObject();
+					responseBody.put("email", "Email address is already in use.");
+					ok = false;
+				}
 			}
-			responseBody.put("email", "Invalid email address.");
-			ok = false;
 		}
 
 		// User could not be created
