@@ -37,22 +37,25 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public @ResponseBody ResponseEntity create(@RequestBody User requestUser) {
-		JSONObject responseBody = null;
-		User user = userProvider.getByUsername(requestUser.getUsername());
+	public @ResponseBody ResponseEntity create(@RequestBody Map<String, String> requestBody) {
+		JSONObject responseBody = new JSONObject();
 		boolean ok = true;
-		// Check for duplicate username
-		if (user != null) {
-			responseBody = new JSONObject();
-			responseBody.put("username", "Username is already taken.");
+		// No username sent
+		if (!requestBody.containsKey("username") || requestBody.get("username").isEmpty()) {
+			responseBody.put("username", "Username cannot be empty.");
 			ok = false;
+		} else {
+			// Check for duplicate username
+			User user = userProvider.getByUsername(requestBody.get("username"));
+			if (user != null) {
+				responseBody.put("username", "Username is already taken.");
+				ok = false;
+			}
 		}
 		// Check for duplicate email
-		user = userProvider.getByEmail(requestUser.getEmail());
+		User user = userProvider.getByEmail(requestBody.get("email"));
 		if (user != null) {
-			if (responseBody == null) {
-				responseBody = new JSONObject();
-			}
+			responseBody = new JSONObject();
 			responseBody.put("email", "Email address is already in use.");
 			ok = false;
 		}
@@ -61,10 +64,15 @@ public class UserController {
 			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
 		}
 		// User could be created
-		responseBody = new JSONObject();
 		responseBody.put("status", HttpStatus.OK);
 		// User could be created
-		users.save(requestUser);
+		users.save(new User(
+				requestBody.get("email"),
+				requestBody.get("username"),
+				"",
+				// Default to false where isAdmin is omitted
+				requestBody.containsKey("isAdmin") && Boolean.parseBoolean(requestBody.get("isAdmin"))
+		));
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 

@@ -34,7 +34,10 @@ public class User {
 	private boolean isAdmin;
 
 	public User(int id, String email, String username, String password, boolean isAdmin) {
-		this.id = id;
+		this(email, username, password, isAdmin);
+	}
+
+	public User(String email, String username, String password, boolean isAdmin) {
 		this.email = email;
 		this.username = username;
 		this.password = password;
