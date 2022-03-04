@@ -24,11 +24,6 @@ public class User {
 	private String username;
 
 	/**
-	 * Login password for this user.
-	 */
-	private String password;
-
-	/**
 	 * Admin status for this user.
 	 */
 	private boolean isAdmin;
@@ -81,17 +76,6 @@ public class User {
 	}
 
 	/**
-	 * @return Login password for this user.
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	/**
 	 * @return Admin status for this user.
 	 */
 	public boolean getIsAdmin() {
@@ -108,9 +92,6 @@ public class User {
 		}
 		if (user.username != null) {
 			this.username = user.username;
-		}
-		if (user.password != null) {
-			this.password = user.password;
 		}
 	}
 }
