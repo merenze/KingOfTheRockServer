@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @RestController
 public class UserController {
+	private static final String EMAIL_PATTERN = "^[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+@[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+(\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+)*$";
+
 	@Autowired
 	UserRepository users;
 
@@ -56,6 +59,15 @@ public class UserController {
 			responseBody.put("email", "Email address is already in use.");
 			ok = false;
 		}
+		// Check for invalid email
+		if (!Pattern.matches(EMAIL_PATTERN, requestUser.getEmail())) {
+			if (responseBody == null) {
+				responseBody = new JSONObject();
+			}
+			responseBody.put("email", "Invalid email address.");
+			ok = false;
+		}
+
 		// User could not be created
 		if (!ok) {
 			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
