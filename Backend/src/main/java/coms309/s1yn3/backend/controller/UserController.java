@@ -57,7 +57,7 @@ public class UserController {
 		}
 
 		// Check for missing email
-		if (!requestBody.containsKey("email")) {
+		if (!requestBody.containsKey("email") || requestBody.get("email").isEmpty()) {
 			responseBody.put("email", "Email cannot be empty.");
 		}
 		else {
@@ -78,7 +78,6 @@ public class UserController {
 				}
 			}
 		}
-
 		// User could not be created
 		if (!ok) {
 			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
