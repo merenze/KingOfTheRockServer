@@ -74,7 +74,7 @@ public class RegisterScreen extends AppCompatActivity {
                             if(response.has("status")){
                                 try {
                                     if(response.getString("status").equals("OK")){
-                                        startActivity(new Intent(view.getContext(), LoginScreen.class));
+                                        startActivity(new Intent(view.getContext(), com.example.loginscreen.LoginScreen.class));
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -95,7 +95,7 @@ public class RegisterScreen extends AppCompatActivity {
                                     if (obj.has("username")) {
                                         try {
                                             Log.d("duplicate username: ", obj.getString("username"));
-                                            startActivity(new Intent(view.getContext(), LoginScreen.class));
+                                            startActivity(new Intent(view.getContext(), com.example.loginscreen.LoginScreen.class));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
