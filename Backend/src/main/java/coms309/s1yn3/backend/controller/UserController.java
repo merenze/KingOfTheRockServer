@@ -1,6 +1,8 @@
 package coms309.s1yn3.backend.controller;
 
+import coms309.s1yn3.backend.entity.Password;
 import coms309.s1yn3.backend.entity.User;
+import coms309.s1yn3.backend.entity.repository.PasswordRepository;
 import coms309.s1yn3.backend.entity.repository.UserRepository;
 import coms309.s1yn3.backend.service.UserProviderService;
 import org.json.JSONObject;
@@ -22,6 +24,9 @@ public class UserController {
 
 	@Autowired
 	UserProviderService userProvider;
+
+	@Autowired
+	PasswordRepository passwords;
 
 	@GetMapping("/users")
 	public @ResponseBody List<User> index() {
@@ -82,14 +87,16 @@ public class UserController {
 		}
 		// User could be created
 		responseBody.put("status", HttpStatus.OK);
-		// User could be created
-		users.save(new User(
+		User user = new User(
 				requestBody.get("email"),
 				requestBody.get("username"),
 				"",
 				// Default to false where isAdmin is omitted
 				requestBody.containsKey("isAdmin") && Boolean.parseBoolean(requestBody.get("isAdmin"))
-		));
+		);
+		users.save(user);
+		// Save the password
+		passwords.save(new Password(user, requestBody.get("password")));
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 
