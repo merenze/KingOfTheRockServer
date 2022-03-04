@@ -90,7 +90,6 @@ public class UserController {
 		User user = new User(
 				requestBody.get("email"),
 				requestBody.get("username"),
-				"",
 				// Default to false where isAdmin is omitted
 				requestBody.containsKey("isAdmin") && Boolean.parseBoolean(requestBody.get("isAdmin"))
 		);
