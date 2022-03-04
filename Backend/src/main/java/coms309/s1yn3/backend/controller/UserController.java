@@ -42,17 +42,14 @@ public class UserController {
 	@PostMapping("/register")
 	public @ResponseBody ResponseEntity create(@RequestBody Map<String, String> requestBody) {
 		JSONObject responseBody = new JSONObject();
-		boolean ok = true;
 		// Check for missing username
 		if (!requestBody.containsKey("username") || requestBody.get("username").isEmpty()) {
 			responseBody.put("username", "Username cannot be empty.");
-			ok = false;
 		} else {
 			// Check for duplicate username
 			User user = userProvider.getByUsername(requestBody.get("username"));
 			if (user != null) {
 				responseBody.put("username", "Username is already taken.");
-				ok = false;
 			}
 		}
 		// Check for missing email
@@ -66,24 +63,21 @@ public class UserController {
 					responseBody = new JSONObject();
 				}
 				responseBody.put("email", "Invalid email address.");
-				ok = false;
 			} else {
 				// Check for duplicate email
 				User user = userProvider.getByEmail(requestBody.get("email"));
 				if (user != null) {
 					responseBody = new JSONObject();
 					responseBody.put("email", "Email address is already in use.");
-					ok = false;
 				}
 			}
 		}
 		// Check for missing password
 		if (!requestBody.containsKey("password") || requestBody.get("password").isEmpty()) {
 			responseBody.put("password", "Password cannot be empty.");
-			ok = false;
 		}
 		// User could not be created
-		if (!ok) {
+		if (!responseBody.isEmpty()) {
 			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
 		}
 		// User could be created
