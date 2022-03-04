@@ -55,7 +55,6 @@ public class UserController {
 				ok = false;
 			}
 		}
-
 		// Check for missing email
 		if (!requestBody.containsKey("email") || requestBody.get("email").isEmpty()) {
 			responseBody.put("email", "Email cannot be empty.");
@@ -77,6 +76,11 @@ public class UserController {
 					ok = false;
 				}
 			}
+		}
+		// Check for missing password
+		if (!requestBody.containsKey("password") || requestBody.get("password").isEmpty()) {
+			responseBody.put("password", "Password cannot be empty.");
+			ok = false;
 		}
 		// User could not be created
 		if (!ok) {
