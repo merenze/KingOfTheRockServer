@@ -19,9 +19,9 @@ public class HomeScreen extends AppCompatActivity {
         buttonToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(view.getContext(), LoginScreen.class));
-                //re-routing the button to switch to search screen - FOR TESTING ONLY
-                startActivity(new Intent(view.getContext(), SearchForUserScreen.class));
+                startActivity(new Intent(view.getContext(), LoginScreen.class));
+//                //re-routing the button to switch to search screen - FOR TESTING ONLY
+//                startActivity(new Intent(view.getContext(), SearchForUserScreen.class));
             }
         });
 
