@@ -16,9 +16,11 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,7 +32,7 @@ public class SearchForUserScreen extends AppCompatActivity {
     private String TAG = SearchForUserScreen.class.getSimpleName();
     private String usernameEntry;
     private Button searchButton;
-    private String tag_json_obj = "jobj_req";
+    private String tag_json_arr = "jarr_req";
     private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
 
     @Override
@@ -45,17 +47,17 @@ public class SearchForUserScreen extends AppCompatActivity {
             usernameEntry = etUsernameEntry.getText().toString().trim();
             //loginCredentials = (TextView)findViewById(R.id.activity_main_tv_loginCredentials);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry, null, new Response.Listener<JSONObject>() {
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+                    (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry, null, new Response.Listener<JSONArray>() {
                         @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d(tag_json_obj, response.toString());
-//                            try {
-//                                //loginCredentials.setText("Welcome, " + response.getString("username"));
-//                                //startActivity(new Intent(view.getContext(), AfterLoginScreen.class));
-//                            } catch (JSONException exception) {
-//                                exception.printStackTrace();
-//                            }
+                        public void onResponse(JSONArray response) {
+                            Log.d(tag_json_arr, response.toString());
+                            try{
+                                response.get(0);
+                            }catch(JSONException exception){
+                                Log.d(tag_json_arr, exception.getMessage());
+                                Log.d(tag_json_arr, "Username not found");
+                            }
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -65,7 +67,7 @@ public class SearchForUserScreen extends AppCompatActivity {
                     });
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(jsonObjectRequest);
+            requestQueue.add(jsonArrayRequest);
         });
     }
 

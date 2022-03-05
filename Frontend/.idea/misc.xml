@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/15noc/coms309/yn3/Frontend/app/src/main/res/layout/activity_home_screen.xml" value="0.2015625" />
+        <entry key="..\:/Users/15noc/coms309/yn3/Frontend/app/src/main/res/layout/activity_login_screen.xml" value="0.25" />
+        <entry key="..\:/Users/15noc/coms309/yn3/Frontend/app/src/main/res/layout/activity_register_screen.xml" value="0.25" />
         <entry key="..\:/Users/15noc/coms309/yn3/Frontend/app/src/main/res/layout/activity_search_for_user_screen.xml" value="0.25" />
         <entry key="..\:/Users/drose/1_yn_3/Experiments/danielrosenhamer/registrationScreen/app/src/main/res/layout/activity_home_screen.xml" value="0.1796875" />
         <entry key="..\:/Users/drose/1_yn_3/Experiments/danielrosenhamer/registrationScreen/app/src/main/res/layout/activity_login_screen.xml" value="0.14175724637681159" />

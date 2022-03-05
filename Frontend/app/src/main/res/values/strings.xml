@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">registrationScreen</string>
     <string name="activity_search_for_user_button_search_string">Enter Username</string>
+    <string name="activity_login_et_username_hint">Username</string>
+    <string name="activity_login_et_password_hint">Password</string>
+    <string name="activity_login_button_login_text">Login</string>
 </resources>
