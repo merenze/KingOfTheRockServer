@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "registrationScreen"
+rootProject.name = "frontend"
 include ':app'
