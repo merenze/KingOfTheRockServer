@@ -24,7 +24,7 @@
         app:layout_constraintVertical_bias="0.12" />
 
     <EditText
-        android:id="@+id/activity_main_et_password"
+        android:id="@+id/activity_login_screen_et_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -41,12 +41,14 @@
         app:layout_constraintVertical_bias="0.056" />
 
     <Button
-        android:id="@+id/activity_login_button_login"
+        android:id="@+id/activity_login_screen_button_login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
+        android:layout_marginBottom="196dp"
         android:text="@string/activity_login_button_login_text"
+        android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,5 +64,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_login_button_login" />
+         app:layout_constraintTop_toBottomOf="@+id/activity_login_screen_et_password"
+        app:layout_constraintVertical_bias="0.301" />
+
+>>>>>>> develop
 </androidx.constraintlayout.widget.ConstraintLayout>

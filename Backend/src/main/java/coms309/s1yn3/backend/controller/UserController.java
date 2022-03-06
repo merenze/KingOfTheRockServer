@@ -1,6 +1,8 @@
 package coms309.s1yn3.backend.controller;
 
+import coms309.s1yn3.backend.entity.Password;
 import coms309.s1yn3.backend.entity.User;
+import coms309.s1yn3.backend.entity.repository.PasswordRepository;
 import coms309.s1yn3.backend.entity.repository.UserRepository;
 import coms309.s1yn3.backend.service.UserProviderService;
 import org.json.JSONObject;
@@ -11,14 +13,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @RestController
 public class UserController {
+	private static final String EMAIL_PATTERN = "^[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+@[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+(\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+)*$";
+
 	@Autowired
 	UserRepository users;
 
 	@Autowired
 	UserProviderService userProvider;
+
+	@Autowired
+	PasswordRepository passwords;
 
 	@GetMapping("/users")
 	public @ResponseBody List<User> index() {
@@ -37,34 +45,57 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public @ResponseBody ResponseEntity create(@RequestBody User requestUser) {
-		JSONObject responseBody = null;
-		User user = userProvider.getByUsername(requestUser.getUsername());
-		boolean ok = true;
-		// Check for duplicate username
-		if (user != null) {
-			responseBody = new JSONObject();
-			responseBody.put("username", "Username is already taken.");
-			ok = false;
-		}
-		// Check for duplicate email
-		user = userProvider.getByEmail(requestUser.getEmail());
-		if (user != null) {
-			if (responseBody == null) {
-				responseBody = new JSONObject();
+	public @ResponseBody ResponseEntity create(@RequestBody Map<String, String> requestBody) {
+		JSONObject responseBody = new JSONObject();
+		// Check for missing username
+		if (!requestBody.containsKey("username") || requestBody.get("username").isEmpty()) {
+			responseBody.put("username", "Username cannot be empty.");
+		} else {
+			// Check for duplicate username
+			User user = userProvider.getByUsername(requestBody.get("username"));
+			if (user != null) {
+				responseBody.put("username", "Username is already taken.");
 			}
-			responseBody.put("email", "Email address is already in use.");
-			ok = false;
+		}
+		// Check for missing email
+		if (!requestBody.containsKey("email") || requestBody.get("email").isEmpty()) {
+			responseBody.put("email", "Email cannot be empty.");
+		}
+		else {
+			// Check for invalid email
+			if (!Pattern.matches(EMAIL_PATTERN, requestBody.get("email"))) {
+				if (responseBody == null) {
+					responseBody = new JSONObject();
+				}
+				responseBody.put("email", "Invalid email address.");
+			} else {
+				// Check for duplicate email
+				User user = userProvider.getByEmail(requestBody.get("email"));
+				if (user != null) {
+					responseBody = new JSONObject();
+					responseBody.put("email", "Email address is already in use.");
+				}
+			}
+		}
+		// Check for missing password
+		if (!requestBody.containsKey("password") || requestBody.get("password").isEmpty()) {
+			responseBody.put("password", "Password cannot be empty.");
 		}
 		// User could not be created
-		if (!ok) {
+		if (!responseBody.isEmpty()) {
 			return new ResponseEntity(responseBody.toMap(), HttpStatus.BAD_REQUEST);
 		}
 		// User could be created
-		responseBody = new JSONObject();
 		responseBody.put("status", HttpStatus.OK);
-		// User could be created
-		users.save(requestUser);
+		User user = new User(
+				requestBody.get("email"),
+				requestBody.get("username"),
+				// Default to false where isAdmin is omitted
+				requestBody.containsKey("isAdmin") && Boolean.parseBoolean(requestBody.get("isAdmin"))
+		);
+		users.save(user);
+		// Save the password
+		passwords.save(new Password(user, requestBody.get("password")));
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 
@@ -111,11 +142,10 @@ public class UserController {
 				HttpStatus.OK
 		);
 	}
-	
+
 	@GetMapping("/search")
-	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParemeter) {		
-		return new ResponseEntity(users.searchUsername(queryParemeter), HttpStatus.OK);	
-		
+	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParemeter) {
+		return new ResponseEntity(users.searchUsername(queryParemeter), HttpStatus.OK);
 	}
-	
+
 }

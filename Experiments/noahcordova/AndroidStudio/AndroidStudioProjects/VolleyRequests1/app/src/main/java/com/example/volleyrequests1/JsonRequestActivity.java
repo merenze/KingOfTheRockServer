@@ -1,7 +1,5 @@
 package com.example.volleyrequests1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,7 +68,7 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
         if (!pDialog.isShowing())
             pDialog.show();
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.POST,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.GET,
                 Const.URL_JSON_OBJECT, null,
                 new Response.Listener<JSONObject>() {
 
@@ -84,14 +82,15 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
                     }
                 }, new Response.ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                //hideProgressDialog();
-                if (pDialog.isShowing())
-                    pDialog.hide();
-            }
-        }) {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d(TAG, "Error: " + error.getMessage());
+                        //hideProgressDialog();
+                        if (pDialog.isShowing())
+                            pDialog.hide();
+                    }
+        })
+        {
 
             /**
              * Passing some request headers
