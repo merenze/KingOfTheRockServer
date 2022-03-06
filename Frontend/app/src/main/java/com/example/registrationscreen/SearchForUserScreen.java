@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.NetworkResponse;
@@ -25,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 
 public class SearchForUserScreen extends AppCompatActivity {
@@ -46,18 +49,24 @@ public class SearchForUserScreen extends AppCompatActivity {
             EditText etUsernameEntry = (EditText)findViewById(R.id.activity_search_for_user_screen_et_searchEntry);
             usernameEntry = etUsernameEntry.getText().toString().trim();
             //loginCredentials = (TextView)findViewById(R.id.activity_main_tv_loginCredentials);
-
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                     (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry, null, new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.d(tag_json_arr, response.toString());
+                            //check that array is non-empty
                             try{
-                                response.get(0);
+                                response.get(0); //response.isEmpty()
                             }catch(JSONException exception){
-                                Log.d(tag_json_arr, exception.getMessage());
                                 Log.d(tag_json_arr, "Username not found");
                             }
+//                            response.toList();
+//                            ArrayAdapter adapter = new ArrayAdapter<String>(SearchForUserScreen.class,
+//                                    R.layout.activity_search_for_user_screen_listview, response);
+//
+//                            ListView listView = (ListView) findViewById(R.id.mobile_list);
+//                            listView.setAdapter(adapter);
+
                         }
                     }, new Response.ErrorListener() {
                         @Override
