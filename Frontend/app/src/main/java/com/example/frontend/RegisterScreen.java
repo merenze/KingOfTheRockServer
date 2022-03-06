@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -29,6 +31,7 @@ public class RegisterScreen extends AppCompatActivity {
 
     private EditText etEmail, etUsername, etPassword;
     private String email, username, password;
+    boolean adminBool;
     private String URL = "http://coms-309-015.class.las.iastate.edu:8080";
 
     @Override
@@ -39,6 +42,7 @@ public class RegisterScreen extends AppCompatActivity {
         Button registerButton = (MaterialButton) findViewById(R.id.register_register_button);
 
         email = username = password = "";
+        adminBool = false;
 
         registerButton.setOnClickListener(view -> {
             etEmail = findViewById(R.id.register_email_text);
@@ -48,10 +52,14 @@ public class RegisterScreen extends AppCompatActivity {
             username = etUsername.getText().toString().trim();
             password = etPassword.getText().toString().trim();
 
-            HashMap<String, String> parameters = new HashMap<String, String>();
+            CheckBox adminCheckBox = findViewById(R.id.register_screen_admin_checkbox);
+            adminBool = adminCheckBox.isChecked();
+
+            HashMap<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("email", email);
             parameters.put("username", username);
             parameters.put("password", password);
+            parameters.put("isAdmin", adminBool);
 
             JSONObject jsonObject = new JSONObject(parameters);
 
@@ -72,7 +80,6 @@ public class RegisterScreen extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //todo
                             //unexpected response code because volley sucks
                             NetworkResponse response = error.networkResponse;
                             if(error instanceof ServerError && response != null){
@@ -80,17 +87,24 @@ public class RegisterScreen extends AppCompatActivity {
                                     String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                                     JSONObject obj = new JSONObject(res);
 
-                                    if (obj.has("username")) {
-                                        try {
-                                            Log.d("duplicate username: ", obj.getString("username"));
-                                            startActivity(new Intent(view.getContext(), LoginScreen.class));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
+                                    if(obj.has("email") && obj.has("username")){
+                                        Toast.makeText(RegisterScreen.this, obj.getString("email") + "\n" + obj.getString("username"),
+                                                Toast.LENGTH_LONG).show();
                                     }
                                     if (obj.has("email")) {
                                         try {
                                             Log.d("duplicate email: ", obj.getString("email"));
+                                            Toast.makeText(RegisterScreen.this, obj.getString("email"),
+                                                    Toast.LENGTH_LONG).show();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    if (obj.has("username")) {
+                                        try {
+                                            Log.d("duplicate username: ", obj.getString("username"));
+                                            Toast.makeText(RegisterScreen.this, obj.getString("username"),
+                                                    Toast.LENGTH_LONG).show();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
