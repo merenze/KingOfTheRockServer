@@ -38,16 +38,15 @@ public class LoginScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login_screen);
 
-        loginButton = (Button)findViewById(R.id.activity_main_button_login);
+        loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
 
         loginButton.setOnClickListener(view -> {
-            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_main_et_name);
-            EditText etPassword = (EditText)findViewById(R.id.activity_main_et_password);
+            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
+            EditText etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
             username = etUsernameOrEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
-            loginCredentials = (TextView)findViewById(R.id.activity_main_tv_loginCredentials);
 
             HashMap<String, String> parameters = new HashMap<String, String>();
             parameters.put("username", username);
@@ -60,12 +59,12 @@ public class LoginScreen extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(tag_json_obj, response.toString());
-                            try {
-                                loginCredentials.setText("Welcome, " + response.getString("username"));
-                                startActivity(new Intent(view.getContext(), AfterLoginScreen.class));
-                            } catch (JSONException exception) {
-                                exception.printStackTrace();
-                            }
+                            //TODO: switch screens on login
+//                            try {
+//                                startActivity(new Intent(view.getContext(), AfterLoginScreen.class));
+//                            } catch (JSONException exception) {
+//                                exception.printStackTrace();
+//                            }
                         }
                     }, new Response.ErrorListener() {
                         @Override

@@ -24,20 +24,18 @@ public class User {
 	private String username;
 
 	/**
-	 * Login password for this user.
-	 */
-	private String password;
-
-	/**
 	 * Admin status for this user.
 	 */
 	private boolean isAdmin;
 
-	public User(int id, String email, String username, String password, boolean isAdmin) {
+	public User(int id, String email, String username, boolean isAdmin) {
+		this(email, username, isAdmin);
 		this.id = id;
+	}
+
+	public User(String email, String username, boolean isAdmin) {
 		this.email = email;
 		this.username = username;
-		this.password = password;
 		this.isAdmin = isAdmin;
 	}
 
@@ -78,17 +76,6 @@ public class User {
 	}
 
 	/**
-	 * @return Login password for this user.
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	/**
 	 * @return Admin status for this user.
 	 */
 	public boolean getIsAdmin() {
@@ -105,9 +92,6 @@ public class User {
 		}
 		if (user.username != null) {
 			this.username = user.username;
-		}
-		if (user.password != null) {
-			this.password = user.password;
 		}
 	}
 }
