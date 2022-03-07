@@ -53,14 +53,22 @@ public class SearchForUserScreen extends AppCompatActivity {
                     (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry, null, new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
+                            Log.d(tag_json_arr, response.getClass().toString());
                             Log.d(tag_json_arr, response.toString());
-                            //check that array is non-empty
+
+                            // check that array is non-empty
+                            // response.isEmpty()   //does not work, Java version?
+                            // instead...
                             try{
-                                response.get(0); //response.isEmpty()
+                                response.get(0); // throws JSONException if empty
                             }catch(JSONException exception){
                                 Log.d(tag_json_arr, "Username not found");
                             }
-//                            response.toList();
+
+                            // JSONArray into List<JSONObject> to pass to adapter
+                            // response.toList();       // does not work, Java version?
+
+                            // pass List<JSONArray>     // does not work, ArrayAdapter does not accept JSONArray as third parameter
 //                            ArrayAdapter adapter = new ArrayAdapter<String>(SearchForUserScreen.class,
 //                                    R.layout.activity_search_for_user_screen_listview, response);
 //
