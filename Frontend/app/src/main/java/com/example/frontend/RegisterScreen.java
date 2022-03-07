@@ -80,7 +80,6 @@ public class RegisterScreen extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //unexpected response code because volley sucks
                             NetworkResponse response = error.networkResponse;
                             if(error instanceof ServerError && response != null){
                                 try {
