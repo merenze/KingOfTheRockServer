@@ -1,5 +1,7 @@
 package com.example.frontend;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -28,7 +30,12 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class SearchForUserScreen extends AppCompatActivity {
 
@@ -67,13 +74,12 @@ public class SearchForUserScreen extends AppCompatActivity {
 
                             // JSONArray into List<JSONObject> to pass to adapter
                             // response.toList();       // does not work, Java version?
+                            JSONObject[] listFromJSONArrayResponse = JSONArrayToList(response);
+                            ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(),
+                                    R.layout.activity_search_for_user_screen_listview, listFromJSONArrayResponse);
 
-                            // pass List<JSONArray>     // does not work, ArrayAdapter does not accept JSONArray as third parameter
-//                            ArrayAdapter adapter = new ArrayAdapter<String>(SearchForUserScreen.class,
-//                                    R.layout.activity_search_for_user_screen_listview, response);
-//
-//                            ListView listView = (ListView) findViewById(R.id.mobile_list);
-//                            listView.setAdapter(adapter);
+                            ListView listView = (ListView) findViewById(R.id.mobile_list);
+                            listView.setAdapter(adapter);
 
                         }
                     }, new Response.ErrorListener() {
@@ -87,5 +93,35 @@ public class SearchForUserScreen extends AppCompatActivity {
             requestQueue.add(jsonArrayRequest);
         });
     }
+
+//    private ArrayList<JSONObject> JSONArrayToList(JSONArray jarray){
+//        ArrayList<JSONObject> myList = new ArrayList<JSONObject>();
+//
+//        for (int i = 0; i < jarray.length() - 1; i++)
+//        {
+//            try {
+//                myList.add(jarray.getJSONObject(i));
+//            } catch (JSONException exception) {
+//                exception.printStackTrace();
+//            }
+//        }
+//
+//        return myList;
+//    }
+
+        private JSONObject[] JSONArrayToList(JSONArray jarray){
+            JSONObject[] myList = new JSONObject[jarray.length()];
+
+            for (int i = 0; i < jarray.length() - 1; i++)
+            {
+                try {
+                    myList[i] = jarray.getJSONObject(i);
+                } catch (JSONException exception) {
+                    exception.printStackTrace();
+                }
+            }
+
+            return myList;
+        }
 
 }
