@@ -1,9 +1,11 @@
 package coms309.s1yn3.backend.controller;
 
+import com.mysql.cj.Session;
 import coms309.s1yn3.backend.entity.Password;
 import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.entity.repository.PasswordRepository;
 import coms309.s1yn3.backend.entity.repository.UserRepository;
+import coms309.s1yn3.backend.service.SessionProviderService;
 import coms309.s1yn3.backend.service.UserProviderService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -19,14 +22,10 @@ import java.util.regex.Pattern;
 public class UserController {
 	private static final String EMAIL_PATTERN = "^[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+@[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+(\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+)*$";
 
-	@Autowired
-	UserRepository users;
-
-	@Autowired
-	UserProviderService userProvider;
-
-	@Autowired
-	PasswordRepository passwords;
+	@Autowired UserRepository users;
+	@Autowired UserProviderService userProvider;
+	@Autowired PasswordRepository passwords;
+	@Autowired SessionProviderService sessions;
 
 	@GetMapping("/users")
 	public @ResponseBody List<User> index() {
@@ -60,8 +59,7 @@ public class UserController {
 		// Check for missing email
 		if (!requestBody.containsKey("email") || requestBody.get("email").isEmpty()) {
 			responseBody.put("email", "Email cannot be empty.");
-		}
-		else {
+		} else {
 			// Check for invalid email
 			if (!Pattern.matches(EMAIL_PATTERN, requestBody.get("email"))) {
 				if (responseBody == null) {
@@ -137,8 +135,10 @@ public class UserController {
 					HttpStatus.NOT_FOUND
 			);
 		}
+		Map<String, String> responseBody = new HashMap<>();
+		responseBody.put("auth-token", sessions.addSession(user));
 		return new ResponseEntity(
-				user,
+				responseBody,
 				HttpStatus.OK
 		);
 	}
