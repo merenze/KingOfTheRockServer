@@ -11,18 +11,28 @@ import java.util.UUID;
 public class SessionProviderService {
 	private Map<String, User> sessions = new HashMap<>();
 
+	/**
+	 * Store a new session for a user
+	 * @param user
+	 * @return Auth token for the user's session.
+	 */
 	public String addSession(User user) {
-		// Remove the user's old session from memory
+		removeSession(user);
+		String token = UUID.randomUUID().toString();
+		sessions.put(token, user);
+		return token;
+	}
+
+	public void removeSession(User user) {
 		for (String token : sessions.keySet()) {
 			if (sessions.get(token) == user) {
 				sessions.remove(token);
 				break;
 			}
 		}
-		// Add the user's new session
-		String token = UUID.randomUUID().toString();
-		sessions.put(token, user);
-		// Return the authentication token
-		return token;
+	}
+
+	public User getUser(String token) {
+		return sessions.get(token);
 	}
 }
