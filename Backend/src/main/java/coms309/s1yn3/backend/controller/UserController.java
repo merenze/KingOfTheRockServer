@@ -1,6 +1,5 @@
 package coms309.s1yn3.backend.controller;
 
-import com.mysql.cj.Session;
 import coms309.s1yn3.backend.entity.Password;
 import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.entity.repository.PasswordRepository;
