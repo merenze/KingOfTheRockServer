@@ -31,11 +31,6 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 public class SearchForUserScreen extends AppCompatActivity {
 
@@ -55,7 +50,6 @@ public class SearchForUserScreen extends AppCompatActivity {
         searchButton.setOnClickListener(view -> {
             EditText etUsernameEntry = (EditText)findViewById(R.id.activity_search_for_user_screen_et_searchEntry);
             usernameEntry = etUsernameEntry.getText().toString().trim();
-            //loginCredentials = (TextView)findViewById(R.id.activity_main_tv_loginCredentials);
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                     (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry, null, new Response.Listener<JSONArray>() {
                         @Override
@@ -64,21 +58,18 @@ public class SearchForUserScreen extends AppCompatActivity {
                             Log.d(tag_json_arr, response.toString());
 
                             // check that array is non-empty
-                            // response.isEmpty()   //does not work, Java version?
-                            // instead...
                             try{
                                 response.get(0); // throws JSONException if empty
                             }catch(JSONException exception){
                                 Log.d(tag_json_arr, "Username not found");
                             }
 
-                            // JSONArray into List<JSONObject> to pass to adapter
-                            // response.toList();       // does not work, Java version?
-                            JSONObject[] listFromJSONArrayResponse = JSONArrayToList(response);
+                            // JSONArray into Array<String> to pass to adapter
+                            ArrayList<String> listFromJSONArrayResponse = JSONArrayToList(response);
                             ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(),
                                     R.layout.activity_search_for_user_screen_listview, listFromJSONArrayResponse);
 
-                            ListView listView = (ListView) findViewById(R.id.mobile_list);
+                            ListView listView = (ListView) findViewById(R.id.activity_search_for_user_screen_lv_users);
                             listView.setAdapter(adapter);
 
                         }
@@ -94,34 +85,17 @@ public class SearchForUserScreen extends AppCompatActivity {
         });
     }
 
-//    private ArrayList<JSONObject> JSONArrayToList(JSONArray jarray){
-//        ArrayList<JSONObject> myList = new ArrayList<JSONObject>();
-//
-//        for (int i = 0; i < jarray.length() - 1; i++)
-//        {
-//            try {
-//                myList.add(jarray.getJSONObject(i));
-//            } catch (JSONException exception) {
-//                exception.printStackTrace();
-//            }
-//        }
-//
-//        return myList;
-//    }
-
-        private JSONObject[] JSONArrayToList(JSONArray jarray){
-            JSONObject[] myList = new JSONObject[jarray.length()];
-
-            for (int i = 0; i < jarray.length() - 1; i++)
-            {
-                try {
-                    myList[i] = jarray.getJSONObject(i);
-                } catch (JSONException exception) {
-                    exception.printStackTrace();
-                }
+    private ArrayList<String> JSONArrayToList(JSONArray jarray){
+        ArrayList<String> myList = new ArrayList<String>();
+        for (int i = 0; i < jarray.length() - 1; i++)
+        {
+            try {
+                myList.add(jarray.getJSONObject(i).getString("username"));
+            } catch (JSONException exception) {
+                exception.printStackTrace();
             }
-
-            return myList;
         }
+        return myList;
+    }
 
 }
