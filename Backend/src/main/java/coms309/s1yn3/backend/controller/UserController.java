@@ -43,6 +43,31 @@ public class UserController {
 		return new ResponseEntity(user, HttpStatus.OK);
 	}
 
+	@PatchMapping("/users/{id}")
+	public @ResponseBody ResponseEntity update(@PathVariable int id, @RequestBody User request) {
+		User user = users.getById(id);
+		if (user == null) {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+		user.patch(request);
+		users.save(user);
+		JSONObject responseBody = new JSONObject();
+		responseBody.put("status", HttpStatus.OK);
+		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/users/{id}")
+	public @ResponseBody ResponseEntity delete(@PathVariable int id) {
+		JSONObject responseBody = new JSONObject();
+		if (users.getById(id) == null) {
+			responseBody.put("status", HttpStatus.NOT_FOUND);
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+		users.deleteById(id);
+		responseBody.put("status", HttpStatus.OK);
+		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
+	}
+
 	@PostMapping("/register")
 	public @ResponseBody ResponseEntity create(@RequestBody Map<String, String> requestBody) {
 		JSONObject responseBody = new JSONObject();
@@ -94,31 +119,6 @@ public class UserController {
 		users.save(user);
 		// Save the password
 		passwords.save(new Password(user, requestBody.get("password")));
-		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
-	}
-
-	@PatchMapping("/users/{id}")
-	public @ResponseBody ResponseEntity update(@PathVariable int id, @RequestBody User request) {
-		User user = users.getById(id);
-		if (user == null) {
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
-		}
-		user.patch(request);
-		users.save(user);
-		JSONObject responseBody = new JSONObject();
-		responseBody.put("status", HttpStatus.OK);
-		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
-	}
-
-	@DeleteMapping("/users/{id}")
-	public @ResponseBody ResponseEntity delete(@PathVariable int id) {
-		JSONObject responseBody = new JSONObject();
-		if (users.getById(id) == null) {
-			responseBody.put("status", HttpStatus.NOT_FOUND);
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
-		}
-		users.deleteById(id);
-		responseBody.put("status", HttpStatus.OK);
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 
