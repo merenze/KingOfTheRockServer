@@ -87,7 +87,7 @@ public class SearchForUserScreen extends AppCompatActivity {
 
     private ArrayList<String> JSONArrayToList(JSONArray jarray){
         ArrayList<String> myList = new ArrayList<String>();
-        for (int i = 0; i < jarray.length() - 1; i++)
+        for (int i = 0; i < jarray.length(); i++)
         {
             try {
                 myList.add(jarray.getJSONObject(i).getString("username"));

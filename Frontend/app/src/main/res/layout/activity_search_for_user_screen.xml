@@ -17,7 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_search_for_user_button_search" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_search_for_user_button_search"
+    />
 
     <EditText
         android:id="@+id/activity_search_for_user_screen_et_searchEntry"
