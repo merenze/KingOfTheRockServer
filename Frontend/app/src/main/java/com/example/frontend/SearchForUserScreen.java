@@ -54,7 +54,6 @@ public class SearchForUserScreen extends AppCompatActivity {
                     (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry, null, new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            Log.d(tag_json_arr, response.getClass().toString());
                             Log.d(tag_json_arr, response.toString());
 
                             // check that array is non-empty
@@ -95,7 +94,6 @@ public class SearchForUserScreen extends AppCompatActivity {
                 exception.printStackTrace();
             }
         }
-        Log.d(tag_json_arr, myList.toString());
         return myList;
     }
 
