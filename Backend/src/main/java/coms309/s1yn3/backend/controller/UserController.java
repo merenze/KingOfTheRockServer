@@ -4,6 +4,7 @@ import coms309.s1yn3.backend.entity.Password;
 import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.entity.repository.PasswordRepository;
 import coms309.s1yn3.backend.entity.repository.UserRepository;
+import coms309.s1yn3.backend.service.SessionProviderService;
 import coms309.s1yn3.backend.service.UserProviderService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -19,14 +21,10 @@ import java.util.regex.Pattern;
 public class UserController {
 	private static final String EMAIL_PATTERN = "^[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+@[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+(\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+)*$";
 
-	@Autowired
-	UserRepository users;
-
-	@Autowired
-	UserProviderService userProvider;
-
-	@Autowired
-	PasswordRepository passwords;
+	@Autowired UserRepository users;
+	@Autowired UserProviderService userProvider;
+	@Autowired PasswordRepository passwords;
+	@Autowired SessionProviderService sessions;
 
 	@GetMapping("/users")
 	public @ResponseBody List<User> index() {
@@ -42,6 +40,31 @@ public class UserController {
 			return new ResponseEntity(responseBody.toMap(), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity(user, HttpStatus.OK);
+	}
+
+	@PatchMapping("/users/{id}")
+	public @ResponseBody ResponseEntity update(@PathVariable int id, @RequestBody User request) {
+		User user = users.getById(id);
+		if (user == null) {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+		user.patch(request);
+		users.save(user);
+		JSONObject responseBody = new JSONObject();
+		responseBody.put("status", HttpStatus.OK);
+		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/users/{id}")
+	public @ResponseBody ResponseEntity delete(@PathVariable int id) {
+		JSONObject responseBody = new JSONObject();
+		if (users.getById(id) == null) {
+			responseBody.put("status", HttpStatus.NOT_FOUND);
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+		users.deleteById(id);
+		responseBody.put("status", HttpStatus.OK);
+		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 
 	@PostMapping("/register")
@@ -60,8 +83,7 @@ public class UserController {
 		// Check for missing email
 		if (!requestBody.containsKey("email") || requestBody.get("email").isEmpty()) {
 			responseBody.put("email", "Email cannot be empty.");
-		}
-		else {
+		} else {
 			// Check for invalid email
 			if (!Pattern.matches(EMAIL_PATTERN, requestBody.get("email"))) {
 				if (responseBody == null) {
@@ -99,31 +121,6 @@ public class UserController {
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 
-	@PatchMapping("/users/{id}")
-	public @ResponseBody ResponseEntity update(@PathVariable int id, @RequestBody User request) {
-		User user = users.getById(id);
-		if (user == null) {
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
-		}
-		user.patch(request);
-		users.save(user);
-		JSONObject responseBody = new JSONObject();
-		responseBody.put("status", HttpStatus.OK);
-		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
-	}
-
-	@DeleteMapping("/users/{id}")
-	public @ResponseBody ResponseEntity delete(@PathVariable int id) {
-		JSONObject responseBody = new JSONObject();
-		if (users.getById(id) == null) {
-			responseBody.put("status", HttpStatus.NOT_FOUND);
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
-		}
-		users.deleteById(id);
-		responseBody.put("status", HttpStatus.OK);
-		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
-	}
-
 	@PostMapping("/login")
 	public @ResponseBody ResponseEntity login(@RequestBody Map<String, String> request) {
 		String username = request.get("username");
@@ -137,8 +134,10 @@ public class UserController {
 					HttpStatus.NOT_FOUND
 			);
 		}
+		Map<String, String> responseBody = new HashMap<>();
+		responseBody.put("auth-token", sessions.addSession(user));
 		return new ResponseEntity(
-				user,
+				responseBody,
 				HttpStatus.OK
 		);
 	}
