@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchForUserScreen">
+    tools:context=".MainActivity">
 
     <ListView
         android:id="@+id/activity_search_for_user_screen_lv_users"
@@ -18,7 +18,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_search_for_user_button_search"
-    />
+        />
 
     <EditText
         android:id="@+id/activity_search_for_user_screen_et_searchEntry"
@@ -28,7 +28,7 @@
         android:layout_marginEnd="50dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="@string/activity_search_for_user_button_search_string"
+        android:hint="Username"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,6 +51,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_search_for_user_screen_et_searchEntry"
         app:layout_constraintVertical_bias="0.053" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

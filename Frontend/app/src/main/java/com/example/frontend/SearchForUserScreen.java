@@ -86,9 +86,7 @@ public class SearchForUserScreen extends AppCompatActivity {
     }
 
     private ArrayList<String> JSONArrayToList(JSONArray jarray){
-        Log.d(tag_json_arr, "in JSONArrayToList()");
-        Log.d(tag_json_arr, jarray.toString());
-        ArrayList<String> myList = new ArrayList<>();
+        ArrayList<String> myList = new ArrayList<String>();
         for (int i = 0; i < jarray.length(); i++)
         {
             try {
