@@ -67,7 +67,11 @@ public class UserListScreen extends AppCompatActivity {
         for (int i = 0; i < jarray.length(); i++)
         {
             try {
-                myList.add(jarray.getJSONObject(i).getString("username"));
+                if(jarray.getJSONObject(i).getBoolean("isAdmin")){
+                    myList.add(jarray.getJSONObject(i).getString("username") + "\n\t\t" + "Admin");
+                } else {
+                    myList.add(jarray.getJSONObject(i).getString("username") + "\n\t\t" + "Player");
+                }
             } catch (JSONException exception) {
                 exception.printStackTrace();
             }
