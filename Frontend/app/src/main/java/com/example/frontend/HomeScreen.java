@@ -25,7 +25,6 @@ public class HomeScreen extends AppCompatActivity {
 
         Button buttonToRegister = findViewById(R.id.homescreen_register_button);
 
-
         buttonToRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,7 +34,7 @@ public class HomeScreen extends AppCompatActivity {
 
         Button buttonToUserList = findViewById(R.id.homescreen_userlist_button);
 
-        buttonToUserList.setOnClickListener(new View.OnClickListener(){
+        buttonToUserList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 startActivity(new Intent(view.getContext(), UserListScreen.class));
