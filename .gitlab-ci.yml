@@ -11,13 +11,36 @@ maven-build:   #this is a JOB
     - mvn package
 
 android-build: #this is another job
-  image: javiersantos/android-ci:latest      # this is a directive to DOCKER
-  stage: androidtry
+  image: gjandres  stage: maventry
   tags:
-   - android_tag         #this is LINK to the docker runner on the remote-server
+    - springboot_tag  # this is LINK to the shell runner on the remote-server
+  script:
+    - cd Backend
+    - mvn package
+
+android-build: #another job to build
+  image: gjandres/android-ci      # this is a directive to DOCKER
+  stage: androidbuild
   before_script:
     - export GRADLE_USER_HOME=pwd/.gradle
     - chmod +x ./Frontend/gradlew
+  tags:
+    - android_tag
   script:
     - cd Frontend
-    - ./gradlew assemble
+    - ./gradlewbuild
+  artifacts:
+    paths:
+      - Android_test/app/build/outputs/
+
+android-test:  #another job to test
+  image: gjandres/android-ci
+  stage: androidtest
+  before_script:
+    - export GRADLE_USER_HOME='pwd'/.gradle
+    - chmod +x ./Frontend/gradlew
+  tags:
+    - android_tag
+  script:
+    - cd Frontend
+    - .gradlew test
