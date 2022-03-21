@@ -1,6 +1,6 @@
 stages:
   - maventry
-  - androidtry
+#  - androidtry
 
 maven-build:   #this is a JOB
   stage: maventry
@@ -10,29 +10,29 @@ maven-build:   #this is a JOB
     - cd Backend
     - mvn package
 
-android-build: #another job to build android
-  image: gjandres/android-ci      # this is a directive to DOCKER
-  stage: androidbuild
-  before_script:
-    - export GRADLE_USER_HOME=pwd/.gradle
-    - chmod +x ./Frontend/gradlew
-  tags:
-    - android_tag
-  script:
-    - cd Frontend
-    - ./gradlewbuild
-  artifacts:
-    paths:
-      - Android_test/app/build/outputs/
+# android-build: #another job to build android
+#   image: gjandres/android-ci      # this is a directive to DOCKER
+#   stage: androidbuild
+#   before_script:
+#     - export GRADLE_USER_HOME=pwd/.gradle
+#     - chmod +x ./Frontend/gradlew
+#   tags:
+#     - android_tag
+#   script:
+#     - cd Frontend
+#     - ./gradlewbuild
+#   artifacts:
+#     paths:
+#       - Android_test/app/build/outputs/
 
-android-test:  #another job to test android
-  image: gjandres/android-ci
-  stage: androidtest
-  before_script:
-    - export GRADLE_USER_HOME='pwd'/.gradle
-    - chmod +x ./Frontend/gradlew
-  tags:
-    - android_tag
-  script:
-    - cd Frontend
-    - .gradlew test
+# android-test:  #another job to test android
+#   image: gjandres/android-ci
+#   stage: androidtest
+#   before_script:
+#     - export GRADLE_USER_HOME='pwd'/.gradle
+#     - chmod +x ./Frontend/gradlew
+#   tags:
+#     - android_tag
+#   script:
+#     - cd Frontend
+#     - .gradlew test
