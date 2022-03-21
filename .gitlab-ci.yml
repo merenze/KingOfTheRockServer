@@ -10,15 +10,7 @@ maven-build:   #this is a JOB
     - cd Backend
     - mvn package
 
-android-build: #this is another job
-  image: gjandres  stage: maventry
-  tags:
-    - springboot_tag  # this is LINK to the shell runner on the remote-server
-  script:
-    - cd Backend
-    - mvn package
-
-android-build: #another job to build
+android-build: #another job to build android
   image: gjandres/android-ci      # this is a directive to DOCKER
   stage: androidbuild
   before_script:
@@ -33,7 +25,7 @@ android-build: #another job to build
     paths:
       - Android_test/app/build/outputs/
 
-android-test:  #another job to test
+android-test:  #another job to test android
   image: gjandres/android-ci
   stage: androidtest
   before_script:
