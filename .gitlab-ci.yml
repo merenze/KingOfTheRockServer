@@ -27,14 +27,15 @@ android-build: #another job to build android
   #   paths:
   #     - Android_test/app/build/outputs/
 
-# android-test:  #another job to test android
-#   image: gjandres/android-ci
-#   stage: androidtest
-#   before_script:
-#     - export GRADLE_USER_HOME='pwd'/.gradle
-#     - chmod +x ./Frontend/gradlew
-#   tags:
-#     - android_tag
-#   script:
-#     - cd Frontend
-#     - .gradlew test
+android-test:  #another job to test android
+  image: inovex/gitlab-ci-android
+  stage: androidtry
+  tags:
+    - android_tag
+  before_script:
+    - export GRADLE_USER_HOME=$(pwd)/.gradle
+    - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    - chmod +x ./Frontend/gradlew
+  script:
+    - cd Frontend
+    # - .gradlew test
