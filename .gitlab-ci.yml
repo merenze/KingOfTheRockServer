@@ -12,10 +12,11 @@ maven-build:   #this is a JOB
     - mvn package
 
 android-build: #another job to build android
-  image: gjandres/android-ci      # this is a directive to DOCKER
+  image: inovex/gitlab-ci-android      # this is a directive to DOCKER
   stage: androidtry
   before_script:
     - export GRADLE_USER_HOME=pwd/.gradle
+    - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
     - chmod +x ./Frontend/gradlew
   tags:
     - android_tag
