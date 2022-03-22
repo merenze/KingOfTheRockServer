@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -34,6 +35,7 @@ public class LoginScreen extends AppCompatActivity {
     private Button loginButton;
     private String tag_json_obj = "jobj_req";
     private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
+    private String authToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,13 @@ public class LoginScreen extends AppCompatActivity {
                     (Request.Method.POST, url_coms309_backend_server + "/login", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            try {
+                                authToken = response.getString("auth-token");
+                                Toast.makeText(LoginScreen.this, authToken,
+                                        Toast.LENGTH_LONG).show();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             Log.d(tag_json_obj, response.toString());
                             //TODO: switch screens on login
 //                            try {
