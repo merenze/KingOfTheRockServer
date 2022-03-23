@@ -15,23 +15,26 @@ public class HomeScreen extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
 
         Button buttonToLogin = findViewById(R.id.homescreen_login_button);
-
         buttonToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(view.getContext(), LoginScreen.class));
-                //re-routing the button to switch to search screen - FOR TESTING ONLY
-                startActivity(new Intent(view.getContext(), SearchForUserScreen.class));
+                startActivity(new Intent(view.getContext(), LoginScreen.class));
             }
         });
 
         Button buttonToRegister = findViewById(R.id.homescreen_register_button);
-
-
         buttonToRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(view.getContext(), RegisterScreen.class));
+            }
+        });
+
+        Button buttonToSearchForUser = findViewById(R.id.homescreen_search_button);
+        buttonToSearchForUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), SearchForUserScreen.class));
             }
         });
 
