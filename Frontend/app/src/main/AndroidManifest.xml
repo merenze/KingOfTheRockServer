@@ -20,6 +20,9 @@
             android:name=".LoginScreen"
             android:exported="false" />
         <activity
+            android:name=".UserListScreen"
+            android:exported="false" />
+        <activity
             android:name=".HomeScreen"
             android:exported="true">
             <intent-filter>

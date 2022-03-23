@@ -94,13 +94,4 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-//    private JSONObject makeJsonObjectForLogin(String usernameOrEmail, String password) throws JSONException {
-//        JSONObject loginCredentialsJsonObject = new JSONObject();
-//        //currently only accepts username, change as project moves along
-//        loginCredentialsJsonObject.put("username", usernameOrEmail);
-//        loginCredentialsJsonObject.put("password", password);
-//
-//        return loginCredentialsJsonObject;
-//    }
-
 }
