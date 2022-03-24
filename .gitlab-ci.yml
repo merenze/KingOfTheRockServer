@@ -2,10 +2,6 @@ stages:
   - maventry
   - androidtry
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 28-user-list-screen-2
 maven-build:   #this is a JOB
   stage: maventry
   tags:
@@ -41,8 +37,4 @@ android-test:  #another job to test android
     - chmod +x ./Frontend/gradlew
   script:
     - cd Frontend
-<<<<<<< HEAD
     # - .gradlew test
-=======
-    # - .gradlew test
->>>>>>> 28-user-list-screen-2
