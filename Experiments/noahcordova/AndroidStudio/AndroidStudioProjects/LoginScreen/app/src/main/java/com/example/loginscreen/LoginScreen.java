@@ -1,4 +1,4 @@
-package com.example.frontend;
+package com.example.loginscreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -31,24 +30,25 @@ public class LoginScreen extends AppCompatActivity {
     private String TAG = LoginScreen.class.getSimpleName();
     private String username;
     private String password;
+    public static String usernameResponse;
     private TextView loginCredentials;
     private Button loginButton;
     private String tag_json_obj = "jobj_req";
     private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
-    private String authToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_screen);
+        setContentView(R.layout.activity_main);
 
-        loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
+        loginButton = (Button)findViewById(R.id.activity_main_button_login);
 
         loginButton.setOnClickListener(view -> {
-            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
-            EditText etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
+            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_main_et_name);
+            EditText etPassword = (EditText)findViewById(R.id.activity_main_et_password);
             username = etUsernameOrEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
+            loginCredentials = (TextView)findViewById(R.id.activity_main_tv_loginCredentials);
 
             HashMap<String, String> parameters = new HashMap<String, String>();
             parameters.put("username", username);
@@ -60,20 +60,14 @@ public class LoginScreen extends AppCompatActivity {
                     (Request.Method.POST, url_coms309_backend_server + "/login", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            try {
-                                authToken = response.getString("auth-token");
-                                Toast.makeText(LoginScreen.this, authToken,
-                                        Toast.LENGTH_LONG).show();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
                             Log.d(tag_json_obj, response.toString());
-                            //TODO: switch screens on login
-//                            try {
-//                                startActivity(new Intent(view.getContext(), AfterLoginScreen.class));
-//                            } catch (JSONException exception) {
-//                                exception.printStackTrace();
-//                            }
+                            try {
+                                usernameResponse = response.getString("username");
+                                loginCredentials.setText("Welcome, " + response.getString("username"));
+                                startActivity(new Intent(view.getContext(), AfterLoginScreen.class));
+                            } catch (JSONException exception) {
+                                exception.printStackTrace();
+                            }
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -102,5 +96,19 @@ public class LoginScreen extends AppCompatActivity {
             requestQueue.add(jsonObjectRequest);
         });
     }
+
+//    private JSONObject makeJsonObjectForLogin(String usernameOrEmail, String password) throws JSONException {
+//        JSONObject loginCredentialsJsonObject = new JSONObject();
+//        //currently only accepts username, change as project moves along
+//        loginCredentialsJsonObject.put("username", usernameOrEmail);
+//        loginCredentialsJsonObject.put("password", password);
+//
+//        return loginCredentialsJsonObject;
+//    }
+
+    public String getUsernameFromResponse(){
+        return usernameResponse;
+    }
+
 
 }

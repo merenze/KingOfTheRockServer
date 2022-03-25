@@ -22,7 +22,8 @@ public class AuthFilter implements Filter {
 	@Override public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
 		HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-		String header = httpRequest.getHeader("auth-token");
+//		String header = httpRequest.getHeader("auth-token");
+		String header = httpRequest.getParameter("auth-token");
 		if (header == null || sessions.getUser(header) == null) {
 			httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
 			return;

@@ -14,10 +14,16 @@
         android:theme="@style/Theme.frontend"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".SearchForUserScreen"
+            android:exported="false" />
+        <activity
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
             android:name=".LoginScreen"
+            android:exported="false" />
+        <activity
+            android:name=".UserListScreen"
             android:exported="false" />
         <activity
             android:name=".HomeScreen"
