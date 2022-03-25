@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">frontend</string>
+    <string name="activity_search_for_user_button_search_string">Enter Username</string>
+    <string name="activity_login_et_username_hint">Username</string>
+    <string name="activity_login_et_password_hint">Password</string>
+    <string name="activity_login_button_login_text">Login</string>
     <string name="login_screen_name">LoginScreen</string>
-    <string name="username_or_email_hint">Username or Email</string>
-    <string name="password_hint">Password</string>
-    <string name="login_button_text">Login</string>
 
 </resources>
