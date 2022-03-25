@@ -31,7 +31,6 @@ public class LoginScreen extends AppCompatActivity {
     private String TAG = LoginScreen.class.getSimpleName();
     private String username;
     private String password;
-    private TextView loginCredentials;
     private Button loginButton;
     private String tag_json_obj = "jobj_req";
     private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
