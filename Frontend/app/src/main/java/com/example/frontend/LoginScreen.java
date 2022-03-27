@@ -34,7 +34,7 @@ public class LoginScreen extends AppCompatActivity {
     private Button loginButton;
     private String tag_json_obj = "jobj_req";
     private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
-    private String authToken;
+    private static String authToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +100,10 @@ public class LoginScreen extends AppCompatActivity {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(jsonObjectRequest);
         });
+    }
+
+    public static String getAuthToken(){
+        return authToken;
     }
 
 }

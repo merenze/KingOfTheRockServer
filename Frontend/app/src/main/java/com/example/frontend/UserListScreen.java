@@ -33,7 +33,7 @@ public class UserListScreen extends AppCompatActivity {
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL + "/users",
+                URL + "/users" + "?auth-token=" + LoginScreen.getAuthToken(),
                 null,
                 response -> {
                     // Process the JSON

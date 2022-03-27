@@ -64,7 +64,7 @@ public class RegisterScreen extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(parameters);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, URL + "/register", jsonObject, new Response.Listener<JSONObject>() {
+                    (Request.Method.POST, URL + "/register" + "?auth-token=" + LoginScreen.getAuthToken(), jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             if(response.has("status")){
