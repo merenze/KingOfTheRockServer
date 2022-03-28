@@ -66,7 +66,7 @@ public class LoginScreen extends AppCompatActivity {
                                     startActivity(new Intent(view.getContext(), UserDashboard.class));
                                 }
                             } catch (JSONException exception) {
-
+                                exception.printStackTrace();
                             }
                         }
                     }, new Response.ErrorListener() {
