@@ -51,7 +51,7 @@ public class SearchForUserScreen extends AppCompatActivity {
             EditText etUsernameEntry = (EditText)findViewById(R.id.activity_search_for_user_screen_et_searchEntry);
             usernameEntry = etUsernameEntry.getText().toString().trim();
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                    (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry, null, new Response.Listener<JSONArray>() {
+                    (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry + "&auth-token=" + LoginScreen.getAuthToken(), null, new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.d(tag_json_arr, response.toString());
