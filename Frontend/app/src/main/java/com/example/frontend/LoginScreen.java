@@ -69,11 +69,6 @@ public class LoginScreen extends AppCompatActivity {
                             } catch (JSONException exception) {
 
                             }
-//                            try {
-//                                startActivity(new Intent(view.getContext(), AfterLoginScreen.class));
-//                            } catch (JSONException exception) {
-//                                exception.printStackTrace();
-//                            }
                         }
                     }, new Response.ErrorListener() {
                         @Override
