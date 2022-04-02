@@ -30,6 +30,23 @@ public class GameUserRelation {
 	@JsonBackReference
 	public User user;
 
+	/**
+	 * Empty constructor for use by JPA.
+	 */
+	public GameUserRelation() {
+
+	}
+
+	/**
+	 * Create a new Game-User relation between the given game and user.
+	 * @param game
+	 * @param user
+	 */
+	public GameUserRelation(Game game, User user) {
+		this.game = game;
+		this.user = user;
+	}
+
 	public int getGameId() {
 		return gameId;
 	}
