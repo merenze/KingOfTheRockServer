@@ -1,9 +1,9 @@
 package coms309.s1yn3.backend.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import coms309.s1yn3.backend.entity.relation.GameUserRelation;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Game {
@@ -11,11 +11,22 @@ public class Game {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@OneToMany(targetEntity = GameUserRelation.class, mappedBy = "game")
+	private List<GameUserRelation> userRelations;
+
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public List<GameUserRelation> getUserRelations() {
+		return userRelations;
+	}
+
+	public void setUserRelations(List<GameUserRelation> userRelations) {
+		this.userRelations = userRelations;
 	}
 }
