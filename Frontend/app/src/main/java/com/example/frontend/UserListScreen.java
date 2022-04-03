@@ -1,6 +1,7 @@
 package com.example.frontend;
 
 import static com.example.frontend.Constants.URL;
+import static com.example.frontend.Constants.tag_json_arr;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,15 +11,13 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.frontend.SupportingClasses.AppController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -29,8 +28,7 @@ public class UserListScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list_screen);
 
-        RequestQueue requestQueue = Volley.newRequestQueue(UserListScreen.this);
-
+        //Request to pull list of users from the backend
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL + "/users" + "?auth-token=" + LoginScreen.getAuthToken(),
@@ -59,9 +57,14 @@ public class UserListScreen extends AppCompatActivity {
                     }
                 }
         );
-        requestQueue.add(jsonArrayRequest);
 
+        //Add request to queue
+        AppController.getInstance().addToRequestQueue(jsonArrayRequest, tag_json_arr);
     }
+
+    /*
+    Converts JSONArray to an ArrayList
+     */
     private ArrayList<String> JSONArrayToList(JSONArray jarray){
         ArrayList<String> myList = new ArrayList<String>();
         for (int i = 0; i < jarray.length(); i++)
