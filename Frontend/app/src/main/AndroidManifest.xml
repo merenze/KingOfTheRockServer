@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.frontend"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:name="com.example.frontend.SupportingClasses.AppController" >
         <activity
             android:name=".SearchForUserScreen"
             android:exported="false" />
