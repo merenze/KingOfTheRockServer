@@ -9,25 +9,35 @@ import java.io.Serializable;
 @Entity
 @IdClass(GameUserStructureId.class)
 public class GameUserStructureRelation {
-	@ManyToOne(targetEntity = GameUserRelation.class)
-
+	/**
+	 * This definition allows the key (game, user) to map to the game-user-relation.
+	 */
 	@EmbeddedId
 	private GameUserId gameUserId;
 
+	/**
+	 * ID of the game in the game-user relation.
+	 * Definition required in order to override the column name.
+	 */
+	@Id
+	@Column(name = "game", insertable = false, updatable = false)
+	private int gameId;
+
+	/**
+	 * ID of the user in the game-user relation.
+	 * Definition required in order to override the column name.
+	 */
+	@Id
+	@Column(name = "user", insertable = false, updatable = false)
+	private int userId;
+
+	/**
+	 * Name of the structure used in this relation.
+	 */
 	@Id
 	@Column(name = "structure")
 	private String structureName;
 
-	/*
-		TODO
-		This adds a duplicate foreign key to GameUserRelation.
-
-		I haven't found a way around this yet, because it seems complex to use Game and User IDs in this table's keyset,
-		while referencing the game-user table and not the games or users themselves.
-
-		Assuming we alter this table's data only through setters and not through raw queries,
-		this might not prove to be an issue.
-	 */
 	/**
 	 * Game-User relation associated with this relation.
 	 */
@@ -48,34 +58,65 @@ public class GameUserStructureRelation {
 	@MapsId("structureName")
 	private Structure structure;
 
+	/**
+	 * Embedded GameUserId used for hacky mapping.
+	 * For use by JPA.
+	 * @return
+	 */
 	public GameUserId getGameUserId() {
 		return gameUserId;
 	}
 
+	/**
+	 * For use by JPA.
+	 * Don't use this.
+	 * @param gameUserId
+	 */
 	public void setGameUserId(GameUserId gameUserId) {
 		this.gameUserId = gameUserId;
 	}
 
+	/**
+	 * @return Name of the structure used in this relation.
+	 */
 	public String getStructureName() {
 		return structureName;
 	}
 
+	/**
+	 * Please use class constants and don't do anything stupid with this.
+	 * @param structureName Name of the structure used in this relation.
+	 */
 	public void setStructureName(String structureName) {
 		this.structureName = structureName;
 	}
 
+	/**
+	 * @return GameUserRelation associated with this relation.
+	 */
 	public GameUserRelation getGameUserRelation() {
 		return gameUserRelation;
 	}
 
+	/**
+	 * For use by JPA.
+	 * Don't use this.
+	 * @param gameUserRelation
+	 */
 	public void setGameUserRelation(GameUserRelation gameUserRelation) {
 		this.gameUserRelation = gameUserRelation;
 	}
 
+	/**
+	 * @return Structure associated with this relation.
+	 */
 	public Structure getStructure() {
 		return structure;
 	}
 
+	/**
+	 * @param structure Structure associated with this relation.
+	 */
 	public void setStructure(Structure structure) {
 		this.structure = structure;
 	}
@@ -83,6 +124,5 @@ public class GameUserStructureRelation {
 
 class GameUserStructureId implements Serializable {
 	private GameUserId gameUserId;
-
 	private String structureName;
 }

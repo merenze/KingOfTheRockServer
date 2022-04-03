@@ -35,7 +35,13 @@ public class GameUserRelation {
 	 * Relations to the structures built by this user in this game.
 	 */
 	@OneToMany(targetEntity = GameUserStructureRelation.class, mappedBy = "gameUserId")
-	private List<GameUserStructureRelation> gameUserStructureRelations;
+	private List<GameUserStructureRelation> structureRelations;
+
+	/**
+	 * Relations to the materials possessed by this user in this game.
+	 */
+	@OneToMany(targetEntity = GameUserMaterialRelation.class, mappedBy = "gameUserId")
+	private List<GameUserMaterialRelation> materialRelations;
 
 
 	/**
@@ -90,18 +96,28 @@ public class GameUserRelation {
 	/**
 	 * @return Relations to the structures built by this user in this game.
 	 */
-	public List<GameUserStructureRelation> getGameUserStructureRelations() {
-		return gameUserStructureRelations;
+	public List<GameUserStructureRelation> getStructureRelations() {
+		return structureRelations;
 	}
 
-	public void setGameUserStructureRelations(List<GameUserStructureRelation> gameUserStructureRelations) {
-		this.gameUserStructureRelations = gameUserStructureRelations;
+	public void setStructureRelations(List<GameUserStructureRelation> structureRelations) {
+		this.structureRelations = structureRelations;
+	}
+
+	public List<GameUserMaterialRelation> getMaterialRelations() {
+		return materialRelations;
+	}
+
+	public void setMaterialRelations(List<GameUserMaterialRelation> materialRelations) {
+		this.materialRelations = materialRelations;
 	}
 }
 
 @Embeddable
 class GameUserId implements Serializable {
+	@Column(name = "game")
 	private int gameId;
+	@Column(name = "user")
 	private int userId;
 
 	public GameUserId(int gameId, int userId) {
