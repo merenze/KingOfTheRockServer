@@ -114,14 +114,15 @@ public class GameUserStructureRelation {
 	}
 
 	/**
-	 * @return Name of the structure used in this relation.
+	 * @return Name of the Structure used in this relation.
 	 */
 	public String getStructureName() {
 		return structureName;
 	}
 
 	/**
-	 * Please use class constants and don't do anything stupid with this.
+	 * For use by JPA.
+	 * Don't use this.
 	 * @param structureName Name of the structure used in this relation.
 	 */
 	public void setStructureName(String structureName) {
