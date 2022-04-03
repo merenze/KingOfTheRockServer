@@ -59,6 +59,11 @@ public class GameUserStructureRelation {
 	private Structure structure;
 
 	/**
+	 * Amount of this structure the User has built in this game.
+	 */
+	private int amount;
+
+	/**
 	 * Embedded GameUserId used for hacky mapping.
 	 * For use by JPA.
 	 * @return
@@ -74,6 +79,38 @@ public class GameUserStructureRelation {
 	 */
 	public void setGameUserId(GameUserId gameUserId) {
 		this.gameUserId = gameUserId;
+	}
+
+	/**
+	 * @return ID of the Game associated with this relation.
+	 */
+	public int getGameId() {
+		return gameId;
+	}
+
+	/**
+	 * For use by JPA.
+	 * Don't use this.
+	 * @param gameId ID of the Game associated with this relation.
+	 */
+	public void setGameId(int gameId) {
+		this.gameId = gameId;
+	}
+
+	/**
+	 * @return ID of the User associated with this relation.
+	 */
+	public int getUserId() {
+		return userId;
+	}
+
+	/**
+	 * For use by JPA.
+	 * Don't use this.
+	 * @param userId
+	 */
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	/**
@@ -119,6 +156,27 @@ public class GameUserStructureRelation {
 	 */
 	public void setStructure(Structure structure) {
 		this.structure = structure;
+	}
+
+	/**
+	 * @return Amount of this structure the User has built in this Game.
+	 */
+	public int getAmount() {
+		return amount;
+	}
+
+	/**
+	 * @param amount Amount of this structure the User has built in this Game.
+	 */
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	/**
+	 * Increment the amount of this structure the User has built.
+	 */
+	public void incrementAmount() {
+		this.amount += 1;
 	}
 }
 
