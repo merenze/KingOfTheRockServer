@@ -1,5 +1,8 @@
 package com.example.frontend;
 
+import static com.example.frontend.Constants.URL;
+import static com.example.frontend.Constants.tag_json_obj;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -19,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.frontend.SupportingClasses.AppController;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
@@ -32,7 +36,6 @@ public class RegisterScreen extends AppCompatActivity {
     private EditText etEmail, etUsername, etPassword;
     private String email, username, password;
     boolean adminBool;
-    private String URL = "http://coms-309-015.class.las.iastate.edu:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class RegisterScreen extends AppCompatActivity {
 
             JSONObject jsonObject = new JSONObject(parameters);
 
+            //Request to register user
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, URL + "/register" + "?auth-token=" + LoginScreen.getAuthToken(), jsonObject, new Response.Listener<JSONObject>() {
                         @Override
@@ -115,8 +119,8 @@ public class RegisterScreen extends AppCompatActivity {
                         }
                     });
 
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(jsonObjectRequest);
+            //Add request to queue
+            AppController.getInstance().addToRequestQueue(jsonObjectRequest);
         });
     }
 }

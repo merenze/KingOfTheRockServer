@@ -1,24 +1,23 @@
 package com.example.frontend;
 
+import static com.example.frontend.Constants.tag_json_obj;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.frontend.SupportingClasses.AppController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +31,6 @@ public class LoginScreen extends AppCompatActivity {
     private String username;
     private String password;
     private Button loginButton;
-    private String tag_json_obj = "jobj_req";
     private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
     private static String authToken;
 
@@ -97,8 +95,8 @@ public class LoginScreen extends AppCompatActivity {
                         }
                     });
 
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(jsonObjectRequest);
+            //Add request to queue
+            AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_obj);
         });
     }
 
