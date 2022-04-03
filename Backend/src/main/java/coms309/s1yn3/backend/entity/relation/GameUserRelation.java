@@ -6,6 +6,7 @@ import coms309.s1yn3.backend.entity.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @IdClass(GameUserId.class)
@@ -22,13 +23,20 @@ public class GameUserRelation {
 	@JoinColumn(name = "user")
 	@MapsId("gameId")
 	@JsonBackReference
-	public Game game;
+	private Game game;
 
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "game")
 	@MapsId("userId")
 	@JsonBackReference
-	public User user;
+	private User user;
+
+	/**
+	 * Relations to the structures built by this user in this game.
+	 */
+	@OneToMany(targetEntity = GameUserStructureRelation.class, mappedBy = "gameUserId")
+	private List<GameUserStructureRelation> gameUserStructureRelations;
+
 
 	/**
 	 * Empty constructor for use by JPA.
@@ -78,8 +86,20 @@ public class GameUserRelation {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	/**
+	 * @return Relations to the structures built by this user in this game.
+	 */
+	public List<GameUserStructureRelation> getGameUserStructureRelations() {
+		return gameUserStructureRelations;
+	}
+
+	public void setGameUserStructureRelations(List<GameUserStructureRelation> gameUserStructureRelations) {
+		this.gameUserStructureRelations = gameUserStructureRelations;
+	}
 }
 
+@Embeddable
 class GameUserId implements Serializable {
 	private int gameId;
 	private int userId;
