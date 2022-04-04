@@ -60,11 +60,6 @@ public class LoginScreen extends AppCompatActivity {
                         public void onResponse(JSONObject response) {
                             try {
                                 authToken = response.getString("auth-token");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            Log.d(tag_json_obj, response.toString());
-                            try {
                                 if(response.getBoolean("isAdmin")){
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
@@ -73,6 +68,7 @@ public class LoginScreen extends AppCompatActivity {
                             } catch (JSONException exception) {
                                 exception.printStackTrace();
                             }
+                            Log.d(tag_json_obj, response.toString());
                         }
                     }, new Response.ErrorListener() {
                         @Override
