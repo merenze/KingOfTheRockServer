@@ -15,6 +15,12 @@
         android:usesCleartextTraffic="true"
         android:name="com.example.frontend.SupportingClasses.AppController" >
         <activity
+            android:name=".UserDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDashboard"
+            android:exported="false" />
+        <activity
             android:name=".SearchForUserScreen"
             android:exported="false" />
         <activity
