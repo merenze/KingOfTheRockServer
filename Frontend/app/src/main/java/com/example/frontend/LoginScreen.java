@@ -1,5 +1,6 @@
 package com.example.frontend;
 
+import static com.example.frontend.Constants.URL;
 import static com.example.frontend.Constants.tag_json_obj;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,7 +56,7 @@ public class LoginScreen extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(parameters);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, url_coms309_backend_server + "/login", jsonObject, new Response.Listener<JSONObject>() {
+                    (Request.Method.POST, URL + "/login", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
