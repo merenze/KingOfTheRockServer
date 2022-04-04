@@ -60,8 +60,6 @@ public class LoginScreen extends AppCompatActivity {
                         public void onResponse(JSONObject response) {
                             try {
                                 authToken = response.getString("auth-token");
-                                Toast.makeText(LoginScreen.this, authToken,
-                                        Toast.LENGTH_LONG).show();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
