@@ -4,6 +4,7 @@ import static com.example.frontend.Constants.tag_json_obj;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -65,18 +66,20 @@ public class LoginScreen extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             Log.d(tag_json_obj, response.toString());
-                            //save current username to class variable
+
+                            //switch screens on login
                             try {
+                                //save current username to class variable
                                 username = response.getString("username");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+
+                                if(response.getBoolean("isAdmin")){
+                                    startActivity(new Intent(view.getContext(), AdminDashboard.class));
+                                } else {
+                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
+                                }
+                            } catch (JSONException exception) {
+                                exception.printStackTrace();
                             }
-                            //TODO: switch screens on login
-//                            try {
-//                                startActivity(new Intent(view.getContext(), AfterLoginScreen.class));
-//                            } catch (JSONException exception) {
-//                                exception.printStackTrace();
-//                            }
                         }
                     }, new Response.ErrorListener() {
                         @Override
