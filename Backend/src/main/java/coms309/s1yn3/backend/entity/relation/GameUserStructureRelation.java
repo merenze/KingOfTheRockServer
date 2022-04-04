@@ -56,6 +56,7 @@ public class GameUserStructureRelation {
 	@ManyToOne
 	@JoinColumn(name = "structure")
 	@MapsId("structureName")
+	@JsonBackReference
 	private Structure structure;
 
 	/**

@@ -170,13 +170,13 @@ public class GameUserRelation {
 	}
 }
 
-@Embeddable
 /**
  * This is embedded not in GameUserRelation,
  * but in GameUserStructureRelation
  * and GameUserMaterialRelation
  * for column mapping purposes.
  */
+@Embeddable
 class GameUserId implements Serializable {
 	@Column(name = "game")
 	private int gameId;
