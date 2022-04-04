@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class GuestGameLobby extends AppCompatActivity {
+public class JoinGameScreen extends AppCompatActivity {
 
     private String lobbyCode;
 
