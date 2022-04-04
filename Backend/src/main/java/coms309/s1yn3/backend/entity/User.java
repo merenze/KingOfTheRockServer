@@ -1,6 +1,9 @@
 package coms309.s1yn3.backend.entity;
 
+import coms309.s1yn3.backend.entity.relation.GameUserRelation;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class User {
@@ -28,6 +31,19 @@ public class User {
 	 */
 	private boolean isAdmin;
 
+	/**
+	 * Games this user has played.
+	 */
+	@OneToMany(targetEntity = GameUserRelation.class, mappedBy = "user")
+	private List<GameUserRelation> gameRelations;
+
+	/**
+	 * User constructor.
+	 * @param id
+	 * @param email
+	 * @param username
+	 * @param isAdmin
+	 */
 	public User(int id, String email, String username, boolean isAdmin) {
 		this(email, username, isAdmin);
 		this.id = id;
@@ -93,5 +109,13 @@ public class User {
 		if (user.username != null) {
 			this.username = user.username;
 		}
+	}
+
+	public List<GameUserRelation> getGameRelations() {
+		return gameRelations;
+	}
+
+	public void setGameRelations(List<GameUserRelation> gameRelations) {
+		this.gameRelations = gameRelations;
 	}
 }
