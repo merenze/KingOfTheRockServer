@@ -1,7 +1,11 @@
 package coms309.s1yn3.backend.entity.repository;
 
+import coms309.s1yn3.backend.entity.relation.StructureMaterialRelation;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Structure {
@@ -10,6 +14,12 @@ public class Structure {
 	 */
 	@Id
 	private String name;
+
+	/**
+	 * List of structure-material relations associated with this Structure.
+	 */
+	@OneToMany(targetEntity = StructureMaterialRelation.class, mappedBy = "structure")
+	private List<StructureMaterialRelation> materialRelations;
 
 	/**
 	 * The amount of points this structure is worth.
@@ -39,8 +49,29 @@ public class Structure {
 		return name;
 	}
 
+	/**
+	 * For use by JPA.
+	 * Don't use this.
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return List of structure-material relations associated with this Structure.
+	 */
+	public List<StructureMaterialRelation> getMaterialRelations() {
+		return materialRelations;
+	}
+
+	/**
+	 * For use by JPA.
+	 * Don't use this.
+	 * @param materialRelations
+	 */
+	public void setMaterialRelations(List<StructureMaterialRelation> materialRelations) {
+		this.materialRelations = materialRelations;
 	}
 
 	/**
