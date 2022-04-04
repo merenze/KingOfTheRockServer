@@ -15,7 +15,6 @@ public class UserDashboard extends AppCompatActivity {
         setContentView(R.layout.activity_user_dashboard);
 
         Button buttonToFindUser = findViewById(R.id.user_dashboard_find_user_button);
-
         buttonToFindUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -24,7 +23,6 @@ public class UserDashboard extends AppCompatActivity {
         });
 
         Button buttonToHostGame = findViewById(R.id.user_dashboard_host_game_button);
-
         buttonToHostGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

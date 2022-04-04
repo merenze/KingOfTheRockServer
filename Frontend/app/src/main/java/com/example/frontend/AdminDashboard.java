@@ -23,6 +23,16 @@ public class AdminDashboard extends AppCompatActivity {
                 startActivity(new Intent(view.getContext(), UserListScreen.class));
             }
         });
+
+        Button buttonToHostGame = findViewById(R.id.user_dashboard_host_game_button);
+        buttonToHostGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO
+                //create game lobby from backend end yada yada
+                startActivity(new Intent(view.getContext(), GameLobby.class));
+            }
+        });
     }
 
 }
