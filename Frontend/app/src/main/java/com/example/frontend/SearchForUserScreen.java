@@ -1,35 +1,25 @@
 package com.example.frontend;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import static com.example.frontend.Constants.tag_json_arr;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.frontend.SupportingClasses.AppController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SearchForUserScreen extends AppCompatActivity {
@@ -37,7 +27,6 @@ public class SearchForUserScreen extends AppCompatActivity {
     private String TAG = SearchForUserScreen.class.getSimpleName();
     private String usernameEntry;
     private Button searchButton;
-    private String tag_json_arr = "jarr_req";
     private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
 
     @Override
@@ -51,7 +40,7 @@ public class SearchForUserScreen extends AppCompatActivity {
             EditText etUsernameEntry = (EditText)findViewById(R.id.activity_search_for_user_screen_et_searchEntry);
             usernameEntry = etUsernameEntry.getText().toString().trim();
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                    (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry, null, new Response.Listener<JSONArray>() {
+                    (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry + "&auth-token=" + LoginScreen.getAuthToken(), null, new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.d(tag_json_arr, response.toString());
@@ -79,8 +68,8 @@ public class SearchForUserScreen extends AppCompatActivity {
                         }
                     });
 
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(jsonArrayRequest);
+            //Add request to queue
+            AppController.getInstance().addToRequestQueue(jsonArrayRequest, tag_json_arr);
         });
     }
 

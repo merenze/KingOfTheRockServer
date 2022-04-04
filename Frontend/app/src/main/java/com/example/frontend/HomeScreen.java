@@ -29,22 +29,5 @@ public class HomeScreen extends AppCompatActivity {
                 startActivity(new Intent(view.getContext(), RegisterScreen.class));
             }
         });
-
-        Button buttonToUserList = findViewById(R.id.homescreen_userlist_button);
-        buttonToUserList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), UserListScreen.class));
-            }
-        });
-
-        Button buttonToSearchForUser = findViewById(R.id.homescreen_search_button);
-        buttonToSearchForUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), SearchForUserScreen.class));
-            }
-        });
-
     }
 }
