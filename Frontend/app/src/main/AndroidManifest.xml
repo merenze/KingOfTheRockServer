@@ -15,6 +15,9 @@
         android:usesCleartextTraffic="true"
         android:name="com.example.frontend.SupportingClasses.AppController" >
         <activity
+            android:name=".GameLobby"
+            android:exported="false" />
+        <activity
             android:name=".UserDashboard"
             android:exported="false" />
         <activity

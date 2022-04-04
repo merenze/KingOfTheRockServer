@@ -5,6 +5,7 @@ import static com.example.frontend.Constants.tag_json_obj;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,11 +41,11 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
+        loginButton = (Button) findViewById(R.id.activity_login_screen_button_login);
 
         loginButton.setOnClickListener(view -> {
-            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
-            EditText etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
+            EditText etUsernameOrEmail = (EditText) findViewById(R.id.activity_login_screen_et_username);
+            EditText etPassword = (EditText) findViewById(R.id.activity_login_screen_et_password);
             username = etUsernameOrEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
 
@@ -60,10 +61,11 @@ public class LoginScreen extends AppCompatActivity {
                         public void onResponse(JSONObject response) {
                             try {
                                 authToken = response.getString("auth-token");
-                                if(response.getBoolean("isAdmin")){
-                                    startActivity(new Intent(view.getContext(), AdminDashboard.class));
+                                Context context = view.getContext();
+                                if (response.getBoolean("isAdmin")) {
+                                    startActivity(new Intent(context, AdminDashboard.class));
                                 } else {
-                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
+                                    startActivity(new Intent(context, UserListScreen.class));
                                 }
                             } catch (JSONException exception) {
                                 exception.printStackTrace();
@@ -75,13 +77,13 @@ public class LoginScreen extends AppCompatActivity {
                         public void onErrorResponse(VolleyError error) {
                             Log.d("TestTag", "in onErrorResponse body");
                             NetworkResponse response = error.networkResponse;
-                            if(error instanceof ServerError && response != null){
+                            if (error instanceof ServerError && response != null) {
                                 try {
                                     String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                                     JSONObject obj = new JSONObject(res);
-                                    if (obj.has(username)) {
+                                    if (obj.has("auth-token")) {
                                         try {
-                                            Log.d(TAG, obj.getString(username));
+                                            Log.d(TAG, obj.getString("auth-token"));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -98,7 +100,7 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-    public static String getAuthToken(){
+    public static String getAuthToken() {
         return authToken;
     }
 
