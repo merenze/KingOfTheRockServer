@@ -36,6 +36,9 @@ public class GameLobby extends AppCompatActivity {
         authToken = LoginScreen.getAuthToken();
 
         //TODO
+        //add switch to make lobby private or public
+
+        //TODO
         //Adjust parameters URL and request method
         //Make /hostGame whatever Renze wants it to be
         //Make request method GET or change jsonObject from null
