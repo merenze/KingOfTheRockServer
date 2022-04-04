@@ -29,7 +29,7 @@ import java.util.HashMap;
 public class LoginScreen extends AppCompatActivity {
 
     private String TAG = LoginScreen.class.getSimpleName();
-    private String username;
+    private static String username; //changed to correct current username upon successful login
     private String password;
     private Button loginButton;
     private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
@@ -66,7 +66,12 @@ public class LoginScreen extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             Log.d(tag_json_obj, response.toString());
+
+                            //switch screens on login
                             try {
+                                //save current username to class variable
+                                username = response.getString("username");
+
                                 if(response.getBoolean("isAdmin")){
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
@@ -106,6 +111,10 @@ public class LoginScreen extends AppCompatActivity {
 
     public static String getAuthToken(){
         return authToken;
+    }
+
+    public static String getUsername(){
+        return username;
     }
 
 }
