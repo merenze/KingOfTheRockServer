@@ -1,7 +1,7 @@
 package coms309.s1yn3.backend.filter;
 
+import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.service.SessionProviderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.*;
@@ -13,10 +13,10 @@ import java.io.IOException;
  * Requires request sender to have a valid user session.
  */
 public class AuthFilter implements Filter {
-	private SessionProviderService sessions;
+	private SessionProviderService sessionProvider;
 
-	public AuthFilter(SessionProviderService sessions) {
-		this.sessions = sessions;
+	public AuthFilter(SessionProviderService sessionProvider) {
+		this.sessionProvider = sessionProvider;
 	}
 
 	@Override public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -24,11 +24,13 @@ public class AuthFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 //		String header = httpRequest.getHeader("auth-token");
 		String header = httpRequest.getParameter("auth-token");
-		if (header == null || sessions.getUser(header) == null) {
+		User user = sessionProvider.getUser(header);
+		if (header == null || user == null) {
 			httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
 			return;
 		}
 
+		httpRequest.setAttribute("user", user);
 		filterChain.doFilter(servletRequest, servletResponse);
 	}
 }
