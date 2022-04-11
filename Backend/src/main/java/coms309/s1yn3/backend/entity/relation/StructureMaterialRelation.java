@@ -2,7 +2,7 @@ package coms309.s1yn3.backend.entity.relation;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import coms309.s1yn3.backend.entity.Material;
-import coms309.s1yn3.backend.entity.repository.Structure;
+import coms309.s1yn3.backend.entity.Structure;
 
 import javax.persistence.*;
 import java.io.Serializable;
