@@ -24,7 +24,7 @@ public class AdminDashboard extends AppCompatActivity {
             }
         });
 
-        Button buttonToHostGame = findViewById(R.id.user_dashboard_host_game_button);
+        Button buttonToHostGame = findViewById(R.id.admin_dashboard_host_game_button);
         buttonToHostGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

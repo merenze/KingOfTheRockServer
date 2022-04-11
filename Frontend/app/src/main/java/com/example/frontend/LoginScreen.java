@@ -61,11 +61,13 @@ public class LoginScreen extends AppCompatActivity {
                         public void onResponse(JSONObject response) {
                             try {
                                 authToken = response.getString("auth-token");
-                                Context context = view.getContext();
                                 if (response.getBoolean("isAdmin")) {
-                                    startActivity(new Intent(context, AdminDashboard.class));
+                                    String test = "worked";
+                                }
+                                if (response.getString("isAdmin").equals("true")) {
+                                    startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
-                                    startActivity(new Intent(context, UserListScreen.class));
+                                    startActivity(new Intent(view.getContext(), UserListScreen.class));
                                 }
                             } catch (JSONException exception) {
                                 exception.printStackTrace();
