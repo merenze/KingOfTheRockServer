@@ -28,8 +28,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 public class GameLobby extends AppCompatActivity {
-    String lobbyCode = null;
     String authToken = LoginScreen.getAuthToken();
+    String lobbyCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
