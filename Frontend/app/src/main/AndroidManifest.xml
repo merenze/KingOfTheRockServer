@@ -18,6 +18,9 @@
             android:name=".TradeScreen"
             android:exported="false" />
         <activity
+            android:name=".BuildScreen"
+            android:exported="false" />
+        <activity
             android:name=".GameViewScreen"
             android:exported="false" />
         <activity
