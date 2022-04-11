@@ -15,6 +15,9 @@
         android:theme="@style/Theme.frontend"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".TradeScreen"
+            android:exported="false" />
+        <activity
             android:name=".BuildScreen"
             android:exported="false" />
         <activity

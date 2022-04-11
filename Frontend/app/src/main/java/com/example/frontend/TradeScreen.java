@@ -51,14 +51,14 @@ public class TradeScreen extends AppCompatActivity {
         });
 
         Button foodMinusButton = (Button) findViewById(R.id.activity_trade_screen_button_resource_food_minus);
-        woodMinusButton.setOnClickListener(new View.OnClickListener() {
+        foodMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //edit foodQuantity
             }
         });
         Button foodPlusButton = (Button) findViewById(R.id.activity_trade_screen_button_resource_food_plus);
-        woodPlusButton.setOnClickListener(new View.OnClickListener() {
+        foodPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //edit foodQuantity
@@ -66,14 +66,14 @@ public class TradeScreen extends AppCompatActivity {
         });
 
         Button waterMinusButton = (Button) findViewById(R.id.activity_trade_screen_button_resource_water_minus);
-        woodMinusButton.setOnClickListener(new View.OnClickListener() {
+        waterMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //edit waterQuantity
             }
         });
         Button waterPlusButton = (Button) findViewById(R.id.activity_trade_screen_button_resource_water_plus);
-        woodPlusButton.setOnClickListener(new View.OnClickListener() {
+        waterPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //edit waterQuantity
@@ -81,7 +81,7 @@ public class TradeScreen extends AppCompatActivity {
         });
 
         Button cancelButton = (Button) findViewById(R.id.activity_trade_screen_button_cancel);
-        woodPlusButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(view.getContext(), GameViewScreen.class));
@@ -89,7 +89,7 @@ public class TradeScreen extends AppCompatActivity {
         });
 
         Button submitButton = (Button) findViewById(R.id.activity_trade_screen_button_submit);
-        woodPlusButton.setOnClickListener(new View.OnClickListener() {
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //submit logic
