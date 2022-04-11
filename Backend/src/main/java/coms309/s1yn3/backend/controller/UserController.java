@@ -129,6 +129,7 @@ public class UserController extends AbstractController {
 		}
 		Map<String, String> responseBody = new HashMap<>();
 		responseBody.put("auth-token", sessions().addSession(user));
+		responseBody.put("isAdmin", Boolean.toString(user.getIsAdmin()));
 		return new ResponseEntity(
 				responseBody,
 				HttpStatus.OK
