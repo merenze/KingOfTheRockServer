@@ -41,14 +41,14 @@ android-test:  #another job to test android
     # - .gradlew test
   
 
-mavenDeploy  #do make a stage with same name!
+mavenDeploy:  #do make a stage with same name!
   tags:
    - springboot_tag
   script:
     - cd Backend
     - mvn package
-    - sudo mv target/*.jar /target/web-demo.jar 
-    - sudo systemctl stop system-web-demo
-    - sudo systemctl start system-web-demo
+    - sudo mv target/*.jar /target/KingOfTheRockServer-DEMO.jar
+    - sudo systemctl stop system-web
+    - sudo systemctl start system-web
 
 
