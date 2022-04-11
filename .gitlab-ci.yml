@@ -42,6 +42,7 @@ android-test:  #another job to test android
   
 
 mavenDeploy:  #do make a stage with same name!
+  stage: mavenDeploy
   tags:
    - springboot_tag
   script:
