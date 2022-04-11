@@ -28,8 +28,6 @@ public class AdminDashboard extends AppCompatActivity {
         buttonToHostGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
-                //create game lobby from backend end yada yada
                 startActivity(new Intent(view.getContext(), GameLobby.class));
             }
         });
