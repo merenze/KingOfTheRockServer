@@ -38,7 +38,7 @@ public class RegistrationLogic extends AppCompatActivity implements IVolleyListe
     @Override
     public void onSuccess(String email) {
         if (email.length() > 0) {
-            startActivity(new Intent(RegisterScreen.getApplicationContext(), LoginScreen.class));
+            startActivity(new Intent(view.getContext(), LoginScreen.class));
         } else {
             r.logText("Error with request, please try again");
         }
