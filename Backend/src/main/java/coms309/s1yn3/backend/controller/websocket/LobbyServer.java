@@ -20,7 +20,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 			@PathVariable("auth-token") String authToken) {
 		Lobby lobby = repositories().getLobbyRepository().findByCode(lobbyCode).get(0);
 		User user = sessions().getUser(authToken);
-		logger.info(String.format("%s connected to lobby %s", user.getUsername(), lobby.getCode()));
+		logger.info(String.format("User <%s> connected to lobby <%s>", user.getUsername(), lobby.getCode()));
 		// TODO broadcast join to other players
 		// TODO start game
 	}
@@ -31,7 +31,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 			@PathVariable("auth-token") String authToken) {
 		Lobby lobby = repositories().getLobbyRepository().findByCode(lobbyCode).get(0);
 		User user = sessions().getUser(authToken);
-		logger.info(String.format("%s disconnected from lobby %s", user.getUsername(), lobby.getCode()));
+		logger.info(String.format("User <%s> disconnected from lobby <%s>", user.getUsername(), lobby.getCode()));
 		// TODO broadcast leave to other players
 	}
 }
