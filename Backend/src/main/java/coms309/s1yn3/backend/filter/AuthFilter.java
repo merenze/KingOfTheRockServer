@@ -37,7 +37,7 @@ public class AuthFilter implements Filter {
 			httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
 			return;
 		}
-		logMessage += "Auth token <%s< associated with user <%s>";
+		logMessage += "Auth token <%s> associated with user <%s>";
 		logger.infof(logMessage, httpRequest.getMethod(), httpRequest.getRequestURL(), header, user.getUsername());
 		httpRequest.setAttribute("user", user);
 		filterChain.doFilter(servletRequest, servletResponse);
