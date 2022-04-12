@@ -32,12 +32,12 @@ public class AuthFilter implements Filter {
 		String header = httpRequest.getParameter("auth-token");
 		User user = sessionProvider.getUser(header);
 		if (header == null || user == null) {
-			logMessage += "Auth token %s not associated with a user";
+			logMessage += "Auth token <%s> not associated with a user";
 			logger.warnf(logMessage, httpRequest.getMethod(), httpRequest.getRequestURL(), header);
 			httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
 			return;
 		}
-		logMessage += "Auth token %s associated with user %s";
+		logMessage += "Auth token <%s< associated with user <%s>";
 		logger.infof(logMessage, httpRequest.getMethod(), httpRequest.getRequestURL(), header, user.getUsername());
 		httpRequest.setAttribute("user", user);
 		filterChain.doFilter(servletRequest, servletResponse);

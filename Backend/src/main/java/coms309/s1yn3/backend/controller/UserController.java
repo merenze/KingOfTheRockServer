@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 @RestController
 public class UserController extends AbstractController {
 	private static final String EMAIL_PATTERN = "^[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+@[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+(\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+)*$";
-	private final Logger logger = LoggerFactory.logger(User.class);
+	private final Logger logger = LoggerFactory.logger(UserController.class);
 
 	@GetMapping("/users")
 	public @ResponseBody List<User> index() {
@@ -40,8 +40,9 @@ public class UserController extends AbstractController {
 
 	@PatchMapping("/users/{id}")
 	public @ResponseBody ResponseEntity update(@PathVariable int id, @RequestBody User request) {
-		User user = repositories().getUserRepository().getById(id);
+		User user = repositories().getUserRepository().findById(id);
 		if (user == null) {
+			logger.warnf("User not found for ID %s", id);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		user.patch(request);
@@ -133,6 +134,7 @@ public class UserController extends AbstractController {
 		Map<String, String> responseBody = new HashMap<>();
 		responseBody.put("auth-token", sessions().addSession(user));
 		responseBody.put("isAdmin", Boolean.toString(user.getIsAdmin()));
+		logger.infof("User <%s> logged in with token <%s>", user.getUsername(), responseBody.get("auth-token"));
 		return new ResponseEntity(
 				responseBody,
 				HttpStatus.OK
