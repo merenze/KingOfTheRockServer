@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.frontend.Constants;
-import com.example.frontend.LoginScreen;
 import com.example.frontend.RegisterScreen;
 import com.example.frontend.SupportingClasses.IView;
 import com.example.frontend.Network.IServerRequest;
@@ -38,7 +37,7 @@ public class RegistrationLogic extends AppCompatActivity implements IVolleyListe
     @Override
     public void onSuccess(String email) {
         if (email.length() > 0) {
-            startActivity(new Intent(view.getContext(), LoginScreen.class));
+            r.switchActivity();
         } else {
             r.logText("Error with request, please try again");
         }
