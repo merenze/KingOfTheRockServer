@@ -38,10 +38,12 @@ public class LobbyController extends AbstractController {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		// Add the requesting user to the Lobby.
+		logger.infof("User <%s> direct joined lobby <%s>", user.getUsername(), code);
+		logger.debugf("Before <%s> join: %s", user.getUsername(), lobby);
 		lobby.addPlayer(user);
 		repositories().getLobbyRepository().saveAndFlush(lobby);
 		repositories().getUserRepository().saveAndFlush(user);
-		logger.infof("User <%s> direct join lobby <%s>", user.getUsername(), code);
+		logger.debugf("After <%s> join: %s", user.getUsername(), lobby);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
@@ -62,6 +64,8 @@ public class LobbyController extends AbstractController {
 		lobby.setHost(user);
 		repositories().getLobbyRepository().saveAndFlush(lobby);
 		repositories().getUserRepository().saveAndFlush(user);
+		logger.infof("User <%s> now hosting lobby <%s>", user.getUsername(), lobby.getCode());
+		logger.debugf("New lobby created: %s", lobby);
 		// Prepare and return the success response.
 		HashMap<String, String> responseBody = new HashMap<>();
 		responseBody.put("code", lobby.getCode());
@@ -81,10 +85,10 @@ public class LobbyController extends AbstractController {
 			logger.warnf("User <%s> attempted disconnect (not connected)", user.getUsername());
 			return new ResponseEntity(responseBody, HttpStatus.OK);
 		}
-		logger.debugf("User <%s> disconnected from %s", lobby);
 		// Remove the user from the lobby.
 		lobby.removePlayer(user);
 		logger.infof("User <%s> disconnected from lobby <%s>", user.getUsername(), lobby.getCode());
+		logger.debugf("Before <%s> disconnect: %s", user, lobby);
 		if (lobby.getHost() == user) {
 			logger.warnf("User <%s> was hosting lobby <%s>; removing host", user.getUsername(), lobby.getCode());
 			lobby.setHost(null);
