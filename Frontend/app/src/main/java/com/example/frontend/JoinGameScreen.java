@@ -36,7 +36,7 @@ public class JoinGameScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_screen);
+        setContentView(R.layout.activity_join_game_screen);
 
         Button buttonToQuickPlay = (Button) findViewById(R.id.join_game_quick_play_button);
 
