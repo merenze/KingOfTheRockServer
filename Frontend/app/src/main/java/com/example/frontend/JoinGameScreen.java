@@ -1,12 +1,33 @@
 package com.example.frontend;
 
+import static com.example.frontend.Constants.URL;
+import static com.example.frontend.Constants.tag_json_obj;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.frontend.SupportingClasses.AppController;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JoinGameScreen extends AppCompatActivity {
 
@@ -22,9 +43,33 @@ public class JoinGameScreen extends AppCompatActivity {
         buttonToQuickPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
-                //backend sends response containing a public lobby code
-                //attempt to join lobby
+                // TODO
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.POST, URL + "/lobby/join", null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                // TODO
+                                // connect to websocket
+                                //switch screens on connection to lobby
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("TestTag", "in onErrorResponse body");
+                                NetworkResponse response = error.networkResponse;
+                                if(error instanceof ServerError && response != null){
+                                    try {
+                                        String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                        JSONObject obj = new JSONObject(res);
+                                    } catch (UnsupportedEncodingException | JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
+
+                //Add request to queue
+                AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_obj);
             }
         });
 
@@ -35,7 +80,40 @@ public class JoinGameScreen extends AppCompatActivity {
             public void onClick(View view) {
                 EditText etLobbyCode = (EditText) findViewById(R.id.join_game_code_text);
                 lobbyCode = etLobbyCode.getText().toString().trim();
-                //attempt to join lobby
+
+                // TODO
+                // attempt to join lobby
+                HashMap<String, String> mapLobbyCode = new HashMap<>();
+                mapLobbyCode.put("code", lobbyCode);
+
+                JSONObject jsonLobbyCode = new JSONObject(mapLobbyCode);
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.POST, URL + "/lobby/join", jsonLobbyCode, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                // TODO
+                                // connect to websocket
+                                //switch screens on connection to lobby
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("TestTag", "in onErrorResponse body");
+                                NetworkResponse response = error.networkResponse;
+                                if(error instanceof ServerError && response != null){
+                                    try {
+                                        String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                        JSONObject obj = new JSONObject(res);
+                                    } catch (UnsupportedEncodingException | JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
+
+                //Add request to queue
+                AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_obj);
             }
         });
 
