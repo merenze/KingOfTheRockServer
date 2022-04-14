@@ -1,4 +1,4 @@
-package com.example.frontend;
+package com.example.frontend.SupportingClasses;
 
 public class Constants {
     public static final String URL = "http://coms-309-015.class.las.iastate.edu:8080";

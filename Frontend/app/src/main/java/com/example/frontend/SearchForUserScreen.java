@@ -1,6 +1,6 @@
 package com.example.frontend;
 
-import static com.example.frontend.Constants.tag_json_arr;
+import static com.example.frontend.SupportingClasses.Constants.tag_json_arr;
 
 import androidx.appcompat.app.AppCompatActivity;
 

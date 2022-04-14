@@ -38,7 +38,11 @@ public class ServerRequest implements IServerRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        l.onError(error.getMessage());
+                        if (error.getMessage() != null){
+                            l.onError(error.getMessage());
+                        } else {
+                            l.onError("No error message received");
+                        }
                     }
                 }
         );

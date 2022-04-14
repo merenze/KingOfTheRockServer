@@ -1,14 +1,11 @@
 package com.example.frontend.Logic;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.frontend.Constants;
-import com.example.frontend.RegisterScreen;
+import com.example.frontend.SupportingClasses.Constants;
 import com.example.frontend.SupportingClasses.IView;
 import com.example.frontend.Network.IServerRequest;
 
