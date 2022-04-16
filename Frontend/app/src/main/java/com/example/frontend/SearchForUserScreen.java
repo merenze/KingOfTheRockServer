@@ -22,6 +22,11 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+/**
+ * Class for the logic of the screen to search for other users
+ *
+ * @author Noah Cordova
+ */
 public class SearchForUserScreen extends AppCompatActivity {
 
     private String TAG = SearchForUserScreen.class.getSimpleName();

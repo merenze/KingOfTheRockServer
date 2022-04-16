@@ -26,6 +26,11 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+/**
+ * Class for the logic of the screen to login
+ *
+ * @author Noah Cordova
+ */
 public class LoginScreen extends AppCompatActivity {
 
     private String TAG = LoginScreen.class.getSimpleName();

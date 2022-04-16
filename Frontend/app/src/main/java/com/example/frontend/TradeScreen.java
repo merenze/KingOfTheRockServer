@@ -8,6 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * Class for the logic of the screen to trade resources
+ *
+ * @author Noah Cordova
+ */
 public class TradeScreen extends AppCompatActivity {
 
     @Override
