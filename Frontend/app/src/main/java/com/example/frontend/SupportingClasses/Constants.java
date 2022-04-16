@@ -1,4 +1,4 @@
-package com.example.frontend;
+package com.example.frontend.SupportingClasses;
 
 /**
  * Class that contains Strings to be used across the project

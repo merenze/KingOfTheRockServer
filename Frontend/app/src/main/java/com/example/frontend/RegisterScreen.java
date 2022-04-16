@@ -1,7 +1,6 @@
 package com.example.frontend;
 
-import static com.example.frontend.Constants.URL;
-import static com.example.frontend.Constants.tag_json_obj;
+import static com.example.frontend.SupportingClasses.Constants.URL;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,13 +14,11 @@ import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.frontend.SupportingClasses.AppController;
 import com.google.android.material.button.MaterialButton;
 

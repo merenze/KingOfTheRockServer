@@ -1,7 +1,7 @@
 package com.example.frontend;
 
-import static com.example.frontend.Constants.URL;
-import static com.example.frontend.Constants.tag_json_arr;
+import static com.example.frontend.SupportingClasses.Constants.URL;
+import static com.example.frontend.SupportingClasses.Constants.tag_json_arr;
 
 import android.os.Bundle;
 import android.util.Log;
