@@ -19,6 +19,7 @@ import org.json.JSONException;
 
 public class RegisterScreen extends AppCompatActivity implements IView {
 
+    private String TAG = LoginScreen.class.getSimpleName();
     private EditText etEmail, etUsername, etPassword;
     private Button registerButton;
     private CheckBox cbAdminCheckBox;

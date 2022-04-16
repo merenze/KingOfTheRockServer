@@ -1,7 +1,5 @@
 package com.example.frontend.Logic;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,7 +7,7 @@ import com.example.frontend.SupportingClasses.Constants;
 import com.example.frontend.SupportingClasses.IView;
 import com.example.frontend.Network.IServerRequest;
 
-public class RegistrationLogic extends AppCompatActivity implements IVolleyListener {
+public class RegistrationLogic implements IVolleyListener {
 
     IView r;
     IServerRequest serverRequest;

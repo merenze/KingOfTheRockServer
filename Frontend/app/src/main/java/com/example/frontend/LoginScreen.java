@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.frontend.SupportingClasses.AppController;
+import com.example.frontend.SupportingClasses.IView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,18 +27,18 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
-public class LoginScreen extends AppCompatActivity {
+public class LoginScreen extends AppCompatActivity implements IView {
 
     private String TAG = LoginScreen.class.getSimpleName();
     private static String username; //changed to correct current username upon successful login
     private String password;
     private Button loginButton;
-    private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
     private static String authToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new AppController();
         setContentView(R.layout.activity_login_screen);
 
         loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
