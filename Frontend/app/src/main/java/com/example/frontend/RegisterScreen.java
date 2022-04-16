@@ -31,6 +31,11 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+/**
+ * Class for the logic of the registration screen
+ *
+ * @author Dan Rosenhamer
+ */
 public class RegisterScreen extends AppCompatActivity {
 
     private EditText etEmail, etUsername, etPassword;

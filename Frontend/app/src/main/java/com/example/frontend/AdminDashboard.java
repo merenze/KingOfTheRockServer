@@ -7,6 +7,11 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Class for the logic of the dashboard screen for an admin type user
+ *
+ * @author Dan Rosenhamer
+ */
 public class AdminDashboard extends AppCompatActivity {
 
     @Override

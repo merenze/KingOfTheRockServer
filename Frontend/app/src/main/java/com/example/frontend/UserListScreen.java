@@ -21,6 +21,11 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+/**
+ * Class for the logic of the screen to display a list of all users
+ *
+ * @author Dan Rosenhamer
+ */
 public class UserListScreen extends AppCompatActivity {
 
     @Override
