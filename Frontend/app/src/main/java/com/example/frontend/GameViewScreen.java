@@ -1,5 +1,6 @@
 package com.example.frontend;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,6 +11,9 @@ import android.widget.Button;
 public class GameViewScreen extends AppCompatActivity {
 
     private String username;
+
+    AlertDialog.Builder dialogBuilder;
+    AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +51,17 @@ public class GameViewScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //start chat pop-up
+                createChatBoxDialog();
             }
         });
 
+    }
+    public void createChatBoxDialog() {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View chatPopupView = getLayoutInflater().inflate(R.layout.activity_game_chat_popup, null);
+
+        dialogBuilder.setView(chatPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
     }
 }

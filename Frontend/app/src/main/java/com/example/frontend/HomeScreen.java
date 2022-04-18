@@ -29,5 +29,13 @@ public class HomeScreen extends AppCompatActivity {
                 startActivity(new Intent(view.getContext(), RegisterScreen.class));
             }
         });
+
+        Button buttonToGame = findViewById(R.id.homescreen_game_button);
+        buttonToGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                startActivity(new Intent(view.getContext(), GameViewScreen.class));
+            }
+        });
     }
 }
