@@ -37,7 +37,6 @@ public class LoginScreen extends AppCompatActivity implements IView {
     private EditText etUsernameOrEmail, etPassword;
     private Button loginButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
