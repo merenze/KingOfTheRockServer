@@ -17,7 +17,7 @@
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.889" />
+        app:layout_constraintVertical_bias="0.974" />
 
     <EditText
         android:id="@+id/game_chat_popup_send_button"
@@ -25,14 +25,12 @@
         android:layout_height="150dp"
         android:background="@drawable/text_rectangle_border"
         android:gravity="center"
-        android:text="Type message here. . ."
+        android:hint="Type message here. . ."
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.912" />
-
-    <te
 
 </androidx.constraintlayout.widget.ConstraintLayout>
