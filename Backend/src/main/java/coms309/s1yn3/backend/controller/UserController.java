@@ -2,12 +2,9 @@ package coms309.s1yn3.backend.controller;
 
 import coms309.s1yn3.backend.entity.Password;
 import coms309.s1yn3.backend.entity.User;
-import coms309.s1yn3.backend.entity.repository.PasswordRepository;
-import coms309.s1yn3.backend.entity.repository.UserRepository;
-import coms309.s1yn3.backend.service.SessionProviderService;
-import coms309.s1yn3.backend.service.UserProviderService;
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
+import org.jboss.logging.Logger;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,23 +14,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * Handles User login and registration.
+ */
 @RestController
-public class UserController {
+public class UserController extends AbstractController {
 	private static final String EMAIL_PATTERN = "^[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+@[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+(\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+)*$";
-
-	@Autowired UserRepository users;
-	@Autowired UserProviderService userProvider;
-	@Autowired PasswordRepository passwords;
-	@Autowired SessionProviderService sessions;
+	private final Logger logger = LoggerFactory.logger(UserController.class);
 
 	@GetMapping("/users")
 	public @ResponseBody List<User> index() {
-		return users.findAll();
+		return repositories().getUserRepository().findAll();
 	}
 
 	@GetMapping("/users/{id}")
 	public @ResponseBody ResponseEntity show(@PathVariable int id) {
-		User user = users.findById(id);
+		User user = repositories().getUserRepository().findById(id);
 		if (user == null) {
 			JSONObject responseBody = new JSONObject();
 			responseBody.put("status", HttpStatus.NOT_FOUND);
@@ -44,12 +40,13 @@ public class UserController {
 
 	@PatchMapping("/users/{id}")
 	public @ResponseBody ResponseEntity update(@PathVariable int id, @RequestBody User request) {
-		User user = users.getById(id);
+		User user = repositories().getUserRepository().findById(id);
 		if (user == null) {
+			logger.warnf("User not found for ID %s", id);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		user.patch(request);
-		users.save(user);
+		repositories().getUserRepository().save(user);
 		JSONObject responseBody = new JSONObject();
 		responseBody.put("status", HttpStatus.OK);
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
@@ -58,11 +55,11 @@ public class UserController {
 	@DeleteMapping("/users/{id}")
 	public @ResponseBody ResponseEntity delete(@PathVariable int id) {
 		JSONObject responseBody = new JSONObject();
-		if (users.getById(id) == null) {
+		if (repositories().getUserRepository().getById(id) == null) {
 			responseBody.put("status", HttpStatus.NOT_FOUND);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
-		users.deleteById(id);
+		repositories().getUserRepository().deleteById(id);
 		responseBody.put("status", HttpStatus.OK);
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
@@ -70,37 +67,41 @@ public class UserController {
 	@PostMapping("/register")
 	public @ResponseBody ResponseEntity create(@RequestBody Map<String, String> requestBody) {
 		JSONObject responseBody = new JSONObject();
+		// Parse request values
+		String username = requestBody.get("username");
+		String email = requestBody.get("email");
+		String password = requestBody.get("password");
+		boolean isAdmin = requestBody.containsKey("isAdmin") && Boolean.parseBoolean(requestBody.get("isAdmin"));
 		// Check for missing username
-		if (!requestBody.containsKey("username") || requestBody.get("username").isEmpty()) {
+		if (username == null || username.isEmpty()) {
 			responseBody.put("username", "Username cannot be empty.");
 		} else {
 			// Check for duplicate username
-			User user = userProvider.getByUsername(requestBody.get("username"));
-			if (user != null) {
+			List<User> users = repositories().getUserRepository().findByUsername(username);
+			System.out.printf("Users with username '%s': %d\n", username, users.size());
+			if (users.size() > 0) {
 				responseBody.put("username", "Username is already taken.");
 			}
 		}
 		// Check for missing email
-		if (!requestBody.containsKey("email") || requestBody.get("email").isEmpty()) {
+		if (email == null || email.isEmpty()) {
 			responseBody.put("email", "Email cannot be empty.");
 		} else {
 			// Check for invalid email
-			if (!Pattern.matches(EMAIL_PATTERN, requestBody.get("email"))) {
-				if (responseBody == null) {
-					responseBody = new JSONObject();
-				}
+			if (!Pattern.matches(EMAIL_PATTERN, email)) {
 				responseBody.put("email", "Invalid email address.");
 			} else {
 				// Check for duplicate email
-				User user = userProvider.getByEmail(requestBody.get("email"));
-				if (user != null) {
+				List<User> users = repositories().getUserRepository().findByEmail(email);
+				System.out.printf("Users with email '%s': %d\n", email, users.size());
+				if (users.size() > 0) {
 					responseBody = new JSONObject();
 					responseBody.put("email", "Email address is already in use.");
 				}
 			}
 		}
 		// Check for missing password
-		if (!requestBody.containsKey("password") || requestBody.get("password").isEmpty()) {
+		if (password == null || password.isEmpty()) {
 			responseBody.put("password", "Password cannot be empty.");
 		}
 		// User could not be created
@@ -109,15 +110,10 @@ public class UserController {
 		}
 		// User could be created
 		responseBody.put("status", HttpStatus.OK);
-		User user = new User(
-				requestBody.get("email"),
-				requestBody.get("username"),
-				// Default to false where isAdmin is omitted
-				requestBody.containsKey("isAdmin") && Boolean.parseBoolean(requestBody.get("isAdmin"))
-		);
-		users.save(user);
+		User user = new User(email, username, isAdmin);
+		repositories().getUserRepository().save(user);
 		// Save the password
-		passwords.save(new Password(user, requestBody.get("password")));
+		repositories().getPasswordRepository().save(new Password(user, password));
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 
@@ -125,7 +121,8 @@ public class UserController {
 	public @ResponseBody ResponseEntity login(@RequestBody Map<String, String> request) {
 		String username = request.get("username");
 		String password = request.get("password");
-		User user = userProvider.getLoginUser(username, password);
+		List<User> users = repositories().getUserRepository().findByUsernameAndPassword(username, password);
+		User user = users.size() > 0 ? users.get(0) : null;
 		if (user == null) {
 			JSONObject responseBody = new JSONObject();
 			responseBody.put("status", HttpStatus.NOT_FOUND);
@@ -135,7 +132,9 @@ public class UserController {
 			);
 		}
 		Map<String, String> responseBody = new HashMap<>();
-		responseBody.put("auth-token", sessions.addSession(user));
+		responseBody.put("auth-token", sessions().addSession(user));
+		responseBody.put("isAdmin", Boolean.toString(user.getIsAdmin()));
+		logger.infof("User <%s> logged in with token <%s>", user.getUsername(), responseBody.get("auth-token"));
 		return new ResponseEntity(
 				responseBody,
 				HttpStatus.OK
@@ -143,8 +142,8 @@ public class UserController {
 	}
 
 	@GetMapping("/search")
-	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParemeter) {
-		return new ResponseEntity(users.searchUsername(queryParemeter), HttpStatus.OK);
+	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParameter) {
+		return new ResponseEntity(repositories().getUserRepository().findByUsernameContaining(queryParameter), HttpStatus.OK);
 	}
 
 }

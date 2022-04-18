@@ -1,4 +1,4 @@
-package coms309.s1yn3.backend.entity.repository;
+package coms309.s1yn3.backend.entity;
 
 import coms309.s1yn3.backend.entity.relation.StructureMaterialRelation;
 
@@ -18,6 +18,7 @@ public class Structure {
 	/**
 	 * List of structure-material relations associated with this Structure.
 	 */
+
 	@OneToMany(targetEntity = StructureMaterialRelation.class, mappedBy = "structure")
 	private List<StructureMaterialRelation> materialRelations;
 

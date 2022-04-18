@@ -34,6 +34,7 @@ public class LoginScreen extends AppCompatActivity {
     private String username;
     private String password;
     private Button loginButton;
+    private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
     private static String authToken;
 
     @Override
@@ -41,11 +42,11 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        loginButton = (Button) findViewById(R.id.activity_login_screen_button_login);
+        loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
 
         loginButton.setOnClickListener(view -> {
-            EditText etUsernameOrEmail = (EditText) findViewById(R.id.activity_login_screen_et_username);
-            EditText etPassword = (EditText) findViewById(R.id.activity_login_screen_et_password);
+            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
+            EditText etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
             username = etUsernameOrEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
 
@@ -56,36 +57,37 @@ public class LoginScreen extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(parameters);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, URL + "/login", jsonObject, new Response.Listener<JSONObject>() {
+                    (Request.Method.POST, url_coms309_backend_server + "/login", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
                                 authToken = response.getString("auth-token");
-                                if (response.getBoolean("isAdmin")) {
-                                    String test = "worked";
-                                }
-                                if (response.getString("isAdmin").equals("true")) {
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d(tag_json_obj, response.toString());
+                            try {
+                                if(response.getBoolean("isAdmin")){
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
-                                    startActivity(new Intent(view.getContext(), UserListScreen.class));
+                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
                                 }
                             } catch (JSONException exception) {
                                 exception.printStackTrace();
                             }
-                            Log.d(tag_json_obj, response.toString());
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.d("TestTag", "in onErrorResponse body");
                             NetworkResponse response = error.networkResponse;
-                            if (error instanceof ServerError && response != null) {
+                            if(error instanceof ServerError && response != null){
                                 try {
                                     String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                                     JSONObject obj = new JSONObject(res);
-                                    if (obj.has("auth-token")) {
+                                    if (obj.has(username)) {
                                         try {
-                                            Log.d(TAG, obj.getString("auth-token"));
+                                            Log.d(TAG, obj.getString(username));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -102,7 +104,7 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-    public static String getAuthToken() {
+    public static String getAuthToken(){
         return authToken;
     }
 
