@@ -29,7 +29,16 @@ import java.io.UnsupportedEncodingException;
 
 public class GameLobby extends AppCompatActivity {
     String authToken = LoginScreen.getAuthToken();
-    String lobbyCode;
+    String lobbyCode = "";
+
+    public void holdResponse() {
+        TextView lobbyCodeText = (TextView) findViewById(R.id.host_game_lobby_code_textview);
+        if(lobbyCode != null){
+            lobbyCodeText.setText(lobbyCode);
+        } else {
+            lobbyCodeText.setText("error");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +50,9 @@ public class GameLobby extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.d("Disconnect  response: ", response.getString("message"));
+                            Log.d(GameLobby.class.toString(), "Disconnect returned " + response.getString("message"));
                         } catch (JSONException e) {
+                            Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
                             e.printStackTrace();
                         }
                     }
@@ -58,64 +68,61 @@ public class GameLobby extends AppCompatActivity {
                                     try {
                                         Log.d(tag_json_obj, obj.getString("message"));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
                                     }
                                 }
                             } catch (UnsupportedEncodingException | JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-
-        //TODO
-        //add switch to make lobby private or public
-
-        //TODO
-        //Adjust parameters URL and request method
-        //Make /hostGame whatever Renze wants it to be
-        //Make request method GET or change jsonObject from null
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, URL + "/lobby/host"  + "?auth-token=" + authToken, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            lobbyCode = response.getString("code");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        NetworkResponse response = error.networkResponse;
-                        if((error instanceof ServerError || error instanceof NetworkError || error instanceof TimeoutError || error instanceof AuthFailureError || error instanceof ParseError) && response != null){
-                            try {
-                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                                JSONObject obj = new JSONObject(res);
-                                if (obj.has("message")) {
-                                    try {
-                                        Log.d(tag_json_obj, obj.getString("message"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            } catch (UnsupportedEncodingException | JSONException e) {
-                                e.printStackTrace();
+                                Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
                             }
                         }
                     }
                 });
 
         AppController.getInstance().addToRequestQueue(disconnectRequest);
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest);
 
-        TextView lobbyCodeText = (TextView) findViewById(R.id.host_game_lobby_code_textview);
-        if(lobbyCode != null){
-            lobbyCodeText.setText(lobbyCode);
-        } else {
-            lobbyCodeText.setText("eror");
-        }
+        //TODO
+        //add switch to make lobby private or public
+
+        JsonObjectRequest hostLobbyRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                URL + "/lobby/host"  + "?auth-token=" + authToken,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            lobbyCode = response.getString("code");
+                            holdResponse();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        NetworkResponse response = error.networkResponse;
+                        if((error instanceof ServerError || error instanceof NetworkError || error instanceof TimeoutError || error instanceof AuthFailureError || error instanceof ParseError)){
+                            try {
+                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                JSONObject obj = new JSONObject(res);
+                                if (obj.has("message")) {
+                                    try {
+                                        Log.d(tag_json_obj, obj.getString("message"));
+                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+                                        Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
+                                    }
+                                }
+                            } catch (UnsupportedEncodingException | JSONException e) {
+//                                e.printStackTrace();
+                                Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
+                            }
+                        }
+                    }
+                });
+
+        AppController.getInstance().addToRequestQueue(hostLobbyRequest);
     }
 
 }
