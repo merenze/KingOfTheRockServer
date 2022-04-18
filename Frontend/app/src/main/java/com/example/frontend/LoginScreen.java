@@ -18,6 +18,8 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.frontend.Logic.LoginLogic;
+import com.example.frontend.Network.ServerRequest;
 import com.example.frontend.SupportingClasses.AppController;
 import com.example.frontend.SupportingClasses.IView;
 
@@ -30,10 +32,11 @@ import java.util.HashMap;
 public class LoginScreen extends AppCompatActivity implements IView {
 
     private String TAG = LoginScreen.class.getSimpleName();
-    private static String username; //changed to correct current username upon successful login
-    private String password;
-    private Button loginButton;
+    private static String currentUsername;
     private static String authToken;
+    private EditText etUsernameOrEmail, etPassword;
+    private Button loginButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +44,22 @@ public class LoginScreen extends AppCompatActivity implements IView {
         new AppController();
         setContentView(R.layout.activity_login_screen);
 
+        etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
+        etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
         loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
 
+        ServerRequest serverRequest = new ServerRequest();
+        final LoginLogic logic = new LoginLogic(this, serverRequest);
+
         loginButton.setOnClickListener(view -> {
-            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
-            EditText etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
-            username = etUsernameOrEmail.getText().toString().trim();
-            password = etPassword.getText().toString().trim();
+            String username = etUsernameOrEmail.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
 
-            HashMap<String, String> parameters = new HashMap<String, String>();
-            parameters.put("username", username);
-            parameters.put("password", password);
-
-            JSONObject jsonObject = new JSONObject(parameters);
+            try {
+                logic.loginUser(username, password);
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+            }
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url_coms309_backend_server + "/login", jsonObject, new Response.Listener<JSONObject>() {
@@ -71,7 +77,7 @@ public class LoginScreen extends AppCompatActivity implements IView {
                             //switch screens on login
                             try {
                                 //save current username to class variable
-                                username = response.getString("username");
+                                currentUsername = response.getString("username");
 
                                 if(response.getBoolean("isAdmin")){
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
@@ -114,8 +120,23 @@ public class LoginScreen extends AppCompatActivity implements IView {
         return authToken;
     }
 
-    public static String getUsername(){
-        return username;
+    public static void setAuthToken(String givenAuthToken) {
+        authToken = givenAuthToken;
     }
 
+    public static String getCurrentUsername(){
+        return currentUsername;
+    }
+
+    public static void setCurrentUsername(String givenCurrentUsername) {
+        currentUsername = givenCurrentUsername;
+    }
+
+    public void switchActivity(){
+        if(logic.getIsAdmin){
+            startActivity(new Intent(view.getContext(), AdminDashboard.class));
+        } else {
+            startActivity(new Intent(view.getContext(), UserDashboard.class));
+        }
+    }
 }

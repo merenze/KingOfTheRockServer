@@ -14,6 +14,7 @@ public class ServerRequest implements IServerRequest {
 
     private String tag_json_obj = "json_obj_req";
     private IVolleyListener l;
+    private JSONObject serverResponse;
 
     @Override
     public void sendToServer(String url, JSONObject newUserObj, String methodType) {
@@ -29,7 +30,7 @@ public class ServerRequest implements IServerRequest {
                     public void onResponse(JSONObject response) {
                             if (response != null ) {
                                 l.onSuccess(response.toString());
-                                System.out.println(response.toString());
+                                serverResponse = response;
                             } else {
                                 l.onError("Null Response object received");
                             }
@@ -48,6 +49,10 @@ public class ServerRequest implements IServerRequest {
         );
 
         AppController.getInstance().addToRequestQueue(registerUserRequest, tag_json_obj);
+    }
+
+    public JSONObject getServerResponse(){
+        return serverResponse;
     }
 
     @Override
