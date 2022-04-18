@@ -29,7 +29,16 @@ import java.io.UnsupportedEncodingException;
 
 public class GameLobby extends AppCompatActivity {
     String authToken = LoginScreen.getAuthToken();
-    String lobbyCode;
+    String lobbyCode = "";
+
+    public void holdResponse() {
+        TextView lobbyCodeText = (TextView) findViewById(R.id.host_game_lobby_code_textview);
+        if(lobbyCode != null){
+            lobbyCodeText.setText(lobbyCode);
+        } else {
+            lobbyCodeText.setText("error");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +53,7 @@ public class GameLobby extends AppCompatActivity {
                             Log.d(GameLobby.class.toString(), "Disconnect returned " + response.getString("message"));
                         } catch (JSONException e) {
                             Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
-//                            e.printStackTrace();
+                            e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -74,7 +83,7 @@ public class GameLobby extends AppCompatActivity {
         //TODO
         //add switch to make lobby private or public
 
-        JsonObjectRequest hostRequest = new JsonObjectRequest(
+        JsonObjectRequest hostLobbyRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 URL + "/lobby/host"  + "?auth-token=" + authToken,
                 null,
@@ -83,9 +92,9 @@ public class GameLobby extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             lobbyCode = response.getString("code");
+                            holdResponse();
                         } catch (JSONException e) {
-//                            e.printStackTrace();
-                            Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
+                            e.printStackTrace();
                         }
                     }
                 },
@@ -113,14 +122,7 @@ public class GameLobby extends AppCompatActivity {
                     }
                 });
 
-        AppController.getInstance().addToRequestQueue(hostRequest);
-
-        TextView lobbyCodeText = (TextView) findViewById(R.id.host_game_lobby_code_textview);
-        if(lobbyCode != null){
-            lobbyCodeText.setText(lobbyCode);
-        } else {
-            lobbyCodeText.setText("error");
-        }
+        AppController.getInstance().addToRequestQueue(hostLobbyRequest);
     }
 
 }
