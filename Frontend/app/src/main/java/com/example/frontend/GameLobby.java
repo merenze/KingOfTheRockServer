@@ -68,14 +68,12 @@ public class GameLobby extends AppCompatActivity {
                     }
                 });
 
+        AppController.getInstance().addToRequestQueue(disconnectRequest);
+
         //TODO
         //add switch to make lobby private or public
 
-        //TODO
-        //Adjust parameters URL and request method
-        //Make /hostGame whatever Renze wants it to be
-        //Make request method GET or change jsonObject from null
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+        JsonObjectRequest hostRequest = new JsonObjectRequest
                 (Request.Method.POST, URL + "/lobby/host"  + "?auth-token=" + authToken, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -89,7 +87,7 @@ public class GameLobby extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse response = error.networkResponse;
-                        if((error instanceof ServerError || error instanceof NetworkError || error instanceof TimeoutError || error instanceof AuthFailureError || error instanceof ParseError) && response != null){
+                        if((error instanceof ServerError || error instanceof NetworkError || error instanceof TimeoutError || error instanceof AuthFailureError || error instanceof ParseError)){
                             try {
                                 String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                                 JSONObject obj = new JSONObject(res);
@@ -107,8 +105,7 @@ public class GameLobby extends AppCompatActivity {
                     }
                 });
 
-        AppController.getInstance().addToRequestQueue(disconnectRequest);
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        AppController.getInstance().addToRequestQueue(hostRequest);
 
         TextView lobbyCodeText = (TextView) findViewById(R.id.host_game_lobby_code_textview);
         if(lobbyCode != null){
