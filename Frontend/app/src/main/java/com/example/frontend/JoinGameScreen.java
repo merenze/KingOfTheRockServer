@@ -30,8 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JoinGameScreen extends AppCompatActivity {
-
     private String lobbyCode = "";
+    private String authToken = LoginScreen.getAuthToken();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,8 @@ public class JoinGameScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.POST, URL + "/lobby/join", null, new Response.Listener<JSONObject>() {
+                JsonObjectRequest quickPlayRequest = new JsonObjectRequest
+                        (Request.Method.POST, URL + "/lobby/join" + "?auth-token=" + authToken, null, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 // TODO
@@ -69,7 +69,7 @@ public class JoinGameScreen extends AppCompatActivity {
                         });
 
                 //Add request to queue
-                AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_obj);
+                AppController.getInstance().addToRequestQueue(quickPlayRequest, tag_json_obj);
             }
         });
 
@@ -88,8 +88,8 @@ public class JoinGameScreen extends AppCompatActivity {
 
                 JSONObject jsonLobbyCode = new JSONObject(mapLobbyCode);
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.POST, URL + "/lobby/join", jsonLobbyCode, new Response.Listener<JSONObject>() {
+                JsonObjectRequest joinViaLobbyCodeRequest = new JsonObjectRequest
+                        (Request.Method.POST, URL + "/lobby/join" + "?auth-token=" + authToken, jsonLobbyCode, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 // TODO
@@ -113,7 +113,7 @@ public class JoinGameScreen extends AppCompatActivity {
                         });
 
                 //Add request to queue
-                AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_obj);
+                AppController.getInstance().addToRequestQueue(joinViaLobbyCodeRequest, tag_json_obj);
             }
         });
 

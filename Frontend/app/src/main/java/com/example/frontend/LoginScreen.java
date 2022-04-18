@@ -76,8 +76,7 @@ public class LoginScreen extends AppCompatActivity {
                                 if(response.getBoolean("isAdmin")){
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
-                                    //startActivity(new Intent(view.getContext(), UserDashboard.class));
-                                    startActivity(new Intent(view.getContext(), GameViewScreen.class));
+                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
                                 }
                             } catch (JSONException exception) {
                                 exception.printStackTrace();
