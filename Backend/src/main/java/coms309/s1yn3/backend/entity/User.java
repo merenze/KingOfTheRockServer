@@ -160,4 +160,11 @@ public class User {
 	public void setLobby(Lobby lobby) {
 		this.lobby = lobby;
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public String toString() {
+		return username;
+	}
 }
