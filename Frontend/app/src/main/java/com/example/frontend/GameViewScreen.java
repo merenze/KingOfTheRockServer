@@ -16,7 +16,7 @@ public class GameViewScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_view_screen);
 
-        username = LoginScreen.getUsername();
+        //username = LoginScreen.getUsername();
 
         Button tradeButton = (Button)findViewById(R.id.activity_game_view_screen_button_trade);
         tradeButton.setOnClickListener(new View.OnClickListener() {
