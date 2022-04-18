@@ -41,9 +41,10 @@ public class GameLobby extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.d("Disconnect  response: ", response.getString("message"));
+                            Log.d(GameLobby.class.toString(), "Disconnect returned " + response.getString("message"));
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
+//                            e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -58,11 +59,11 @@ public class GameLobby extends AppCompatActivity {
                                     try {
                                         Log.d(tag_json_obj, obj.getString("message"));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
                                     }
                                 }
                             } catch (UnsupportedEncodingException | JSONException e) {
-                                e.printStackTrace();
+                                Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
                             }
                         }
                     }
@@ -73,17 +74,22 @@ public class GameLobby extends AppCompatActivity {
         //TODO
         //add switch to make lobby private or public
 
-        JsonObjectRequest hostRequest = new JsonObjectRequest
-                (Request.Method.POST, URL + "/lobby/host"  + "?auth-token=" + authToken, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest hostRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                URL + "/lobby/host"  + "?auth-token=" + authToken,
+                null,
+                new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             lobbyCode = response.getString("code");
                         } catch (JSONException e) {
-                            e.printStackTrace();
+//                            e.printStackTrace();
+                            Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
                         }
                     }
-                }, new Response.ErrorListener() {
+                },
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         NetworkResponse response = error.networkResponse;
@@ -95,11 +101,13 @@ public class GameLobby extends AppCompatActivity {
                                     try {
                                         Log.d(tag_json_obj, obj.getString("message"));
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
+//                                        e.printStackTrace();
+                                        Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
                                     }
                                 }
                             } catch (UnsupportedEncodingException | JSONException e) {
-                                e.printStackTrace();
+//                                e.printStackTrace();
+                                Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
                             }
                         }
                     }
@@ -111,7 +119,7 @@ public class GameLobby extends AppCompatActivity {
         if(lobbyCode != null){
             lobbyCodeText.setText(lobbyCode);
         } else {
-            lobbyCodeText.setText("eror");
+            lobbyCodeText.setText("error");
         }
     }
 
