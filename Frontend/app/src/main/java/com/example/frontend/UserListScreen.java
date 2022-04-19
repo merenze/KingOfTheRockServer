@@ -1,7 +1,7 @@
 package com.example.frontend;
 
-import static com.example.frontend.Constants.URL;
-import static com.example.frontend.Constants.tag_json_arr;
+import static com.example.frontend.SupportingClasses.Constants.URL;
+import static com.example.frontend.SupportingClasses.Constants.tag_json_arr;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +21,11 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+/**
+ * Class for the logic of the screen to display a list of all users
+ *
+ * @author Dan Rosenhamer
+ */
 public class UserListScreen extends AppCompatActivity {
 
     @Override

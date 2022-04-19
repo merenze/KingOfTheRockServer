@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Class for the logic of the screen of the main game of the user
+ *
+ * @author Noah Cordova
+ */
 public class GameViewScreen extends AppCompatActivity {
 
     private String username;

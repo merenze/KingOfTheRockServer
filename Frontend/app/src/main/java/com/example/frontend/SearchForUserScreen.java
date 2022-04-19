@@ -1,6 +1,6 @@
 package com.example.frontend;
 
-import static com.example.frontend.Constants.tag_json_arr;
+import static com.example.frontend.SupportingClasses.Constants.tag_json_arr;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +22,11 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+/**
+ * Class for the logic of the screen to search for other users
+ *
+ * @author Noah Cordova
+ */
 public class SearchForUserScreen extends AppCompatActivity {
 
     private String TAG = SearchForUserScreen.class.getSimpleName();
