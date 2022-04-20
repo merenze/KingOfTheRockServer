@@ -6,7 +6,7 @@ public class User implements IUser {
     private String username;
     private boolean isAdmin;
 
-    User(String authToken, String username, boolean isAdmin){
+    public User(String authToken, String username, boolean isAdmin){
         this.authToken = authToken;
         this.username = username;
         this.isAdmin = isAdmin;

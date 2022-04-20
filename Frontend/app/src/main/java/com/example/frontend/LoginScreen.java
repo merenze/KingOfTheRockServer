@@ -18,6 +18,8 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.frontend.Entities.IUser;
+import com.example.frontend.Entities.User;
 import com.example.frontend.SupportingClasses.AppController;
 
 import org.json.JSONException;
@@ -34,7 +36,9 @@ import java.util.HashMap;
 public class LoginScreen extends AppCompatActivity {
 
     private String TAG = LoginScreen.class.getSimpleName();
-    private static String currentUsername = ""; //changed to correct current username upon successful login
+    private static User currentUser;
+    private static String currentUsername = "";
+    private static boolean isAdmin;
     private String username;
     private String password;
     private Button loginButton;
@@ -78,6 +82,8 @@ public class LoginScreen extends AppCompatActivity {
                                 //save current username to class variable
                                 currentUsername = username;
                                 if(response.getBoolean("isAdmin")){
+                                    isAdmin = true;
+                                    currentUser = new User(authToken, currentUsername, isAdmin);
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
                                     //startActivity(new Intent(view.getContext(), UserDashboard.class));
@@ -123,4 +129,7 @@ public class LoginScreen extends AppCompatActivity {
         return currentUsername;
     }
 
+    public static User getCurrentUser() {
+        return currentUser;
+    }
 }
