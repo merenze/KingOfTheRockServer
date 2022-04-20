@@ -51,11 +51,13 @@ public class GameViewScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //start chat pop-up
-                createChatBoxDialog();
+//                createChatBoxDialog();
+
             }
         });
 
     }
+    /*
     public void createChatBoxDialog() {
         dialogBuilder = new AlertDialog.Builder(this);
         final View chatPopupView = getLayoutInflater().inflate(R.layout.activity_game_chat_popup, null);
@@ -64,4 +66,5 @@ public class GameViewScreen extends AppCompatActivity {
         dialog = dialogBuilder.create();
         dialog.show();
     }
+     */
 }
