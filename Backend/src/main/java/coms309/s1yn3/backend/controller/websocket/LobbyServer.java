@@ -2,27 +2,22 @@ package coms309.s1yn3.backend.controller.websocket;
 
 import coms309.s1yn3.backend.entity.Lobby;
 import coms309.s1yn3.backend.entity.User;
-import coms309.s1yn3.backend.service.RepositoryProviderService;
-import coms309.s1yn3.backend.service.SessionProviderService;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnOpen;
-import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-@Controller
 @ServerEndpoint("/lobby/{lobby-code}/{auth-token}")
 public class LobbyServer extends AbstractWebSocketServer {
 	Logger logger = LoggerFactory.logger(LobbyServer.class);
 
 	@OnOpen
 	public void onOpen(
-			@PathParam("lobby-code") String lobbyCode,
-			@PathParam("auth-token") String authToken) {
+			@PathVariable("lobby-code") String lobbyCode,
+			@PathVariable("auth-token") String authToken) {
 		User user = sessions().getUser(authToken);
 		if (user == null) {
 			logger.warnf("Failed to resolve auth token <%s> for lobby join", authToken);
@@ -40,8 +35,8 @@ public class LobbyServer extends AbstractWebSocketServer {
 
 	@OnClose
 	public void onClose(
-			@PathParam("lobby-code") String lobbyCode,
-			@PathParam("auth-token") String authToken) {
+			@PathVariable("lobby-code") String lobbyCode,
+			@PathVariable("auth-token") String authToken) {
 		User user = sessions().getUser(authToken);
 		if (user == null) {
 			logger.warnf("Failed to resolve auth token <%s> for lobby disconnect", authToken);

@@ -3,6 +3,8 @@ package coms309.s1yn3.backend.controller;
 
 import coms309.s1yn3.backend.entity.Lobby;
 import coms309.s1yn3.backend.entity.User;
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
+import org.jboss.logging.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import java.util.Random;
 
 @RestController
 public class LobbyController extends AbstractController {
+	Logger logger = LoggerFactory.logger(LobbyController.class);
 
 	@PostMapping("/lobby/join")
 	public @ResponseBody ResponseEntity join(HttpServletRequest request, @RequestParam(name = "code", required = false) String code) {
@@ -23,6 +26,7 @@ public class LobbyController extends AbstractController {
 		// If no code provided, do quick join.
 		if (code == null) {
 			// TODO Quick join
+			logger.warnf("User <%s> attempted lobby quick join (not implemented)", user.getUsername());
 			return new ResponseEntity(HttpStatus.OK);
 		}
 		// If code provided, get the Lobby with the given code.
@@ -30,12 +34,16 @@ public class LobbyController extends AbstractController {
 		try {
 			lobby = repositories().getLobbyRepository().findByCode(code).get(0);
 		} catch (NullPointerException ex) {
+			logger.warnf("User <%s> attempted direct join to nonexistent lobby <%s>", user.getUsername(), code);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		// Add the requesting user to the Lobby.
+		logger.infof("User <%s> direct joined lobby <%s>", user.getUsername(), code);
+		logger.debugf("Before <%s> join: %s", user.getUsername(), lobby);
 		lobby.addPlayer(user);
 		repositories().getLobbyRepository().saveAndFlush(lobby);
 		repositories().getUserRepository().saveAndFlush(user);
+		logger.debugf("After <%s> join: %s", user.getUsername(), lobby);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
@@ -47,6 +55,7 @@ public class LobbyController extends AbstractController {
 		if (user.getLobby() != null) {
 			HashMap<String, String> responseBody = new HashMap<>();
 			responseBody.put("message", "User is already connected to a lobby.");
+			logger.warnf("User <%s> attempted to host lobby (already connected to <%s>)", user.getUsername(), user.getLobby().getCode());
 			return new ResponseEntity(responseBody, HttpStatus.FORBIDDEN);
 		}
 		// Create a new Lobby hosted by the requesting User.
@@ -55,6 +64,8 @@ public class LobbyController extends AbstractController {
 		lobby.setHost(user);
 		repositories().getLobbyRepository().saveAndFlush(lobby);
 		repositories().getUserRepository().saveAndFlush(user);
+		logger.infof("User <%s> now hosting lobby <%s>", user.getUsername(), lobby.getCode());
+		logger.debugf("New lobby created: %s", lobby);
 		// Prepare and return the success response.
 		HashMap<String, String> responseBody = new HashMap<>();
 		responseBody.put("code", lobby.getCode());
@@ -71,18 +82,25 @@ public class LobbyController extends AbstractController {
 		if (lobby == null) {
 			HashMap<String, String> responseBody = new HashMap<>();
 			responseBody.put("message", "User is not connected to a lobby.");
+			logger.warnf("User <%s> attempted disconnect (not connected)", user.getUsername());
 			return new ResponseEntity(responseBody, HttpStatus.OK);
 		}
 		// Remove the user from the lobby.
 		lobby.removePlayer(user);
+		logger.infof("User <%s> disconnected from lobby <%s>", user.getUsername(), lobby.getCode());
+		logger.debugf("Before <%s> disconnect: %s", user, lobby);
 		if (lobby.getHost() == user) {
+			logger.warnf("User <%s> was hosting lobby <%s>; removing host", user.getUsername(), lobby.getCode());
 			lobby.setHost(null);
 		}
 		repositories().getLobbyRepository().saveAndFlush(lobby);
 		repositories().getUserRepository().saveAndFlush(user);
+		logger.debugf("After <%s> disconnect: %s", user, lobby);
 		// If the lobby is now empty, destroy it.
 		if (lobby.getPlayers().size() <= 0) {
+			logger.warnf("Lobby <%s> is now empty; destroying.", lobby.getCode());
 			repositories().getLobbyRepository().delete(lobby);
+			logger.warnf("Lobby <%s> destroyed.", lobby.getCode());
 		}
 		return new ResponseEntity(HttpStatus.OK);
 	}

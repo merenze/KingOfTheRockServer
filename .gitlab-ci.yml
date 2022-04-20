@@ -1,6 +1,7 @@
 stages:
   - maventry
   - androidtry
+  - mavenDeploy
 
 maven-build:   #this is a JOB
   stage: maventry
@@ -38,3 +39,17 @@ android-test:  #another job to test android
   script:
     - cd Frontend
     # - .gradlew test
+  
+
+mavenDeploy:  #do make a stage with same name!
+  stage: mavenDeploy
+  tags:
+   - springboot_tag
+  script:
+    - cd Backend
+    - mvn package
+    - sudo mv target/*.jar /target/KingOfTheRockServer-DEMO.jar
+    - sudo systemctl stop system-web
+    - sudo systemctl start system-web
+
+
