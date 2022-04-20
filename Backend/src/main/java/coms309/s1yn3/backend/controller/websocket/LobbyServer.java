@@ -104,7 +104,9 @@ public class LobbyServer extends AbstractWebSocketServer {
 			logger.info("Lobby <%s> destroyed.");
 		}
 		// Broadcast disconnect to remaining players
-		broadcast(lobby, "%s disconnected from the lobby.", user.getUsername());
+		else {
+			broadcast(lobby, "%s disconnected from the lobby.", user.getUsername());
+		}
 	}
 
 	/**
@@ -115,9 +117,11 @@ public class LobbyServer extends AbstractWebSocketServer {
 	 * @throws IOException
 	 */
 	private void broadcast(Lobby lobby, String format, Object... o) throws IOException {
+		String message = String.format(format, o);
+		logger.infof("Broadcast to <%s>: %s", lobby.getCode(), message);
 		for (User player : lobby.getPlayers()) {
 			try {
-				sessions.get(player).getBasicRemote().sendText(String.format(format, o));
+				sessions.get(player).getBasicRemote().sendText(message);
 			} catch (NullPointerException ex) {
 				logger.warnf("In Broadcast: <%s> has lobby <%s> in database but no active session", player.getUsername(), lobby.getCode());
 			}
