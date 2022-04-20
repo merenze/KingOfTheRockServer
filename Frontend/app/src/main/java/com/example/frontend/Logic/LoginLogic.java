@@ -29,6 +29,10 @@ public class LoginLogic implements IVolleyListener {
         newUserObj.put("password", password);
 
         serverRequest.sendToServer(url, newUserObj, "POST");
+
+        authToken = serverRequest.getServerResponse().getString("authToken");
+        currentUsername = serverRequest.getServerResponse().getString("username");
+        isAdmin = serverRequest.getServerResponse().getBoolean("isAdmin");
     }
 
     public String getAuthToken(){
@@ -45,14 +49,7 @@ public class LoginLogic implements IVolleyListener {
 
     @Override
     public void onSuccess(String message) {
-        try {
-            authToken = serverRequest.getServerResponse().getString("authToken");
-            currentUsername = serverRequest.getServerResponse().getString("username");
-            isAdmin = serverRequest.getServerResponse().getBoolean("isAdmin");
-        } catch (JSONException exception) {
-            exception.printStackTrace();
-        }
-
+        r.logText(message);
         r.switchActivity();
     }
 
