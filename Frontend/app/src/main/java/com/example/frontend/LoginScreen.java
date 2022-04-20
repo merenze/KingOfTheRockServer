@@ -32,6 +32,7 @@ import java.util.HashMap;
 public class LoginScreen extends AppCompatActivity implements IView {
 
     private String TAG = LoginScreen.class.getSimpleName();
+    private LoginLogic logic;
     private static String currentUsername;
     private static String authToken;
     private EditText etUsernameOrEmail, etPassword;
@@ -48,7 +49,7 @@ public class LoginScreen extends AppCompatActivity implements IView {
         loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
 
         ServerRequest serverRequest = new ServerRequest();
-        final LoginLogic logic = new LoginLogic(this, serverRequest);
+        LoginLogic logic = new LoginLogic(this, serverRequest);
 
         loginButton.setOnClickListener(view -> {
             String username = etUsernameOrEmail.getText().toString().trim();
@@ -59,59 +60,6 @@ public class LoginScreen extends AppCompatActivity implements IView {
             } catch (JSONException exception) {
                 exception.printStackTrace();
             }
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, url_coms309_backend_server + "/login", jsonObject, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                authToken = response.getString("auth-token");
-                                Toast.makeText(LoginScreen.this, authToken,
-                                        Toast.LENGTH_LONG).show();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            Log.d(tag_json_obj, response.toString());
-
-                            //switch screens on login
-                            try {
-                                //save current username to class variable
-                                currentUsername = response.getString("username");
-
-                                if(response.getBoolean("isAdmin")){
-                                    startActivity(new Intent(view.getContext(), AdminDashboard.class));
-                                } else {
-                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
-                                }
-                            } catch (JSONException exception) {
-                                exception.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("TestTag", "in onErrorResponse body");
-                            NetworkResponse response = error.networkResponse;
-                            if(error instanceof ServerError && response != null){
-                                try {
-                                    String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                                    JSONObject obj = new JSONObject(res);
-                                    if (obj.has(username)) {
-                                        try {
-                                            Log.d(TAG, obj.getString(username));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                } catch (UnsupportedEncodingException | JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    });
-
-            //Add request to queue
-            AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_obj);
         });
     }
 
@@ -131,11 +79,17 @@ public class LoginScreen extends AppCompatActivity implements IView {
         currentUsername = givenCurrentUsername;
     }
 
+    @Override
+    public void logText(String s) {
+        Log.d("RegisterScreen", s);
+    }
+
+    @Override
     public void switchActivity(){
-        if(logic.getIsAdmin){
-            startActivity(new Intent(view.getContext(), AdminDashboard.class));
+        if(logic.getIsAdmin()){
+            startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
         } else {
-            startActivity(new Intent(view.getContext(), UserDashboard.class));
+            startActivity(new Intent(getApplicationContext(), UserDashboard.class));
         }
     }
 }

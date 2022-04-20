@@ -58,6 +58,7 @@ public class RegisterScreen extends AppCompatActivity implements IView {
         Log.d("RegisterScreen", s);
     }
 
+    @Override
     public void switchActivity(){
         startActivity(new Intent(getApplicationContext(), LoginScreen.class));
     }

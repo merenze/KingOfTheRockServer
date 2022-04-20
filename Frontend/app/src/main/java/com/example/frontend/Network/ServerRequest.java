@@ -1,5 +1,7 @@
 package com.example.frontend.Network;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -28,7 +30,9 @@ public class ServerRequest implements IServerRequest {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                            if (response != null ) {
+                       // Log.d("TestTag", response.toString());
+                        if (response != null ) {
+                                Log.d("TestTag", response.toString());
                                 l.onSuccess(response.toString());
                                 serverResponse = response;
                             } else {
