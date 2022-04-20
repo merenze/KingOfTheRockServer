@@ -18,7 +18,6 @@ import com.example.frontend.Entities.IUser;
 public class GameViewScreen extends AppCompatActivity {
 
     private IUser currentUser;
-    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +25,6 @@ public class GameViewScreen extends AppCompatActivity {
         setContentView(R.layout.activity_game_view_screen);
 
         currentUser = LoginScreen.getCurrentUser();
-        //username = currentUser.getUsername();
         Log.d("GameViewScreen", currentUser.toString());
 
         Button tradeButton = (Button)findViewById(R.id.activity_game_view_screen_button_trade);

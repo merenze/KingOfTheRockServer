@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.frontend.Entities.IUser;
 import com.example.frontend.Entities.User;
 import com.example.frontend.SupportingClasses.AppController;
+import com.example.frontend.SupportingClasses.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,13 +38,7 @@ public class LoginScreen extends AppCompatActivity {
 
     private String TAG = LoginScreen.class.getSimpleName();
     private static User currentUser;
-    private static String currentUsername = "";
-    private static boolean isAdmin;
-    private String username;
-    private String password;
     private Button loginButton;
-    private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
-    private static String authToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +50,8 @@ public class LoginScreen extends AppCompatActivity {
         loginButton.setOnClickListener(view -> {
             EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
             EditText etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
-            username = etUsernameOrEmail.getText().toString().trim();
-            password = etPassword.getText().toString().trim();
+            String username = etUsernameOrEmail.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
 
             HashMap<String, String> parameters = new HashMap<String, String>();
             parameters.put("username", username);
@@ -65,27 +60,18 @@ public class LoginScreen extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(parameters);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, url_coms309_backend_server + "/login", jsonObject, new Response.Listener<JSONObject>() {
+                    (Request.Method.POST, Constants.URL + "/login", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            try {
-                                authToken = response.getString("auth-token");
-                                Toast.makeText(LoginScreen.this, authToken,
-                                        Toast.LENGTH_LONG).show();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
                             Log.d(tag_json_obj, response.toString());
 
                             //switch screens on login
                             try {
-                                //save current username to class variable
-                                currentUsername = username;
                                 if(response.getBoolean("isAdmin")){
-                                    currentUser = new User(authToken, currentUsername, true);
+                                    currentUser = new User(response.getString("auth-token"), response.getString("username"), true);
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
-                                    currentUser = new User(authToken, currentUsername, false);
+                                    currentUser = new User(response.getString("auth-token"), response.getString("username"), false);
                                     //startActivity(new Intent(view.getContext(), UserDashboard.class));
                                     startActivity(new Intent(view.getContext(), GameViewScreen.class));
                                 }
@@ -119,14 +105,6 @@ public class LoginScreen extends AppCompatActivity {
             //Add request to queue
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_obj);
         });
-    }
-
-    public static String getAuthToken(){
-        return authToken;
-    }
-
-    public static String getUsername(){
-        return currentUsername;
     }
 
     public static User getCurrentUser() {

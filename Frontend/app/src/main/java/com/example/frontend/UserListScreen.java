@@ -14,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.frontend.Entities.IUser;
 import com.example.frontend.SupportingClasses.AppController;
 
 import org.json.JSONArray;
@@ -28,15 +29,19 @@ import java.util.ArrayList;
  */
 public class UserListScreen extends AppCompatActivity {
 
+    private IUser currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list_screen);
 
+        currentUser = LoginScreen.getCurrentUser();
+
         //Request to pull list of users from the backend
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL + "/users" + "?auth-token=" + LoginScreen.getAuthToken(),
+                URL + "/users" + "?auth-token=" + currentUser.getAuthToken(),
                 null,
                 response -> {
                     // Process the JSON

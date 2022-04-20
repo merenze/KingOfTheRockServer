@@ -19,6 +19,7 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.frontend.Entities.IUser;
 import com.example.frontend.SupportingClasses.AppController;
 import com.google.android.material.button.MaterialButton;
 
@@ -70,7 +71,7 @@ public class RegisterScreen extends AppCompatActivity {
 
             //Request to register user
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, URL + "/register" + "?auth-token=" + LoginScreen.getAuthToken(), jsonObject, new Response.Listener<JSONObject>() {
+                    (Request.Method.POST, URL + "/register", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             if(response.has("status")){
