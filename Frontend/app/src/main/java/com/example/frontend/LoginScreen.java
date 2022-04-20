@@ -61,27 +61,11 @@ public class LoginScreen extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
+                                authToken = response.getString("auth-token");
                                 if (response.getString("isAdmin").equals("true")) {
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
-                                    startActivity(new Intent(view.getContext(), UserListScreen.class));
-                                    Toast.makeText(LoginScreen.this, authToken,
-                                            Toast.LENGTH_LONG).show();
-                                    Log.d(tag_json_obj, response.toString());
-
-                                    //switch screens on login
-                                    try {
-                                        //save current username to class variable
-                                        currentUsername = username;
-                                        if (response.getBoolean("isAdmin")) {
-                                            startActivity(new Intent(view.getContext(), AdminDashboard.class));
-                                        } else {
-                                            //startActivity(new Intent(view.getContext(), UserDashboard.class));
-                                            startActivity(new Intent(view.getContext(), GameViewScreen.class));
-                                        }
-                                    } catch (JSONException exception) {
-                                        exception.printStackTrace();
-                                    }
+                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
                                     Log.d(tag_json_obj, response.toString());
                                 }
                             } catch (JSONException e) {
