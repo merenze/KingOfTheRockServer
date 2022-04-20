@@ -20,7 +20,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 	public void onOpen(
 			@PathParam("lobby-code") String lobbyCode,
 			@PathParam("auth-token") String authToken) {
-		logger.debugf("Websocket connection opened at /lobby/%s/%s", lobbyCode, authToken);
+		logger.infof("Web Socket connection opened at /lobby/%s/%s", lobbyCode, authToken);
 		User user = sessions().getUser(authToken);
 		if (user == null) {
 			logger.warnf("Failed to resolve auth token <%s> for lobby join", authToken);
