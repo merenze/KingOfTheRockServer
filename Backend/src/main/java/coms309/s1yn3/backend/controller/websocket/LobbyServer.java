@@ -1,5 +1,6 @@
 package coms309.s1yn3.backend.controller.websocket;
 
+import coms309.s1yn3.backend.controller.websocket.encoder.LobbyEncoder;
 import coms309.s1yn3.backend.entity.Lobby;
 import coms309.s1yn3.backend.entity.User;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
@@ -18,14 +19,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@ServerEndpoint("/lobby/{lobby-code}/{auth-token}")
+@ServerEndpoint(
+		value = "/lobby/{lobby-code}/{auth-token}",
+		encoders = {
+				LobbyEncoder.class
+		}
+)
 public class LobbyServer extends AbstractWebSocketServer {
 	private final Logger logger = LoggerFactory.logger(LobbyServer.class);
 	private static Map<User, Session> sessions = new HashMap<>();
 
 	/**
-	 *
-	 * @param session WebSocket connection.
+	 * @param session   WebSocket connection.
 	 * @param lobbyCode Code for the destination Lobby.
 	 * @param authToken Auth token for the connecting User.
 	 * @throws IOException
@@ -54,10 +59,8 @@ public class LobbyServer extends AbstractWebSocketServer {
 			return;
 		}
 		// Make sure the lobby exists
-		Lobby lobby;
-		try {
-			lobby = repositories().getLobbyRepository().findByCode(lobbyCode).get(0);
-		} catch (IndexOutOfBoundsException ex) {
+		Lobby lobby = lobbies().findByCode(lobbyCode);
+		if (lobby == null) {
 			logger.warnf("User <%s> attempted connection to nonexistent lobby <%s>", user, lobbyCode);
 			session.getBasicRemote().sendText(String.format("No lobby with code '%s'", lobbyCode));
 			session.close();
@@ -66,12 +69,15 @@ public class LobbyServer extends AbstractWebSocketServer {
 		// Update the User's Lobby
 		user.setLobby(lobby);
 		repositories().getUserRepository().saveAndFlush(user);
+		// Store the User's WebSocket connection
+		sessions.put(user, session);
+		// Send the User the Lobby info
+		session.getBasicRemote().sendObject(lobby);
 		logger.info(String.format("%s connected to lobby %s", user.getUsername(), lobby.getCode()));
-		for(User player : lobby.getPlayers()) {
+		// Broadcast the join message to the Lobby
+		for (User player : lobby.getPlayers()) {
 			sessions.get(user).getBasicRemote().sendText(String.format("%s joined the lobby.", user.getUsername()));
 		}
-		sessions.put(user, session);
-		session.getBasicRemote().sendObject(lobby);
 		// TODO start game
 	}
 
@@ -84,7 +90,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 			logger.warnf("Failed to resolve auth token <%s> for lobby disconnect", authToken);
 			return;
 		}
-		Lobby lobby = repositories().getLobbyRepository().findByCode(lobbyCode).get(0);
+		Lobby lobby = lobbies().findByCode(lobbyCode);
 		if (lobby == null) {
 			logger.warnf("User <%s> attempted disconnect from nonexistent lobby endpoint <%s>");
 			return;
