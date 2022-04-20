@@ -28,7 +28,7 @@ public class AbstractWebSocketServer {
 		return repositoryProviderService;
 	}
 
-	protected static SessionProviderService sessions() {
+	protected static SessionProviderService authSessions() {
 		return sessionProviderService;
 	}
 }
