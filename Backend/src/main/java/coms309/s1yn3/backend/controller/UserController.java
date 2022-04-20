@@ -37,7 +37,7 @@ public class UserController extends AbstractController {
 
 	@PatchMapping("/users/{id}")
 	public @ResponseBody ResponseEntity update(@PathVariable int id, @RequestBody User request) {
-		User user = repositories().getUserRepository().getById(id);
+		User user = repositories().getUserRepository().findById(id);
 		if (user == null) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
@@ -51,7 +51,7 @@ public class UserController extends AbstractController {
 	@DeleteMapping("/users/{id}")
 	public @ResponseBody ResponseEntity delete(@PathVariable int id) {
 		JSONObject responseBody = new JSONObject();
-		if (repositories().getUserRepository().getById(id) == null) {
+		if (repositories().getUserRepository().findById(id) == null) {
 			responseBody.put("status", HttpStatus.NOT_FOUND);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
@@ -139,5 +139,4 @@ public class UserController extends AbstractController {
 	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParameter) {
 		return new ResponseEntity(repositories().getUserRepository().findByUsernameContaining(queryParameter), HttpStatus.OK);
 	}
-
 }
