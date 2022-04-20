@@ -12,4 +12,6 @@ public interface IUser {
     public boolean getIsAdmin();
 
     public void setIsAdmin(boolean isAdmin);
+
+    public String toString();
 }

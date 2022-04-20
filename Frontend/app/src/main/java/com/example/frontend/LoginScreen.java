@@ -82,10 +82,10 @@ public class LoginScreen extends AppCompatActivity {
                                 //save current username to class variable
                                 currentUsername = username;
                                 if(response.getBoolean("isAdmin")){
-                                    isAdmin = true;
-                                    currentUser = new User(authToken, currentUsername, isAdmin);
+                                    currentUser = new User(authToken, currentUsername, true);
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
+                                    currentUser = new User(authToken, currentUsername, false);
                                     //startActivity(new Intent(view.getContext(), UserDashboard.class));
                                     startActivity(new Intent(view.getContext(), GameViewScreen.class));
                                 }
