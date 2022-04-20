@@ -18,7 +18,9 @@ public class Application {
 	 * Routes which should be protected by the AuthFilter.
 	 */
 	private static final String[] ROUTES_USER = {
-			"/lobby/*",
+//			"/lobby/*",
+			"/lobby/host",
+			"/lobby/disconnect",
 			"/users",
 			"/users/*"
 	};
