@@ -16,6 +16,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Component
 @ServerEndpoint(
@@ -26,14 +27,19 @@ import java.util.Map;
 )
 public class LobbyServer extends AbstractWebSocketServer {
 	private final Logger logger = LoggerFactory.logger(LobbyServer.class);
-	private static Map<User, Session> sessions = new HashMap<>();
-	private static Map<Session, User> users = new HashMap<>();
+	/**
+	 * Map a User ID to a Session.
+	 */
+	private static Map<Integer, Session> uidToSession = new HashMap<>();
+	/**
+	 * Map a Session to a User ID.
+	 */
+	private static Map<Session, Integer> sessionToUid = new HashMap<>();
 
 	/**
 	 * @param session   WebSocket connection.
 	 * @param lobbyCode Code for the destination Lobby.
 	 * @param authToken Auth token for the connecting User.
-	 * @throws IOException
 	 */
 	@OnOpen
 	public void onOpen(
@@ -50,9 +56,9 @@ public class LobbyServer extends AbstractWebSocketServer {
 			return;
 		}
 		// Make sure the User is not already connected to a lobby
-		logger.debugf("User <%s> has session: %s", user, sessions.containsKey(user));
+		logger.debugf("User <%s> has session: %s", user, uidToSession.containsKey(user));
 		logger.debugf("User <%s> lobby in database: %s", user, user.getLobby());
-		if (sessions.containsKey(user)) {
+		if (uidToSession.containsKey(user.getId())) {
 			logger.warnf("User <%s> attempted lobby connection; already connected", user.getUsername());
 			session.getBasicRemote().sendText("You are already connected to a lobby or game.");
 			session.close();
@@ -70,8 +76,8 @@ public class LobbyServer extends AbstractWebSocketServer {
 		lobby.addPlayer(user);
 		repositories().getUserRepository().saveAndFlush(user);
 		// Store the User's WebSocket connection
-		sessions.put(user, session);
-		users.put(session, user);
+		uidToSession.put(user.getId(), session);
+		sessionToUid.put(session, user.getId());
 		// Send the User the Lobby info
 		session.getBasicRemote().sendObject(lobby);
 		logger.info(String.format("%s connected to lobby %s", user.getUsername(), lobby.getCode()));
@@ -88,20 +94,31 @@ public class LobbyServer extends AbstractWebSocketServer {
 	@OnClose
 	public void onClose(Session session) throws IOException {
 		// Remove the sessions from mapping
-		User user = users.get(session);
-		users.remove(session);
-		sessions.remove(user);
+		User user;
+		try {
+			user = repositories().getUserRepository().findById(sessionToUid.get(session)).get();
+		} catch (NoSuchElementException ex) {
+			// This shouldn't happen!
+			int uid = sessionToUid.get(session);
+			logger.warnf("Session closed for non-existent user with id <%d>", uid);
+			uidToSession.remove(uid);
+			sessionToUid.remove(session);
+			session.close();
+			return;
+		}
+		sessionToUid.remove(session);
+		uidToSession.remove(user.getId());
 		// Assigned like this in order to get joins from provider
 		Lobby lobby = lobbies().findByCode(user.getLobby().getCode());
 		// Disconnect the User
 		lobby.removePlayer(user);
 		repositories().getUserRepository().saveAndFlush(user);
-		logger.info(String.format("%s disconnected from lobby <%s>", user.getUsername(), lobby.getCode()));
+		logger.infof("%s disconnected from lobby <%s>", user.getUsername(), lobby.getCode());
 		// Destroy an empty lobby
 		if (lobby.getPlayers().size() <= 0) {
-			logger.info("Lobby <%s> is now empty, destroying.");
+			logger.infof("Lobby <%s> is now empty, destroying.", lobby.getCode());
 			repositories().getLobbyRepository().delete(lobby);
-			logger.info("Lobby <%s> destroyed.");
+			logger.infof("Lobby <%s> destroyed.", lobby.getCode());
 		}
 		// Broadcast disconnect to remaining players
 		else {
@@ -114,16 +131,17 @@ public class LobbyServer extends AbstractWebSocketServer {
 	 * @param lobby
 	 * @param format
 	 * @param o
-	 * @throws IOException
 	 */
-	private void broadcast(Lobby lobby, String format, Object... o) throws IOException {
+	private void broadcast(Lobby lobby, String format, Object... o) {
 		String message = String.format(format, o);
 		logger.infof("Broadcast to <%s>: %s", lobby.getCode(), message);
 		for (User player : lobby.getPlayers()) {
 			try {
-				sessions.get(player).getBasicRemote().sendText(message);
+				uidToSession.get(player.getId()).getBasicRemote().sendText(message);
 			} catch (NullPointerException ex) {
 				logger.warnf("In Broadcast: <%s> has lobby <%s> in database but no active session", player.getUsername(), lobby.getCode());
+			} catch (IOException ex) {
+				ex.printStackTrace();
 			}
 		}
 	}
