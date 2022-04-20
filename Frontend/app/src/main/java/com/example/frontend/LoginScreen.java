@@ -63,17 +63,19 @@ public class LoginScreen extends AppCompatActivity {
                     (Request.Method.POST, Constants.URL + "/login", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d(tag_json_obj, response.toString());
+                            Log.d(TAG, response.toString());
 
                             //switch screens on login
                             try {
                                 if(response.getBoolean("isAdmin")){
-                                    currentUser = new User(response.getString("auth-token"), response.getString("username"), true);
+                                    currentUser = new User(response.getString("auth-token"), username, true);
+                                    Log.d(TAG, currentUser.toString());
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
-                                    currentUser = new User(response.getString("auth-token"), response.getString("username"), false);
-                                    //startActivity(new Intent(view.getContext(), UserDashboard.class));
-                                    startActivity(new Intent(view.getContext(), GameViewScreen.class));
+                                    currentUser = new User(response.getString("auth-token"), username, false);
+                                    Log.d(TAG, currentUser.toString());
+                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
+                                    //startActivity(new Intent(view.getContext(), GameViewScreen.class));
                                 }
                             } catch (JSONException exception) {
                                 exception.printStackTrace();

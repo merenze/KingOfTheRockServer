@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.frontend.Entities.IUser;
 import com.example.frontend.SupportingClasses.AppController;
+import com.example.frontend.SupportingClasses.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +35,6 @@ public class SearchForUserScreen extends AppCompatActivity {
     private IUser currentUser;
     private String usernameEntry;
     private Button searchButton;
-    private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class SearchForUserScreen extends AppCompatActivity {
         setContentView(R.layout.activity_search_for_user_screen);
 
         currentUser = LoginScreen.getCurrentUser();
+        Log.d(TAG, currentUser.toString());
 
         searchButton = (Button)findViewById(R.id.activity_search_for_user_button_search);
 
@@ -49,7 +50,7 @@ public class SearchForUserScreen extends AppCompatActivity {
             EditText etUsernameEntry = (EditText)findViewById(R.id.activity_search_for_user_screen_et_searchEntry);
             usernameEntry = etUsernameEntry.getText().toString().trim();
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                    (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry + "&auth-token=" + currentUser.getAuthToken(), null, new Response.Listener<JSONArray>() {
+                    (Request.Method.GET, Constants.URL + "/search/?q=" + usernameEntry + "&auth-token=" + currentUser.getAuthToken(), null, new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.d(tag_json_arr, response.toString());
