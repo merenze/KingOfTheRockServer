@@ -7,8 +7,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
+@EnableWebMvc
 public class Application {
 	@Autowired SessionProviderService sessionProvider;
 
@@ -16,7 +18,9 @@ public class Application {
 	 * Routes which should be protected by the AuthFilter.
 	 */
 	private static final String[] ROUTES_USER = {
-			"/lobby/*",
+//			"/lobby/*",
+			"/lobby/host",
+			"/lobby/disconnect",
 			"/users",
 			"/users/*"
 	};

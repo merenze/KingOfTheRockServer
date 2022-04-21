@@ -2,6 +2,8 @@ package coms309.s1yn3.backend.controller;
 
 import coms309.s1yn3.backend.entity.Password;
 import coms309.s1yn3.backend.entity.User;
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
+import org.jboss.logging.Logger;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.regex.Pattern;
 @RestController
 public class UserController extends AbstractController {
 	private static final String EMAIL_PATTERN = "^[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+@[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+(\\.[0-9a-zA-Z!#$%&'*/=?^_+\\-`\\{|\\}~]+)*$";
+	private final Logger logger = LoggerFactory.logger(UserController.class);
 
 	@GetMapping("/users")
 	public @ResponseBody List<User> index() {
@@ -37,8 +40,9 @@ public class UserController extends AbstractController {
 
 	@PatchMapping("/users/{id}")
 	public @ResponseBody ResponseEntity update(@PathVariable int id, @RequestBody User request) {
-		User user = repositories().getUserRepository().getById(id);
+		User user = repositories().getUserRepository().findById(id);
 		if (user == null) {
+			logger.warnf("User not found for ID %s", id);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		user.patch(request);
@@ -51,7 +55,7 @@ public class UserController extends AbstractController {
 	@DeleteMapping("/users/{id}")
 	public @ResponseBody ResponseEntity delete(@PathVariable int id) {
 		JSONObject responseBody = new JSONObject();
-		if (repositories().getUserRepository().getById(id) == null) {
+		if (repositories().getUserRepository().findById(id) == null) {
 			responseBody.put("status", HttpStatus.NOT_FOUND);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
@@ -129,6 +133,8 @@ public class UserController extends AbstractController {
 		}
 		Map<String, String> responseBody = new HashMap<>();
 		responseBody.put("auth-token", sessions().addSession(user));
+		responseBody.put("isAdmin", Boolean.toString(user.getIsAdmin()));
+		logger.infof("User <%s> logged in with token <%s>", user.getUsername(), responseBody.get("auth-token"));
 		return new ResponseEntity(
 				responseBody,
 				HttpStatus.OK
@@ -139,5 +145,4 @@ public class UserController extends AbstractController {
 	public @ResponseBody ResponseEntity search(@RequestParam("q") String queryParameter) {
 		return new ResponseEntity(repositories().getUserRepository().findByUsernameContaining(queryParameter), HttpStatus.OK);
 	}
-
 }

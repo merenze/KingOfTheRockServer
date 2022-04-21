@@ -1,5 +1,9 @@
 package com.example.frontend.Logic;
 
+import android.util.Log;
+
+import com.example.frontend.Entities.IUser;
+import com.example.frontend.Entities.User;
 import com.example.frontend.Network.IServerRequest;
 import com.example.frontend.SupportingClasses.Constants;
 import com.example.frontend.SupportingClasses.IView;
@@ -12,9 +16,7 @@ public class LoginLogic implements IVolleyListener {
     IView r;
     IServerRequest serverRequest;
 
-    private static String authToken;
-    private static String currentUsername;
-    private static boolean isAdmin;
+    private User currentUser;
 
     public LoginLogic(IView r, IServerRequest serverRequest) {
         this.r = r;
@@ -30,21 +32,15 @@ public class LoginLogic implements IVolleyListener {
 
         serverRequest.sendToServer(url, newUserObj, "POST");
 
-        authToken = serverRequest.getServerResponse().getString("authToken");
-        currentUsername = serverRequest.getServerResponse().getString("username");
-        isAdmin = serverRequest.getServerResponse().getBoolean("isAdmin");
+        String authToken = serverRequest.getServerResponse().getString("authToken");
+        boolean isAdmin = serverRequest.getServerResponse().getBoolean("isAdmin");
+
+        currentUser = new User(authToken, username, isAdmin);
+        Log.d("LoginLogic", currentUser.toString());
     }
 
-    public String getAuthToken(){
-        return authToken;
-    }
-
-    public String getCurrentUsername(){
-        return currentUsername;
-    }
-
-    public boolean getIsAdmin(){
-        return isAdmin;
+    public User getCurrentUser(){
+        return currentUser;
     }
 
     @Override

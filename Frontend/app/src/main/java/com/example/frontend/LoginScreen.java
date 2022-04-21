@@ -18,10 +18,13 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.frontend.Entities.IUser;
+import com.example.frontend.Entities.User;
 import com.example.frontend.Logic.LoginLogic;
 import com.example.frontend.Network.ServerRequest;
 import com.example.frontend.SupportingClasses.AppController;
 import com.example.frontend.SupportingClasses.IView;
+import com.example.frontend.SupportingClasses.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,14 +32,18 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+/**
+ * Class for the logic of the screen to login
+ *
+ * @author Noah Cordova
+ */
 public class LoginScreen extends AppCompatActivity implements IView {
 
     private String TAG = LoginScreen.class.getSimpleName();
-    private LoginLogic logic;
-    private static String currentUsername;
-    private static String authToken;
-    private EditText etUsernameOrEmail, etPassword;
+    private static IUser currentUser;
     private Button loginButton;
+    private LoginLogic logic;
+    private EditText etUsernameOrEmail, etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,7 @@ public class LoginScreen extends AppCompatActivity implements IView {
         loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
 
         ServerRequest serverRequest = new ServerRequest();
-        LoginLogic logic = new LoginLogic(this, serverRequest);
+        logic = new LoginLogic(this, serverRequest);
 
         loginButton.setOnClickListener(view -> {
             String username = etUsernameOrEmail.getText().toString().trim();
@@ -57,36 +64,26 @@ public class LoginScreen extends AppCompatActivity implements IView {
 
             try {
                 logic.loginUser(username, password);
+                currentUser = logic.getCurrentUser();
+                Log.d("LoginScreen", currentUser.toString());
             } catch (JSONException exception) {
                 exception.printStackTrace();
             }
         });
     }
 
-    public static String getAuthToken(){
-        return authToken;
-    }
-
-    public static void setAuthToken(String givenAuthToken) {
-        authToken = givenAuthToken;
-    }
-
-    public static String getCurrentUsername(){
-        return currentUsername;
-    }
-
-    public static void setCurrentUsername(String givenCurrentUsername) {
-        currentUsername = givenCurrentUsername;
+    public static IUser getCurrentUser() {
+        return currentUser;
     }
 
     @Override
     public void logText(String s) {
-        Log.d("RegisterScreen", s);
+        Log.d("LoginScreen", s);
     }
 
     @Override
     public void switchActivity(){
-        if(logic.getIsAdmin()){
+        if(currentUser.getIsAdmin()){
             startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
         } else {
             startActivity(new Intent(getApplicationContext(), UserDashboard.class));
