@@ -33,11 +33,11 @@ public class RepositoryProviderService {
 		return userRepository;
 	}
 
-	public GameRepository games() {
+	public GameRepository getGameRepository() {
 		return gameRepository;
 	}
 
-	public GameUserRepository gameUserRelations() {
+	public GameUserRepository getGameUserRepository() {
 		return gameUserRepository;
 	}
 }

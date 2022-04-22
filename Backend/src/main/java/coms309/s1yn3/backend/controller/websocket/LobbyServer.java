@@ -89,10 +89,13 @@ public class LobbyServer extends AbstractWebSocketServer {
 		if (lobby.getPlayers().size() >= Game.MAX_PLAYERS) {
 			logger.infof("Lobby <%s> is full, starting game", lobby.getCode());
 			broadcast(lobby, "Starting game");
-			Game game = new Game();
+			Game game = repositories().getGameRepository().saveAndFlush(new Game());
 			for (User player : lobby.getPlayers()) {
 				GameUserRelation gameUserRelation = new GameUserRelation(game, user);
+				repositories().getGameUserRepository().save(gameUserRelation);
+				logger.debugf("Added relation between user <%s> and game <%d>", player.getUsername(), game.getId());
 			}
+			repositories().getGameUserRepository().flush();
 		}
 		// TODO start game
 	}
