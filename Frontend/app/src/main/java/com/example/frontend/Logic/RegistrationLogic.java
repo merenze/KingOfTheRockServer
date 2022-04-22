@@ -1,5 +1,7 @@
 package com.example.frontend.Logic;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +33,7 @@ public class RegistrationLogic implements IVolleyListener {
 
     @Override
     public void onSuccess(String email) {
+        Log.d("RegistrationLogic", "in onSuccess method");
         if (email.length() > 0) {
             r.switchActivity();
         } else {
@@ -40,6 +43,7 @@ public class RegistrationLogic implements IVolleyListener {
 
     @Override
     public void onError (String errorMessage) {
+        Log.d("RegistrationLogic", "in onError method");
         r.logText(errorMessage);
     }
 }
