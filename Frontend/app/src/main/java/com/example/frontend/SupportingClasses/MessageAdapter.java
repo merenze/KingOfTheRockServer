@@ -58,7 +58,7 @@ public class MessageAdapter extends BaseAdapter {
         } else {
             convertView = messageInflater.inflate(R.layout.their_message, null);
             holder.avatar = (View) convertView.findViewById(R.id.avatar);
-            holder.name = (TextView) convertView.findViewById(R.id.name);
+            holder.name = (TextView) convertView.findViewById(R.id.their_message_name);
             holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);
             convertView.setTag(holder);
 

@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.frontend.SupportingClasses.MessageAdapter;
 
+import org.java_websocket.client.WebSocketClient;
+
 import java.util.Random;
 
 public class GameChat extends AppCompatActivity {
@@ -28,6 +30,8 @@ public class GameChat extends AppCompatActivity {
         messagesView.setAdapter(messageAdapter);
 
         MemberData data = new MemberData(getRandomName(), getRandomColor());
+
+
     }
 
     private String getRandomName() {
