@@ -1,5 +1,6 @@
 package coms309.s1yn3.backend.controller.websocket;
 
+import coms309.s1yn3.backend.controller.websocket.encoder.GameEncoder;
 import coms309.s1yn3.backend.controller.websocket.encoder.LobbyEncoder;
 import coms309.s1yn3.backend.entity.Game;
 import coms309.s1yn3.backend.entity.Lobby;
@@ -24,7 +25,8 @@ import java.util.NoSuchElementException;
 @ServerEndpoint(
 		value = "/lobby/{lobby-code}/{auth-token}",
 		encoders = {
-				LobbyEncoder.class
+				LobbyEncoder.class,
+				GameEncoder.class
 		}
 )
 public class LobbyServer extends AbstractWebSocketServer {

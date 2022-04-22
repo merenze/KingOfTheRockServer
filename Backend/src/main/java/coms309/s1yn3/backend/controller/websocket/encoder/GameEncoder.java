@@ -1,7 +1,8 @@
 package coms309.s1yn3.backend.controller.websocket.encoder;
 
-import coms309.s1yn3.backend.entity.Lobby;
+import coms309.s1yn3.backend.entity.Game;
 import coms309.s1yn3.backend.entity.User;
+import coms309.s1yn3.backend.entity.relation.GameUserRelation;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,20 +10,16 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-public class LobbyEncoder implements Encoder.Text<Lobby> {
+public class GameEncoder implements Encoder.Text<Game> {
 	@Override
-	public String encode(Lobby lobby) throws EncodeException {
+	public String encode(Game game) throws EncodeException {
 		JSONObject jsonObject = new JSONObject();
-		// Raw fields
-		jsonObject.put("code", lobby.getCode());
-		jsonObject.put("host", lobby.getHost());
-		// Player list
-		JSONArray players = new JSONArray();
-		for (User player : lobby.getPlayers()) {
-			players.put(new JSONObject(new UserEncoder().encode(player)));
+		jsonObject.put("id", game.getId());
+		JSONArray jsonArray = new JSONArray();
+		for (GameUserRelation userRelation : game.getUserRelations()) {
+			jsonArray.put(new JSONObject(new UserEncoder().encode(userRelation.getUser())));
 		}
-		jsonObject.put("players", players);
-		// Result
+		jsonObject.put("players", jsonArray);
 		return jsonObject.toString();
 	}
 
