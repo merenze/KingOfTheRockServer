@@ -19,7 +19,7 @@ public class RegistrationLogic implements IVolleyListener {
     }
 
     public void registerUser(String email, String username, String password, boolean adminBool) throws JSONException {
-        String url =  Constants.URL + "/register";
+        String url = Constants.URL + "/register";
         JSONObject newUserObj = new JSONObject();
         newUserObj.put("email", email);
         newUserObj.put("username", username);

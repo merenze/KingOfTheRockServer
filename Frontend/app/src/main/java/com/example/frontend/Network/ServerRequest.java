@@ -22,10 +22,10 @@ public class ServerRequest implements IServerRequest {
     public void sendToServer(String url, JSONObject newUserObj, String methodType) {
 
         int method = Request.Method.GET;
-
         if (methodType.equals("POST")) {
             method = Request.Method.POST;
         }
+
         JsonObjectRequest userRequest = new JsonObjectRequest(method, url, newUserObj,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -36,10 +36,11 @@ public class ServerRequest implements IServerRequest {
                                 Log.d(tag_json_obj, response.toString());
                                 l.onSuccess(response.toString());
                                 serverResponse = response;
-                            } else {
-                                l.onError("Null Response object received");
-                            }
-                    }},
+                        } else {
+                            l.onError("Null Response object received");
+                        }
+                    }
+                },
 
                 new Response.ErrorListener() {
                     @Override
