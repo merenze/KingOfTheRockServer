@@ -69,8 +69,15 @@ public class LobbyServer extends AbstractWebSocketServer {
 		// Make sure the lobby exists
 		Lobby lobby = lobbies().findByCode(lobbyCode);
 		if (lobby == null) {
-			logger.warnf("User <%s> attempted connection to nonexistent lobby <%s>", user, lobbyCode);
+			logger.infof("User <%s> attempted connection to nonexistent lobby <%s>", user, lobbyCode);
 			session.getBasicRemote().sendText(String.format("No lobby with code '%s'", lobbyCode));
+			session.close();
+			return;
+		}
+		// Make sure the lobby is not full
+		if (lobby.getPlayers().size() >= Game.MAX_PLAYERS) {
+			logger.infof("User <%s> attempted connection to full lobby <%s>", user, lobby.getCode());
+			session.getBasicRemote().sendText("That lobby is already full.");
 			session.close();
 			return;
 		}
@@ -85,19 +92,16 @@ public class LobbyServer extends AbstractWebSocketServer {
 		logger.infof("%s connected to lobby %s", user.getUsername(), lobby.getCode());
 		// Broadcast the join message to the Lobby
 		broadcast(lobby, "%s joined the lobby.", user.getUsername());
-
+		// Start the game
 		if (lobby.getPlayers().size() >= Game.MAX_PLAYERS) {
 			logger.infof("Lobby <%s> is full, starting game", lobby.getCode());
-			broadcast(lobby, "Starting game");
-			Game game = repositories().getGameRepository().saveAndFlush(new Game());
+			Game game = startGame(lobby);
+			// Send the players the game start message
 			for (User player : lobby.getPlayers()) {
-				GameUserRelation gameUserRelation = new GameUserRelation(game, user);
-				repositories().getGameUserRepository().save(gameUserRelation);
-				logger.debugf("Added relation between user <%s> and game <%d>", player.getUsername(), game.getId());
+				// TODO: This will except; Game needs an encoder.
+				uidToSession.get(player.getId()).getBasicRemote().sendObject(game);
 			}
-			repositories().getGameUserRepository().flush();
 		}
-		// TODO start game
 	}
 
 	/**
@@ -158,5 +162,20 @@ public class LobbyServer extends AbstractWebSocketServer {
 				ex.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * Start a game for the players in a Lobby.
+	 * @param lobby
+	 */
+	private Game startGame(Lobby lobby) {
+		broadcast(lobby, "Starting game");
+		Game game = repositories().getGameRepository().saveAndFlush(new Game());
+		for (User player : lobby.getPlayers()) {
+			GameUserRelation gameUserRelation = new GameUserRelation(game, player);
+			repositories().getGameUserRepository().save(gameUserRelation);
+			logger.debugf("Added relation between user <%s> and game <%d>", player.getUsername(), game.getId());
+		}
+		return game;
 	}
 }
