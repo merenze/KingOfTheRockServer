@@ -30,7 +30,6 @@ import java.io.UnsupportedEncodingException;
 public class GameLobby extends AppCompatActivity {
     String authToken = LoginScreen.getAuthToken();
     String lobbyCode;
-    boolean receivedLobbyCode = false;
 
     public void holdResponse() {
         TextView lobbyCodeText = (TextView) findViewById(R.id.host_game_lobby_code_textview);
