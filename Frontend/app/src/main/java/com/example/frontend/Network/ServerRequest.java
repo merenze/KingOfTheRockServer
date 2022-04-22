@@ -26,11 +26,12 @@ public class ServerRequest implements IServerRequest {
         if (methodType.equals("POST")) {
             method = Request.Method.POST;
         }
-        JsonObjectRequest registerUserRequest = new JsonObjectRequest(method, url, newUserObj,
+        JsonObjectRequest userRequest = new JsonObjectRequest(method, url, newUserObj,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                       // Log.d("TestTag", response.toString());
+                        Log.d("TestTag", "in onResponse method");
+                        Log.d("TestTag", response.toString());
                         if (response != null ) {
                                 Log.d(tag_json_obj, response.toString());
                                 l.onSuccess(response.toString());
@@ -43,6 +44,7 @@ public class ServerRequest implements IServerRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d("TestTag", "in onErrorResponse method");
                         if (error.getMessage() != null){
                             l.onError(error.getMessage());
                         } else {
@@ -52,7 +54,7 @@ public class ServerRequest implements IServerRequest {
                 }
         );
 
-        AppController.getInstance().addToRequestQueue(registerUserRequest, tag_json_obj);
+        AppController.getInstance().addToRequestQueue(userRequest, tag_json_obj);
     }
 
     public JSONObject getServerResponse(){
