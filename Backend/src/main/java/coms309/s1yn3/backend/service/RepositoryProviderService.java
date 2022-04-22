@@ -1,8 +1,6 @@
 package coms309.s1yn3.backend.service;
 
-import coms309.s1yn3.backend.entity.repository.LobbyRepository;
-import coms309.s1yn3.backend.entity.repository.PasswordRepository;
-import coms309.s1yn3.backend.entity.repository.UserRepository;
+import coms309.s1yn3.backend.entity.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +15,12 @@ public class RepositoryProviderService {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	GameRepository gameRepository;
+
+	@Autowired
+	GameUserRepository gameUserRepository;
+
 	public LobbyRepository getLobbyRepository() {
 		return lobbyRepository;
 	}
@@ -27,5 +31,13 @@ public class RepositoryProviderService {
 
 	public UserRepository getUserRepository() {
 		return userRepository;
+	}
+
+	public GameRepository games() {
+		return gameRepository;
+	}
+
+	public GameUserRepository gameUserRelations() {
+		return gameUserRepository;
 	}
 }
