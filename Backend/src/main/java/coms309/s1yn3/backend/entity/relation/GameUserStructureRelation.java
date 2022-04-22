@@ -2,9 +2,10 @@ package coms309.s1yn3.backend.entity.relation;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import coms309.s1yn3.backend.entity.Structure;
+import coms309.s1yn3.backend.entity.relation.id.GameUserId;
+import coms309.s1yn3.backend.entity.relation.id.GameUserStructureId;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @IdClass(GameUserStructureId.class)
@@ -182,7 +183,3 @@ public class GameUserStructureRelation {
 	}
 }
 
-class GameUserStructureId implements Serializable {
-	private GameUserId gameUserId;
-	private String structureName;
-}

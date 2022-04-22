@@ -1,8 +1,10 @@
 package coms309.s1yn3.backend.controller.websocket;
 
 import coms309.s1yn3.backend.controller.websocket.encoder.LobbyEncoder;
+import coms309.s1yn3.backend.entity.Game;
 import coms309.s1yn3.backend.entity.Lobby;
 import coms309.s1yn3.backend.entity.User;
+import coms309.s1yn3.backend.entity.relation.GameUserRelation;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Component;
@@ -80,9 +82,18 @@ public class LobbyServer extends AbstractWebSocketServer {
 		sessionToUid.put(session, user.getId());
 		// Send the User the Lobby info
 		session.getBasicRemote().sendObject(lobby);
-		logger.info(String.format("%s connected to lobby %s", user.getUsername(), lobby.getCode()));
+		logger.infof("%s connected to lobby %s", user.getUsername(), lobby.getCode());
 		// Broadcast the join message to the Lobby
 		broadcast(lobby, "%s joined the lobby.", user.getUsername());
+
+		if (lobby.getPlayers().size() >= Game.MAX_PLAYERS) {
+			logger.infof("Lobby <%s> is full, starting game", lobby.getCode());
+			broadcast(lobby, "Starting game");
+			Game game = new Game();
+			for (User player : lobby.getPlayers()) {
+				GameUserRelation gameUserRelation = new GameUserRelation(game, user);
+			}
+		}
 		// TODO start game
 	}
 
@@ -139,7 +150,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 			try {
 				uidToSession.get(player.getId()).getBasicRemote().sendText(message);
 			} catch (NullPointerException ex) {
-				logger.warnf("In Broadcast: <%s> has lobby <%s> in database but no active session", player.getUsername(), lobby.getCode());
+				logger.warnf("<%s> has lobby <%s> in database but no active session", player.getUsername(), lobby.getCode());
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
