@@ -31,7 +31,7 @@ public class GameUserRelation {
 	 * Game associated with this relation.
 	 */
 	@ManyToOne(targetEntity = Game.class)
-	@JoinColumn(name = "user")
+	@JoinColumn(name = "game")
 	@MapsId("gameId")
 	@JsonBackReference
 	private Game game;
@@ -40,7 +40,7 @@ public class GameUserRelation {
 	 * User associated with this relation.
 	 */
 	@ManyToOne(targetEntity = User.class)
-	@JoinColumn(name = "game")
+	@JoinColumn(name = "user")
 	@MapsId("userId")
 	@JsonBackReference
 	private User user;
@@ -72,6 +72,9 @@ public class GameUserRelation {
 	public GameUserRelation(Game game, User user) {
 		this.game = game;
 		this.user = user;
+
+		gameId = game.getId();
+		userId = user.getId();
 	}
 
 	/**
