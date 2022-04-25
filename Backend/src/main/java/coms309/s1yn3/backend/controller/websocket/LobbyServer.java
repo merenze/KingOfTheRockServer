@@ -173,6 +173,8 @@ public class LobbyServer extends AbstractWebSocketServer {
 	private Game startGame(Lobby lobby) {
 		broadcast(lobby, "Starting game");
 		Game game = repositories().getGameRepository().saveAndFlush(new Game());
+		// Join game-user relations
+		game = games().findById(game.getId());
 		for (User player : lobby.getPlayers()) {
 			GameUserRelation gameUserRelation = new GameUserRelation(game, player);
 			repositories().getGameUserRepository().save(gameUserRelation);
