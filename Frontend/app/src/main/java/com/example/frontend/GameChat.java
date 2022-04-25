@@ -30,8 +30,6 @@ public class GameChat extends AppCompatActivity {
         messagesView.setAdapter(messageAdapter);
 
         MemberData data = new MemberData(getRandomName(), getRandomColor());
-
-
     }
 
     private String getRandomName() {
