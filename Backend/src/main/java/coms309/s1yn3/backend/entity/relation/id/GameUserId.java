@@ -19,11 +19,6 @@ public class GameUserId implements Serializable {
 	@Column(name = "user")
 	private int userId;
 
-//	public GameUserId(int gameId, int userId) {
-//		this.gameId = gameId;
-//		this.userId = userId;
-//	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof GameUserId)) {

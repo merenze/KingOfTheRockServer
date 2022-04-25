@@ -34,11 +34,11 @@ public class LobbyServer extends AbstractWebSocketServer {
 	/**
 	 * Map a User ID to a Session.
 	 */
-	private static Map<Integer, Session> uidToSession = new HashMap<>();
+	private static final Map<Integer, Session> uidToSession = new HashMap<>();
 	/**
 	 * Map a Session to a User ID.
 	 */
-	private static Map<Session, Integer> sessionToUid = new HashMap<>();
+	private static final Map<Session, Integer> sessionToUid = new HashMap<>();
 
 	/**
 	 * @param session   WebSocket connection.
@@ -98,6 +98,8 @@ public class LobbyServer extends AbstractWebSocketServer {
 		if (lobby.getPlayers().size() >= Game.MAX_PLAYERS) {
 			logger.infof("Lobby <%s> is full, starting game", lobby.getCode());
 			Game game = startGame(lobby);
+			// Join game-user relations
+			game = games().findById(game.getId());
 			// Send the players the game start message
 			for (User player : lobby.getPlayers()) {
 				// TODO: This will except; Game needs an encoder.
@@ -172,9 +174,8 @@ public class LobbyServer extends AbstractWebSocketServer {
 	 */
 	private Game startGame(Lobby lobby) {
 		broadcast(lobby, "Starting game");
+		// Saving before instantiating so we can generate the ID
 		Game game = repositories().getGameRepository().saveAndFlush(new Game());
-		// Join game-user relations
-		game = games().findById(game.getId());
 		for (User player : lobby.getPlayers()) {
 			GameUserRelation gameUserRelation = new GameUserRelation(game, player);
 			repositories().getGameUserRepository().save(gameUserRelation);
