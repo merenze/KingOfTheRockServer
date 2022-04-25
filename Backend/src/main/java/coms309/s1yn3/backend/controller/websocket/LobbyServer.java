@@ -103,7 +103,9 @@ public class LobbyServer extends AbstractWebSocketServer {
 			// Send the players the game start message
 			for (User player : lobby.getPlayers()) {
 				// TODO: This will except; Game needs an encoder.
-				uidToSession.get(player.getId()).getBasicRemote().sendObject(game);
+				Session s = uidToSession.get(player.getId());
+				s.getBasicRemote().sendObject(game);
+				s.close();
 			}
 		}
 	}
