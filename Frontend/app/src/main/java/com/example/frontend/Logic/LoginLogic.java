@@ -30,6 +30,7 @@ public class LoginLogic implements IVolleyListener {
         newUserObj.put("username", username);
         newUserObj.put("password", password);
 
+
         serverRequest.sendToServer(url, newUserObj, "POST");
 
         //String authToken = serverRequest.getServerResponse().getString("auth-token");

@@ -64,8 +64,10 @@ public class LoginScreen extends AppCompatActivity implements IView {
 
             try {
                 logic.loginUser(username, password);
-                currentUser = logic.getCurrentUser();
-                Log.d("LoginScreen", currentUser.toString());
+
+                //wait for onSuccess...
+                //currentUser = logic.getCurrentUser();
+                //Log.d("LoginScreen", currentUser.toString());
             } catch (JSONException exception) {
                 exception.printStackTrace();
             }
