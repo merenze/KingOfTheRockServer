@@ -8,6 +8,11 @@ import java.util.List;
 @Entity
 public class Game {
 	/**
+	 * The maximum number of players that can be in a game
+	 */
+	public static final int MAX_PLAYERS = 4;
+
+	/**
 	 * Unique ID for this game.
 	 */
 	@Id
@@ -50,5 +55,9 @@ public class Game {
 	 */
 	public void setUserRelations(List<GameUserRelation> userRelations) {
 		this.userRelations = userRelations;
+	}
+
+	public void addUserRelation(User user) {
+		GameUserRelation gameUserRelation;
 	}
 }

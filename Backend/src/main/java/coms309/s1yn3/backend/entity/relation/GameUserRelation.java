@@ -3,9 +3,9 @@ package coms309.s1yn3.backend.entity.relation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import coms309.s1yn3.backend.entity.Game;
 import coms309.s1yn3.backend.entity.User;
+import coms309.s1yn3.backend.entity.relation.id.GameUserId;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -31,7 +31,7 @@ public class GameUserRelation {
 	 * Game associated with this relation.
 	 */
 	@ManyToOne(targetEntity = Game.class)
-	@JoinColumn(name = "user")
+	@JoinColumn(name = "game")
 	@MapsId("gameId")
 	@JsonBackReference
 	private Game game;
@@ -40,7 +40,7 @@ public class GameUserRelation {
 	 * User associated with this relation.
 	 */
 	@ManyToOne(targetEntity = User.class)
-	@JoinColumn(name = "game")
+	@JoinColumn(name = "user")
 	@MapsId("userId")
 	@JsonBackReference
 	private User user;
@@ -72,6 +72,9 @@ public class GameUserRelation {
 	public GameUserRelation(Game game, User user) {
 		this.game = game;
 		this.user = user;
+
+		gameId = game.getId();
+		userId = user.getId();
 	}
 
 	/**
@@ -170,21 +173,3 @@ public class GameUserRelation {
 	}
 }
 
-/**
- * This is embedded not in GameUserRelation,
- * but in GameUserStructureRelation
- * and GameUserMaterialRelation
- * for column mapping purposes.
- */
-@Embeddable
-class GameUserId implements Serializable {
-	@Column(name = "game")
-	private int gameId;
-	@Column(name = "user")
-	private int userId;
-
-	public GameUserId(int gameId, int userId) {
-		this.gameId = gameId;
-		this.userId = userId;
-	}
-}

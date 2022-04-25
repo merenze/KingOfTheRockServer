@@ -1,5 +1,6 @@
 package coms309.s1yn3.backend.entity.repository;
 
+import coms309.s1yn3.backend.entity.Lobby;
 import coms309.s1yn3.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,4 +29,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	List<User> findByUsernameOrEmail(String username, String email);
 
 	List<User> findByUsernameContaining(String username);
+
+	List<User> findByLobby(Lobby lobby);
 }
