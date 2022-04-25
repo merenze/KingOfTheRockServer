@@ -1,9 +1,11 @@
 package com.example.frontend;
 
+import static com.example.frontend.Constants.URL;
 import static com.example.frontend.Constants.tag_json_obj;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +35,6 @@ public class LoginScreen extends AppCompatActivity {
     private String username;
     private String password;
     private Button loginButton;
-    private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
     private static String authToken;
 
     @Override
@@ -41,11 +42,11 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
+        loginButton = (Button) findViewById(R.id.activity_login_screen_button_login);
 
         loginButton.setOnClickListener(view -> {
-            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
-            EditText etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
+            EditText etUsernameOrEmail = (EditText) findViewById(R.id.activity_login_screen_et_username);
+            EditText etPassword = (EditText) findViewById(R.id.activity_login_screen_et_password);
             username = etUsernameOrEmail.getText().toString().trim();
             password = etPassword.getText().toString().trim();
 
@@ -56,44 +57,33 @@ public class LoginScreen extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(parameters);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, url_coms309_backend_server + "/login", jsonObject, new Response.Listener<JSONObject>() {
+                    (Request.Method.POST, URL + "/login", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
                                 authToken = response.getString("auth-token");
-                                Toast.makeText(LoginScreen.this, authToken,
-                                        Toast.LENGTH_LONG).show();
+                                if (response.getString("isAdmin").equals("true")) {
+                                    startActivity(new Intent(view.getContext(), AdminDashboard.class));
+                                } else {
+                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
+                                    Log.d(tag_json_obj, response.toString());
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Log.d(tag_json_obj, response.toString());
-
-                            //switch screens on login
-                            try {
-                                //save current username to class variable
-                                currentUsername = username;
-                                if(response.getBoolean("isAdmin")){
-                                    startActivity(new Intent(view.getContext(), AdminDashboard.class));
-                                } else {
-                                    //startActivity(new Intent(view.getContext(), UserDashboard.class));
-                                    startActivity(new Intent(view.getContext(), GameViewScreen.class));
-                                }
-                            } catch (JSONException exception) {
-                                exception.printStackTrace();
-                            }
                         }
-                    }, new Response.ErrorListener() {
+                        }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.d("TestTag", "in onErrorResponse body");
                             NetworkResponse response = error.networkResponse;
-                            if(error instanceof ServerError && response != null){
+                            if (error instanceof ServerError && response != null) {
                                 try {
                                     String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                                     JSONObject obj = new JSONObject(res);
-                                    if (obj.has(username)) {
+                                    if (obj.has("auth-token")) {
                                         try {
-                                            Log.d(TAG, obj.getString(username));
+                                            Log.d(TAG, obj.getString("auth-token"));
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -110,7 +100,7 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-    public static String getAuthToken(){
+    public static String getAuthToken() {
         return authToken;
     }
 

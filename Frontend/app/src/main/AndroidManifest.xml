@@ -3,7 +3,6 @@
     package="com.example.frontend">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".SupportingClasses.AppController"
@@ -22,6 +21,15 @@
             android:exported="false" />
         <activity
             android:name=".GameViewScreen"
+            android:exported="false" />
+        <activity
+            android:name=".GameLobby"
+            android:exported="false" />
+        <activity
+            android:name=".UserDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDashboard"
             android:exported="false" />
         <activity
             android:name=".SearchForUserScreen"
