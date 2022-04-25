@@ -40,7 +40,6 @@ public class GameLobby extends AppCompatActivity {
     String lobbyCode;
     private WebSocketClient lobbyWebSocket;
 
-
     Draft[] drafts = {
             new Draft_6455()
     };
@@ -54,9 +53,7 @@ public class GameLobby extends AppCompatActivity {
         }
 
         instantiateWebsocket();
-
         lobbyWebSocket.connect();
-
     }
 
     private void instantiateWebsocket() {
@@ -93,9 +90,6 @@ public class GameLobby extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_game_lobby);
-
-        //TODO
-        //add switch to make lobby private or public
 
         JsonObjectRequest hostLobbyRequest = new JsonObjectRequest(
                 Request.Method.POST,
