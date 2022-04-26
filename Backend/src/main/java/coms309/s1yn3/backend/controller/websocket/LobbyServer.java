@@ -1,6 +1,5 @@
 package coms309.s1yn3.backend.controller.websocket;
 
-import com.mysql.cj.xdevapi.JsonArray;
 import coms309.s1yn3.backend.controller.websocket.encoder.GameEncoder;
 import coms309.s1yn3.backend.controller.websocket.encoder.LobbyEncoder;
 import coms309.s1yn3.backend.entity.Game;
@@ -19,28 +18,11 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Component
-@ServerEndpoint(
-		value = "/lobby/{lobby-code}/{auth-token}",
-		encoders = {
-				LobbyEncoder.class,
-				GameEncoder.class
-		}
-)
+@ServerEndpoint("/lobby/{lobby-code}/{auth-token}")
 public class LobbyServer extends AbstractWebSocketServer {
-	private final Logger logger = LoggerFactory.logger(LobbyServer.class);
-	/**
-	 * Map a User ID to a Session.
-	 */
-	private static final Map<Integer, Session> uidToSession = new HashMap<>();
-	/**
-	 * Map a Session to a User ID.
-	 */
-	private static final Map<Session, Integer> sessionToUid = new HashMap<>();
+	private static final Logger logger = LoggerFactory.logger(LobbyServer.class);
 
 	/**
 	 * @param session   WebSocket connection.
@@ -62,16 +44,14 @@ public class LobbyServer extends AbstractWebSocketServer {
 			return;
 		}
 		// Make sure the User is not already connected to a lobby
-		logger.debugf("User <%s> has session: %s", user, uidToSession.containsKey(user));
-		logger.debugf("User <%s> lobby in database: %s", user, user.getLobby());
-		if (uidToSession.containsKey(user.getId())) {
+		if (getSession(user) != null) {
 			logger.warnf("User <%s> attempted lobby connection; already connected", user.getUsername());
 			session.getBasicRemote().sendText("You are already connected to a lobby or game.");
 			session.close();
 			return;
 		}
 		// Make sure the lobby exists
-		Lobby lobby = lobbies().findByCode(lobbyCode);
+		Lobby lobby = entityProviders().getLobbyProvider().findByCode(lobbyCode);
 		if (lobby == null) {
 			logger.infof("User <%s> attempted connection to nonexistent lobby <%s>", user, lobbyCode);
 			session.getBasicRemote().sendText(String.format("No lobby with code '%s'", lobbyCode));
@@ -89,10 +69,12 @@ public class LobbyServer extends AbstractWebSocketServer {
 		lobby.addPlayer(user);
 		repositories().getUserRepository().saveAndFlush(user);
 		// Store the User's WebSocket connection
-		uidToSession.put(user.getId(), session);
-		sessionToUid.put(session, user.getId());
+		addSession(user, session);
 		// Send the User the Lobby info
-		session.getBasicRemote().sendObject(lobby);
+		JSONObject lobbyMessage = new JSONObject();
+		lobbyMessage.put("type", "lobby");
+		lobbyMessage.put("lobby", new JSONObject(new LobbyEncoder().encode(lobby)));
+		session.getBasicRemote().sendText(lobbyMessage.toString());
 		logger.infof("%s connected to lobby %s", user.getUsername(), lobby.getCode());
 		// Broadcast the join message to the Lobby
 		broadcast(lobby, "%s joined the lobby.", user.getUsername());
@@ -101,14 +83,14 @@ public class LobbyServer extends AbstractWebSocketServer {
 			logger.infof("Lobby <%s> is full, starting game", lobby.getCode());
 			Game game = startGame(lobby);
 			// Join game-user relations
-			game = games().findById(game.getId());
+			game = entityProviders().getGameProvider().findById(game.getId());
 			// Build the message
 			JSONObject message = new JSONObject();
 			message.put("type", "start-game");
 			message.put("game", new JSONObject(new GameEncoder().encode(game)));
 			// Send the players the game start message
 			for (User player : lobby.getPlayers()) {
-				Session s = uidToSession.get(player.getId());
+				Session s = getSession(player);
 				s.getBasicRemote().sendText(message.toString());
 				s.close();
 			}
@@ -116,29 +98,16 @@ public class LobbyServer extends AbstractWebSocketServer {
 	}
 
 	/**
-	 *
 	 * @param session
 	 * @throws IOException
 	 */
 	@OnClose
 	public void onClose(Session session) throws IOException {
 		// Remove the sessions from mapping
-		User user;
-		try {
-			user = repositories().getUserRepository().findById(sessionToUid.get(session)).get();
-		} catch (NoSuchElementException ex) {
-			// This shouldn't happen!
-			int uid = sessionToUid.get(session);
-			logger.warnf("Session closed for non-existent user with id <%d>", uid);
-			uidToSession.remove(uid);
-			sessionToUid.remove(session);
-			session.close();
-			return;
-		}
-		sessionToUid.remove(session);
-		uidToSession.remove(user.getId());
+		User user = getUser(session);
+		removeSession(user);
 		// Assigned like this in order to get joins from provider
-		Lobby lobby = lobbies().findByCode(user.getLobby().getCode());
+		Lobby lobby = entityProviders().getLobbyProvider().findByCode(user.getLobby().getCode());
 		// Disconnect the User
 		lobby.removePlayer(user);
 		repositories().getUserRepository().saveAndFlush(user);
@@ -157,11 +126,12 @@ public class LobbyServer extends AbstractWebSocketServer {
 
 	/**
 	 * Broadcast a message to all Users in a Lobby.
+	 *
 	 * @param lobby
 	 * @param format
 	 * @param o
 	 */
-	private void broadcast(Lobby lobby, String format, Object... o) {
+	public static void broadcast(Lobby lobby, String format, Object... o) {
 		String message = String.format(format, o);
 		logger.infof("Broadcast to <%s>: %s", lobby.getCode(), message);
 		JSONObject jsonObject = new JSONObject();
@@ -169,7 +139,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 		jsonObject.put("message", message);
 		for (User player : lobby.getPlayers()) {
 			try {
-				uidToSession.get(player.getId()).getBasicRemote().sendText(jsonObject.toString());
+				getSession(player).getBasicRemote().sendText(jsonObject.toString());
 			} catch (NullPointerException ex) {
 				logger.warnf("<%s> has lobby <%s> in database but no active session", player.getUsername(), lobby.getCode());
 			} catch (IOException ex) {
@@ -180,6 +150,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 
 	/**
 	 * Start a game for the players in a Lobby.
+	 *
 	 * @param lobby
 	 */
 	private Game startGame(Lobby lobby) {

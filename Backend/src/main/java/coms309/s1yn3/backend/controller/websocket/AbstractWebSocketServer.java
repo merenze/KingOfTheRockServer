@@ -1,58 +1,49 @@
 package coms309.s1yn3.backend.controller.websocket;
 
-import coms309.s1yn3.backend.service.RepositoryProviderService;
+import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.service.SessionProviderService;
-import coms309.s1yn3.backend.service.entityprovider.GameProviderService;
-import coms309.s1yn3.backend.service.entityprovider.LobbyProviderService;
+import coms309.s1yn3.backend.service.entityprovider.AbstractEntityManagerService;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AbstractWebSocketServer {
+import javax.websocket.Session;
+import java.util.HashMap;
+import java.util.Map;
+
+public class AbstractWebSocketServer extends AbstractEntityManagerService {
 	private static final Logger logger = LoggerFactory.logger(AbstractWebSocketServer.class);
 
-	private static RepositoryProviderService repositoryProviderService;
-	private static SessionProviderService sessionProviderService;
-	private static LobbyProviderService lobbyProviderService;
-	private static GameProviderService gameProviderService;
+	private static final Map<Integer, Session> uidToSession = new HashMap<>();
+	private static final Map<Session, Integer> sessionToUid = new HashMap<>();
 
-	@Autowired
-	public void setRepositoryProviderService(RepositoryProviderService repositoryProviderService) {
-		logger.debug("Injecting RepositoryProviderService");
-		AbstractWebSocketServer.repositoryProviderService = repositoryProviderService;
-	}
+	private static SessionProviderService sessionProviderService;
 
 	@Autowired
 	public void setSessionProviderService(SessionProviderService sessionProviderService) {
-		logger.debug("Injecting SessionProviderService");
 		AbstractWebSocketServer.sessionProviderService = sessionProviderService;
 	}
 
-	@Autowired
-	public void setLobbyProviderService(LobbyProviderService lobbyProviderService) {
-		logger.debug("Injecting LobbyProviderService");
-		AbstractWebSocketServer.lobbyProviderService = lobbyProviderService;
+	protected static void addSession(User user, Session session) {
+		sessionToUid.put(session, user.getId());
+		uidToSession.put(user.getId(), session);
 	}
 
-	@Autowired
-	public void setGameProviderService(GameProviderService gameProviderService) {
-		logger.debug("Injecting GameProviderService");
-		AbstractWebSocketServer.gameProviderService = gameProviderService;
+	protected static Session getSession(User user) {
+		return uidToSession.get(user.getId());
 	}
 
-	protected static RepositoryProviderService repositories() {
-		return repositoryProviderService;
+	protected static User getUser(Session session) {
+		// TODO add joins
+		return repositories().getUserRepository().findById(sessionToUid.get(session)).get();
+	}
+
+	protected static void removeSession(User user) {
+		sessionToUid.remove(uidToSession.get(user.getId()));
+		uidToSession.remove(user.getId());
 	}
 
 	protected static SessionProviderService authSessions() {
 		return sessionProviderService;
-	}
-
-	protected static LobbyProviderService lobbies() {
-		return lobbyProviderService;
-	}
-
-	protected static GameProviderService games() {
-		return gameProviderService;
 	}
 }
