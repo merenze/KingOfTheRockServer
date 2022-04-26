@@ -19,9 +19,11 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 @SpringBootApplication
 @EnableWebMvc
@@ -113,6 +115,11 @@ public class Application extends AbstractEntityManagerService {
 	private static JSONObject parseJsonFile(String file) throws IOException {
 		// Reads the whole JSON file into a single String,
 		// and uses that String to instantiate a JSON object.
-		return new JSONObject(Files.readString(Paths.get(file)));
+		Scanner scanner = new Scanner(new File(file));
+		String result = "";
+		while (scanner.hasNextLine()) {
+			result += scanner.nextLine();
+		}
+		return new JSONObject(result);
 	}
 }
