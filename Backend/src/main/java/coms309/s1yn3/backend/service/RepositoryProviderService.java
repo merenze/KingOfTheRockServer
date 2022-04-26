@@ -6,23 +6,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RepositoryProviderService {
-	@Autowired
-	LobbyRepository lobbyRepository;
-
-	@Autowired
-	PasswordRepository passwordRepository;
-
-	@Autowired
-	UserRepository userRepository;
-
-	@Autowired
-	GameRepository gameRepository;
-
-	@Autowired
-	GameUserRepository gameUserRepository;
-
-	@Autowired
-	StructureRepository structureRepository;
+	@Autowired LobbyRepository lobbyRepository;
+	@Autowired PasswordRepository passwordRepository;
+	@Autowired UserRepository userRepository;
+	@Autowired GameRepository gameRepository;
+	@Autowired GameUserRepository gameUserRepository;
+	@Autowired StructureRepository structureRepository;
+	@Autowired MaterialRepository materialRepository;
+	@Autowired StructureMaterialRepository structureMaterialRepository;
 
 	public LobbyRepository getLobbyRepository() {
 		return lobbyRepository;
@@ -46,5 +37,13 @@ public class RepositoryProviderService {
 
 	public StructureRepository getStructureRepository() {
 		return structureRepository;
+	}
+
+	public MaterialRepository getMaterialRepository() {
+		return materialRepository;
+	}
+
+	public StructureMaterialRepository getStructureMaterialRepository() {
+		return structureMaterialRepository;
 	}
 }

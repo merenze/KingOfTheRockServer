@@ -1,6 +1,8 @@
 package coms309.s1yn3.backend;
 
+import coms309.s1yn3.backend.entity.Material;
 import coms309.s1yn3.backend.entity.Structure;
+import coms309.s1yn3.backend.entity.relation.StructureMaterialRelation;
 import coms309.s1yn3.backend.filter.AuthFilter;
 import coms309.s1yn3.backend.service.RepositoryProviderService;
 import coms309.s1yn3.backend.service.SessionProviderService;
@@ -63,19 +65,38 @@ public class Application extends AbstractEntityManagerService {
 
 	/**
 	 * Register structures from the JSON configuration.
+	 *
 	 * @throws IOException
 	 */
 	private static void registerStructures() throws IOException {
-		JSONObject jsonObject = parseJsonFile("src/main/resources/config/structures.json");
-		for (String structureName : jsonObject.keySet()) {
+		JSONObject structureConfig = parseJsonFile("src/main/resources/config/structures.json");
+		for (String structureName : structureConfig.keySet()) {
 			Structure structure = entityProviders().getStructureProvider().findByName(structureName);
 			if (structure == null) {
-				structure = new Structure(
+				JSONObject jsonStructure = structureConfig.getJSONObject(structureName);
+				structure = repositories().getStructureRepository().save(new Structure(
 						structureName,
-						jsonObject.getJSONObject(structureName).getInt("points")
-				);
+						jsonStructure.getInt("points")
+				));
 				logger.infof("Added structure <%s> to database", structure.getName());
-				repositories().getStructureRepository().save(structure);
+				JSONObject recipe = jsonStructure.getJSONObject("recipe");
+				for (String materialName : recipe.keySet()) {
+					Material material = entityProviders().getMaterialProvider().findByName(materialName);
+					if (material == null) {
+						material = repositories().getMaterialRepository().save(new Material(materialName));
+						logger.infof("Added material <%s> to database", material.getName());
+					}
+					StructureMaterialRelation structureMaterialRelation = repositories().getStructureMaterialRepository().save(new StructureMaterialRelation(
+							structure,
+							material,
+							recipe.getInt(materialName)
+					));
+					logger.infof(
+							"Added %d %s to recipe for <%s>",
+							structureMaterialRelation.getAmount(),
+							structureMaterialRelation.getMaterial().getName(),
+							structureMaterialRelation.getStructure().getName());
+				}
 			}
 		}
 	}
