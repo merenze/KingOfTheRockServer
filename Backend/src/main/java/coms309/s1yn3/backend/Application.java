@@ -69,23 +69,32 @@ public class Application extends AbstractEntityManagerService {
 	 * @throws IOException
 	 */
 	private static void registerStructures() throws IOException {
+		// Parse the structure config into a JSON object.
 		JSONObject structureConfig = parseJsonFile("src/main/resources/config/structures.json");
+		// For each structure in the JSON file,
 		for (String structureName : structureConfig.keySet()) {
+			// Check if the structure is already in the database.
 			Structure structure = entityProviders().getStructureProvider().findByName(structureName);
 			if (structure == null) {
+				// If not, add it.
 				JSONObject jsonStructure = structureConfig.getJSONObject(structureName);
 				structure = repositories().getStructureRepository().save(new Structure(
 						structureName,
 						jsonStructure.getInt("points")
 				));
 				logger.infof("Added structure <%s> to database", structure.getName());
+				// Then add its recipe to the database.
 				JSONObject recipe = jsonStructure.getJSONObject("recipe");
+				// For each material necessary in the recipe,
 				for (String materialName : recipe.keySet()) {
+					// Check if the material is in the database.
 					Material material = entityProviders().getMaterialProvider().findByName(materialName);
 					if (material == null) {
+						// If not, add it.
 						material = repositories().getMaterialRepository().save(new Material(materialName));
 						logger.infof("Added material <%s> to database", material.getName());
 					}
+					// Then add the amount required for the recipe.
 					StructureMaterialRelation structureMaterialRelation = repositories().getStructureMaterialRepository().save(new StructureMaterialRelation(
 							structure,
 							material,
@@ -102,6 +111,8 @@ public class Application extends AbstractEntityManagerService {
 	}
 
 	private static JSONObject parseJsonFile(String file) throws IOException {
+		// Reads the whole JSON file into a single String,
+		// and uses that String to instantiate a JSON object.
 		return new JSONObject(Files.readString(Paths.get(file)));
 	}
 }
