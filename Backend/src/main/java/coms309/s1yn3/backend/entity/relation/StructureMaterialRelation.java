@@ -62,7 +62,9 @@ public class StructureMaterialRelation {
 	 */
 	public StructureMaterialRelation(Structure structure, Material material, int amount) {
 		this.structure = structure;
+		this.structureName = structure.getName();
 		this.material = material;
+		this.materialName = material.getName();
 		this.amount = amount;
 	}
 
