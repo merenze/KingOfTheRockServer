@@ -1,5 +1,6 @@
 package coms309.s1yn3.backend.controller.websocket;
 
+import com.mysql.cj.xdevapi.JsonArray;
 import coms309.s1yn3.backend.controller.websocket.encoder.GameEncoder;
 import coms309.s1yn3.backend.controller.websocket.encoder.LobbyEncoder;
 import coms309.s1yn3.backend.entity.Game;
@@ -8,6 +9,7 @@ import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.entity.relation.GameUserRelation;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.EncodeException;
@@ -100,10 +102,14 @@ public class LobbyServer extends AbstractWebSocketServer {
 			Game game = startGame(lobby);
 			// Join game-user relations
 			game = games().findById(game.getId());
+			// Build the message
+			JSONObject message = new JSONObject();
+			message.put("type", "start-game");
+			message.put("game", new JSONObject(new GameEncoder().encode(game)));
 			// Send the players the game start message
 			for (User player : lobby.getPlayers()) {
 				Session s = uidToSession.get(player.getId());
-				s.getBasicRemote().sendObject(game);
+				s.getBasicRemote().sendText(message.toString());
 				s.close();
 			}
 		}
@@ -158,9 +164,12 @@ public class LobbyServer extends AbstractWebSocketServer {
 	private void broadcast(Lobby lobby, String format, Object... o) {
 		String message = String.format(format, o);
 		logger.infof("Broadcast to <%s>: %s", lobby.getCode(), message);
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("type", "player-message");
+		jsonObject.put("message", message);
 		for (User player : lobby.getPlayers()) {
 			try {
-				uidToSession.get(player.getId()).getBasicRemote().sendText(message);
+				uidToSession.get(player.getId()).getBasicRemote().sendText(jsonObject.toString());
 			} catch (NullPointerException ex) {
 				logger.warnf("<%s> has lobby <%s> in database but no active session", player.getUsername(), lobby.getCode());
 			} catch (IOException ex) {
