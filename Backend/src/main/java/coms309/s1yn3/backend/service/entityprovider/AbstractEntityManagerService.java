@@ -18,13 +18,11 @@ public class AbstractEntityManagerService {
 
 	@Autowired
 	public void setEntityProviderService(EntityProviderService entityProviderService) {
-		logger.debugf("Injecting EntityProviderService");
 		AbstractEntityManagerService.entityProviderService = entityProviderService;
 	}
 
 	@Autowired
 	public void setRepositoryProviderService(RepositoryProviderService repositoryProviderService) {
-		logger.debugf("Injecting RepositoryProviderService");
 		AbstractEntityManagerService.repositoryProviderService = repositoryProviderService;
 	}
 
