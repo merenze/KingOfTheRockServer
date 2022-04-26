@@ -9,7 +9,7 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class AbstractWebSocketServer {
-	Logger logger = LoggerFactory.logger(AbstractWebSocketServer.class);
+	private static final Logger logger = LoggerFactory.logger(AbstractWebSocketServer.class);
 
 	private static RepositoryProviderService repositoryProviderService;
 	private static SessionProviderService sessionProviderService;
