@@ -21,6 +21,9 @@ public class RepositoryProviderService {
 	@Autowired
 	GameUserRepository gameUserRepository;
 
+	@Autowired
+	StructureRepository structureRepository;
+
 	public LobbyRepository getLobbyRepository() {
 		return lobbyRepository;
 	}
@@ -39,5 +42,9 @@ public class RepositoryProviderService {
 
 	public GameUserRepository getGameUserRepository() {
 		return gameUserRepository;
+	}
+
+	public StructureRepository getStructureRepository() {
+		return structureRepository;
 	}
 }
