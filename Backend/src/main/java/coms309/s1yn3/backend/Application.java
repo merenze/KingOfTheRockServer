@@ -4,11 +4,8 @@ import coms309.s1yn3.backend.entity.Material;
 import coms309.s1yn3.backend.entity.Structure;
 import coms309.s1yn3.backend.entity.relation.StructureMaterialRelation;
 import coms309.s1yn3.backend.filter.AuthFilter;
-import coms309.s1yn3.backend.service.RepositoryProviderService;
 import coms309.s1yn3.backend.service.SessionProviderService;
 import coms309.s1yn3.backend.service.entityprovider.AbstractEntityManagerService;
-import coms309.s1yn3.backend.service.entityprovider.AbstractEntityProviderService;
-import coms309.s1yn3.backend.service.entityprovider.EntityProviderService;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.json.JSONObject;
@@ -21,8 +18,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 @SpringBootApplication
