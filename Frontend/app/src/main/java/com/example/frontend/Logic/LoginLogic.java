@@ -17,6 +17,7 @@ public class LoginLogic implements IVolleyListener {
     IServerRequest serverRequest;
 
     private User currentUser;
+    private String currentUsername;
 
     public LoginLogic(IView r, IServerRequest serverRequest) {
         this.r = r;
@@ -25,12 +26,16 @@ public class LoginLogic implements IVolleyListener {
     }
 
     public void loginUser(String username, String password) throws JSONException {
+        Log.d("LoginLogic", "in loginUser, attempting login");
         String url =  Constants.URL + "/login";
         JSONObject newUserObj = new JSONObject();
+
+        currentUsername = username;
+
         newUserObj.put("username", username);
         newUserObj.put("password", password);
 
-
+        Log.d("LoginLogic", "in loginUser, sending login request");
         serverRequest.sendToServer(url, newUserObj, "POST");
 
         //String authToken = serverRequest.getServerResponse().getString("auth-token");
@@ -48,7 +53,7 @@ public class LoginLogic implements IVolleyListener {
     public void onSuccess(JSONObject response) {
         r.logText(response.toString());
         try {
-            currentUser = new User(response.getString("auth-token"), response.getString("username"), response.getBoolean("isAdmin"));
+            currentUser = new User(response.getString("auth-token"), currentUsername, response.getBoolean("isAdmin"));
         } catch (JSONException exception) {
             exception.printStackTrace();
         }

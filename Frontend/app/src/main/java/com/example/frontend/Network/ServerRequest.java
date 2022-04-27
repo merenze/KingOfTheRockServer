@@ -32,7 +32,7 @@ public class ServerRequest implements IServerRequest {
                     public void onResponse(JSONObject response) {
                         Log.d("ServerRequest", "in onResponse method");
                         if (response != null ) {
-                            Log.d(tag_json_obj, response.toString());
+                            Log.d("ServerRequest", response.toString());
                             serverResponse = response;
                             l.onSuccess(response);
                         } else {

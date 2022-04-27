@@ -63,11 +63,8 @@ public class LoginScreen extends AppCompatActivity implements IView {
             String password = etPassword.getText().toString().trim();
 
             try {
+                Log.d(TAG, "calling logic.loginUser...");
                 logic.loginUser(username, password);
-
-                //wait for onSuccess...
-                //currentUser = logic.getCurrentUser();
-                //Log.d("LoginScreen", currentUser.toString());
             } catch (JSONException exception) {
                 exception.printStackTrace();
             }
@@ -85,6 +82,8 @@ public class LoginScreen extends AppCompatActivity implements IView {
 
     @Override
     public void switchActivity(){
+        currentUser = logic.getCurrentUser();
+        Log.d("LoginScreen", currentUser.toString());
         if(currentUser.getIsAdmin()){
             startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
         } else {
