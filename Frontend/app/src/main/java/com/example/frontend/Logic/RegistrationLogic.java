@@ -32,13 +32,9 @@ public class RegistrationLogic implements IVolleyListener {
     }
 
     @Override
-    public void onSuccess(String email) {
+    public void onSuccess(JSONObject response) {
         Log.d("RegistrationLogic", "in onSuccess method");
-        if (email.length() > 0) {
-            r.switchActivity();
-        } else {
-            r.logText("Error with request, please try again");
-        }
+        r.switchActivity();
     }
 
     @Override

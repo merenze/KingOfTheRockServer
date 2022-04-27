@@ -45,8 +45,14 @@ public class LoginLogic implements IVolleyListener {
     }
 
     @Override
-    public void onSuccess(String message) {
-        r.logText(message);
+    public void onSuccess(JSONObject response) {
+        r.logText(response.toString());
+        try {
+            currentUser = new User(response.getString("auth-token"), response.getString("username"), response.getBoolean("isAdmin"));
+        } catch (JSONException exception) {
+            exception.printStackTrace();
+        }
+        Log.d("LoginLogic", currentUser.toString());
         r.switchActivity();
     }
 

@@ -30,12 +30,11 @@ public class ServerRequest implements IServerRequest {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("TestTag", "in onResponse method");
-                        Log.d("TestTag", response.toString());
+                        Log.d("ServerRequest", "in onResponse method");
                         if (response != null ) {
-                                Log.d(tag_json_obj, response.toString());
-                                l.onSuccess(response.toString());
-                                serverResponse = response;
+                            Log.d(tag_json_obj, response.toString());
+                            serverResponse = response;
+                            l.onSuccess(response);
                         } else {
                             l.onError("Null Response object received");
                         }
@@ -45,11 +44,11 @@ public class ServerRequest implements IServerRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("TestTag", "in onErrorResponse method");
+                        Log.d("ServerRequest", "in onErrorResponse method");
                         if (error.getMessage() != null){
                             l.onError(error.getMessage());
                         } else {
-                            l.onError("No error message received");
+                            l.onError("Error, no error message received");
                         }
                     }
                 }
