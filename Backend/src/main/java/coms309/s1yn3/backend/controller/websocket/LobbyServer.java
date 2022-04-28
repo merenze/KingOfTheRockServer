@@ -124,7 +124,11 @@ public class LobbyServer extends AbstractWebSocketServer {
 		}
 		// Broadcast disconnect to remaining players
 		else {
-			broadcast(lobby, "%s disconnected from the lobby.", user.getUsername());
+			JSONObject leaveMessage = new JSONObject();
+			leaveMessage.put("type", "player-leave");
+			leaveMessage.put("username", user.getUsername());
+			leaveMessage.put("num-players", lobby.getPlayers().size());
+			broadcast(lobby, leaveMessage.toString());
 		}
 	}
 
