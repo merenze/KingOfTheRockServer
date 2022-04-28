@@ -9,7 +9,7 @@ public class MemberData {
         this.color = color;
     }
 
-    public MemberData(){
+    public MemberData() {
     }
 
     public String getName() {
@@ -23,7 +23,7 @@ public class MemberData {
     @Override
     public String toString() {
         return "MemberData{" +
-                "name'" + name +'\'' +
+                "name'" + name + '\'' +
                 ", color='" + color + '\'' +
                 '}';
     }

@@ -1,11 +1,11 @@
 package com.example.frontend;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Class for the logic of the screen to build a structure
@@ -19,7 +19,7 @@ public class BuildScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_build_screen);
 
-        Button townButton = (Button)findViewById(R.id.activity_build_screen_button_structure_town);
+        Button townButton = (Button) findViewById(R.id.activity_build_screen_button_structure_town);
         townButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -27,7 +27,7 @@ public class BuildScreen extends AppCompatActivity {
             }
         });
 
-        Button houseButton = (Button)findViewById(R.id.activity_build_screen_button_structure_house);
+        Button houseButton = (Button) findViewById(R.id.activity_build_screen_button_structure_house);
         houseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,7 +35,7 @@ public class BuildScreen extends AppCompatActivity {
             }
         });
 
-        Button mineButton = (Button)findViewById(R.id.activity_build_screen_button_structure_mine);
+        Button mineButton = (Button) findViewById(R.id.activity_build_screen_button_structure_mine);
         mineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,7 +43,7 @@ public class BuildScreen extends AppCompatActivity {
             }
         });
 
-        Button lumberyardButton = (Button)findViewById(R.id.activity_build_screen_button_structure_lumberyard);
+        Button lumberyardButton = (Button) findViewById(R.id.activity_build_screen_button_structure_lumberyard);
         lumberyardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,7 +51,7 @@ public class BuildScreen extends AppCompatActivity {
             }
         });
 
-        Button farmButton = (Button)findViewById(R.id.activity_build_screen_button_structure_farm);
+        Button farmButton = (Button) findViewById(R.id.activity_build_screen_button_structure_farm);
         farmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,7 +59,7 @@ public class BuildScreen extends AppCompatActivity {
             }
         });
 
-        Button wellButton = (Button)findViewById(R.id.activity_build_screen_button_structure_well);
+        Button wellButton = (Button) findViewById(R.id.activity_build_screen_button_structure_well);
         wellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +67,7 @@ public class BuildScreen extends AppCompatActivity {
             }
         });
 
-        Button cancelButton = (Button)findViewById(R.id.activity_build_screen_button_cancel);
+        Button cancelButton = (Button) findViewById(R.id.activity_build_screen_button_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +75,7 @@ public class BuildScreen extends AppCompatActivity {
             }
         });
 
-        Button chatButton = (Button)findViewById(R.id.activity_build_screen_button_chat);
+        Button chatButton = (Button) findViewById(R.id.activity_build_screen_button_chat);
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +83,7 @@ public class BuildScreen extends AppCompatActivity {
             }
         });
 
-        Button menuButton = (Button)findViewById(R.id.activity_build_screen_button_menu);
+        Button menuButton = (Button) findViewById(R.id.activity_build_screen_button_menu);
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

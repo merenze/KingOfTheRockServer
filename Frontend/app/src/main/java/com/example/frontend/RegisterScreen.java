@@ -2,8 +2,6 @@ package com.example.frontend;
 
 import static com.example.frontend.SupportingClasses.Constants.URL;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +10,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -19,7 +19,6 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.frontend.Entities.IUser;
 import com.example.frontend.SupportingClasses.AppController;
 import com.google.android.material.button.MaterialButton;
 
@@ -74,9 +73,9 @@ public class RegisterScreen extends AppCompatActivity {
                     (Request.Method.POST, URL + "/register", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            if(response.has("status")){
+                            if (response.has("status")) {
                                 try {
-                                    if(response.getString("status").equals("OK")){
+                                    if (response.getString("status").equals("OK")) {
                                         startActivity(new Intent(view.getContext(), LoginScreen.class));
                                     }
                                 } catch (JSONException e) {
@@ -88,12 +87,12 @@ public class RegisterScreen extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             NetworkResponse response = error.networkResponse;
-                            if(error instanceof ServerError && response != null){
+                            if (error instanceof ServerError && response != null) {
                                 try {
                                     String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                                     JSONObject obj = new JSONObject(res);
 
-                                    if(obj.has("email") && obj.has("username")){
+                                    if (obj.has("email") && obj.has("username")) {
                                         Toast.makeText(RegisterScreen.this, obj.getString("email") + "\n" + obj.getString("username"),
                                                 Toast.LENGTH_LONG).show();
                                     }

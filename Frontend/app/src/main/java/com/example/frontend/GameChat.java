@@ -8,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.frontend.SupportingClasses.MessageAdapter;
 
-import org.java_websocket.client.WebSocketClient;
-
 import java.util.Random;
 
 public class GameChat extends AppCompatActivity {
@@ -45,7 +43,7 @@ public class GameChat extends AppCompatActivity {
     private String getRandomColor() {
         Random r = new Random();
         StringBuffer sb = new StringBuffer("#");
-        while(sb.length() < 7){
+        while (sb.length() < 7) {
             sb.append(Integer.toHexString(r.nextInt()));
         }
         return sb.toString().substring(0, 7);

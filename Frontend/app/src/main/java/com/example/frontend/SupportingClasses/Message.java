@@ -20,7 +20,7 @@ public class Message {
         return memberData;
     }
 
-    public boolean isMyMessage(){
+    public boolean isMyMessage() {
         return myMessage;
     }
 

@@ -2,14 +2,14 @@ package com.example.frontend;
 
 import static com.example.frontend.SupportingClasses.Constants.tag_json_arr;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -44,10 +44,10 @@ public class SearchForUserScreen extends AppCompatActivity {
         currentUser = LoginScreen.getCurrentUser();
         Log.d(TAG, currentUser.toString());
 
-        searchButton = (Button)findViewById(R.id.activity_search_for_user_button_search);
+        searchButton = (Button) findViewById(R.id.activity_search_for_user_button_search);
 
         searchButton.setOnClickListener(view -> {
-            EditText etUsernameEntry = (EditText)findViewById(R.id.activity_search_for_user_screen_et_searchEntry);
+            EditText etUsernameEntry = (EditText) findViewById(R.id.activity_search_for_user_screen_et_searchEntry);
             usernameEntry = etUsernameEntry.getText().toString().trim();
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                     (Request.Method.GET, url_coms309_backend_server + "/search/?q=" + usernameEntry + "?auth-token=" + LoginScreen.getAuthToken(), null, new Response.Listener<JSONArray>() {
@@ -56,9 +56,9 @@ public class SearchForUserScreen extends AppCompatActivity {
                             Log.d(tag_json_arr, response.toString());
 
                             // check that array is non-empty
-                            try{
+                            try {
                                 response.get(0); // throws JSONException if empty
-                            }catch(JSONException exception){
+                            } catch (JSONException exception) {
                                 Log.d(tag_json_arr, "Username not found");
                             }
 
@@ -83,10 +83,9 @@ public class SearchForUserScreen extends AppCompatActivity {
         });
     }
 
-    private ArrayList<String> JSONArrayToList(JSONArray jarray){
+    private ArrayList<String> JSONArrayToList(JSONArray jarray) {
         ArrayList<String> myList = new ArrayList<String>();
-        for (int i = 0; i < jarray.length(); i++)
-        {
+        for (int i = 0; i < jarray.length(); i++) {
             try {
                 myList.add(jarray.getJSONObject(i).getString("username"));
             } catch (JSONException exception) {

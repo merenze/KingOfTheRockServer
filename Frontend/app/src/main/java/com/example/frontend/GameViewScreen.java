@@ -1,13 +1,13 @@
 package com.example.frontend;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.frontend.Entities.IUser;
 
@@ -31,7 +31,7 @@ public class GameViewScreen extends AppCompatActivity {
         currentUser = LoginScreen.getCurrentUser();
         Log.d("GameViewScreen", currentUser.toString());
 
-        Button tradeButton = (Button)findViewById(R.id.activity_game_view_screen_button_trade);
+        Button tradeButton = (Button) findViewById(R.id.activity_game_view_screen_button_trade);
         tradeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,7 +39,7 @@ public class GameViewScreen extends AppCompatActivity {
             }
         });
 
-        Button buildButton = (Button)findViewById(R.id.activity_game_view_screen_button_build);
+        Button buildButton = (Button) findViewById(R.id.activity_game_view_screen_button_build);
         buildButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +47,7 @@ public class GameViewScreen extends AppCompatActivity {
             }
         });
 
-        Button menuButton = (Button)findViewById(R.id.activity_game_view_screen_button_menu);
+        Button menuButton = (Button) findViewById(R.id.activity_game_view_screen_button_menu);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +55,7 @@ public class GameViewScreen extends AppCompatActivity {
             }
         });
 
-        Button chatButton = (Button)findViewById(R.id.activity_game_view_screen_button_chat);
+        Button chatButton = (Button) findViewById(R.id.activity_game_view_screen_button_chat);
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -4,7 +4,6 @@ import static com.example.frontend.SupportingClasses.Constants.URL;
 import static com.example.frontend.SupportingClasses.Constants.WSURL;
 import static com.example.frontend.SupportingClasses.Constants.tag_json_obj;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +24,6 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.frontend.SupportingClasses.AppController;
 
-import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
@@ -36,7 +34,6 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Set;
 
 public class GameLobby extends AppCompatActivity {
     String authToken = LoginScreen.getAuthToken();
@@ -77,9 +74,9 @@ public class GameLobby extends AppCompatActivity {
                     TextView playerCount = (TextView) findViewById(R.id.host_game_player_count_textview);
                     try {
                         JSONObject jsonMessage = new JSONObject(message);
-                        if(jsonMessage.getString("type").equals("player-join")){
+                        if (jsonMessage.getString("type").equals("player-join")) {
                             int numPlayers = jsonMessage.getInt("num-players");
-                            String numPlayerString = "Players: " + Integer.toString(numPlayers) + "/4";
+                            String numPlayerString = "Players: " + numPlayers + "/4";
                             playerCount.setText(numPlayerString);
                         }
                     } catch (JSONException e) {
