@@ -1,6 +1,12 @@
 package coms309.s1yn3.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import coms309.s1yn3.backend.entity.relation.GameUserRelation;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class User {
@@ -28,18 +34,59 @@ public class User {
 	 */
 	private boolean isAdmin;
 
+	/**
+	 * Games this user has played.
+	 */
+	@OneToMany(targetEntity = GameUserRelation.class, mappedBy = "user")
+	@Fetch(FetchMode.JOIN)
+	private List<GameUserRelation> gameRelations;
+
+	/**
+	 * The Lobby this player is in.
+	 */
+	@ManyToOne(targetEntity = Lobby.class)
+	@JoinColumn(name = "lobby")
+	@JsonBackReference
+	private Lobby lobby;
+
+	/**
+	 * For use in UserRepository queries.
+	 *
+	 * @param id
+	 * @param email
+	 * @param username
+	 * @param isAdmin
+	 * @param lobby
+	 */
+	public User(int id, String email, String username, boolean isAdmin, Lobby lobby) {
+		this(email, username, isAdmin);
+		this.id = id;
+		this.lobby = lobby;
+	}
+
 	public User(int id, String email, String username, boolean isAdmin) {
 		this(email, username, isAdmin);
 		this.id = id;
 	}
 
+	/**
+	 * Create a new User.
+	 *
+	 * @param email    Unique email address for this User.
+	 * @param username Unique username for this User.
+	 * @param isAdmin  Admin status of this User.
+	 */
 	public User(String email, String username, boolean isAdmin) {
 		this.email = email;
 		this.username = username;
 		this.isAdmin = isAdmin;
 	}
 
+	/**
+	 * Empty constructor for use by JPA.
+	 */
 	public User() {
+
 	}
 
 	/**
@@ -93,5 +140,49 @@ public class User {
 		if (user.username != null) {
 			this.username = user.username;
 		}
+	}
+
+	public List<GameUserRelation> getGameRelations() {
+		return gameRelations;
+	}
+
+	public void setGameRelations(List<GameUserRelation> gameRelations) {
+		this.gameRelations = gameRelations;
+	}
+
+	public Lobby getLobby() {
+		return lobby;
+	}
+
+	/**
+	 * Do not set this to null.
+	 * Instead, use disconnectFromLobby.
+	 *
+	 * @param lobby The Lobby in which this player waits.
+	 */
+	public void setLobby(Lobby lobby) {
+		this.lobby = lobby;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public String toString() {
+		return username;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof User)) {
+			return false;
+		}
+		User user = (User) o;
+		return id == user.id &&
+				username.equals(user.username) &&
+				email.equals(user.email) &&
+				isAdmin == user.isAdmin;
 	}
 }

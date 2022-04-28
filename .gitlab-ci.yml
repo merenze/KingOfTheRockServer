@@ -1,6 +1,7 @@
 stages:
   - maventry
   - androidtry
+  - mavenDeploy
 
 maven-build:   #this is a JOB
   stage: maventry
@@ -10,14 +11,45 @@ maven-build:   #this is a JOB
     - cd Backend
     - mvn package
 
-android-build: #this is another job
-  image: javiersantos/android-ci:latest      # this is a directive to DOCKER
+android-build: #another job to build android
+  image: inovex/gitlab-ci-android      # this is a directive to DOCKER
   stage: androidtry
   tags:
-   - android_tag         #this is LINK to the docker runner on the remote-server
+    - android_tag
   before_script:
-    - export GRADLE_USER_HOME=pwd/.gradle
+    - export GRADLE_USER_HOME=$(pwd)/.gradle
+    - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
     - chmod +x ./Frontend/gradlew
   script:
     - cd Frontend
-    - ./gradlew assemble
+  #   - ./gradlewbuild
+  # artifacts:
+  #   paths:
+  #     - Android_test/app/build/outputs/
+
+android-test:  #another job to test android
+  image: inovex/gitlab-ci-android
+  stage: androidtry
+  tags:
+    - android_tag
+  before_script:
+    - export GRADLE_USER_HOME=$(pwd)/.gradle
+    - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    - chmod +x ./Frontend/gradlew
+  script:
+    - cd Frontend
+    # - .gradlew test
+  
+
+mavenDeploy:  #do make a stage with same name!
+  stage: mavenDeploy
+  tags:
+   - springboot_tag
+  script:
+    - cd Backend
+    - mvn package
+    - sudo mv target/*.jar /target/KingOfTheRockServer-DEMO.jar
+    - sudo systemctl stop system-web
+    - sudo systemctl start system-web
+
+

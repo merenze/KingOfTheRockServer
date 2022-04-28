@@ -8,6 +8,18 @@
     tools:context=".HomeScreen">
 
     <Button
+        android:id="@+id/homescreen_register_button"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
+        android:text="Register"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.596" />
+
+    <Button
         android:id="@+id/homescreen_login_button"
         android:layout_width="150dp"
         android:layout_height="75dp"
@@ -19,17 +31,6 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.344" />
+        app:layout_constraintVertical_bias="0.413" />
 
-    <Button
-        android:id="@+id/homescreen_register_button"
-        android:layout_width="150dp"
-        android:layout_height="75dp"
-        android:text="Register"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homescreen_login_button"
-        app:layout_constraintVertical_bias="0.172" />
 </androidx.constraintlayout.widget.ConstraintLayout>

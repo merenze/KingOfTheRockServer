@@ -3,22 +3,15 @@
 
 ## Description
 
-
+TODO
 
 ### Dependencies
  
-
+TODO
 
 ## Installation  
 
-To install the server API as a service,
-* Execute `install.sh`
-* Start the service: `systemctl start kingoftherock.service`
-
-To run the server API without installing as a service,
-* Set properties in `Backend/application.properties` (see example file)
-* Build the executable JAR: `mvn -f Backend/ clean package`
-* Run the JAR: `java -jar Backend/target/KingOfTheRockServer-DEMO.jar`
+TODO
 
 ## Contributors 
 * Dave Arlt (dcarlt@iastate.edu)

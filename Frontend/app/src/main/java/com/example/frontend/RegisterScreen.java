@@ -1,5 +1,7 @@
 package com.example.frontend;
 
+import static com.example.frontend.SupportingClasses.Constants.URL;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,13 +14,13 @@ import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.frontend.Entities.IUser;
+import com.example.frontend.SupportingClasses.AppController;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
@@ -27,12 +29,16 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+/**
+ * Class for the logic of the registration screen
+ *
+ * @author Dan Rosenhamer
+ */
 public class RegisterScreen extends AppCompatActivity {
 
     private EditText etEmail, etUsername, etPassword;
     private String email, username, password;
     boolean adminBool;
-    private String URL = "http://coms-309-015.class.las.iastate.edu:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,7 @@ public class RegisterScreen extends AppCompatActivity {
 
             JSONObject jsonObject = new JSONObject(parameters);
 
+            //Request to register user
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, URL + "/register", jsonObject, new Response.Listener<JSONObject>() {
                         @Override
@@ -115,8 +122,8 @@ public class RegisterScreen extends AppCompatActivity {
                         }
                     });
 
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(jsonObjectRequest);
+            //Add request to queue
+            AppController.getInstance().addToRequestQueue(jsonObjectRequest);
         });
     }
 }
