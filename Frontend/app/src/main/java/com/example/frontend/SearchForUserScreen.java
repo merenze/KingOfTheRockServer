@@ -1,6 +1,6 @@
 package com.example.frontend;
 
-import static com.example.frontend.Constants.tag_json_arr;
+import static com.example.frontend.SupportingClasses.Constants.tag_json_arr;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.frontend.Entities.IUser;
 import com.example.frontend.SupportingClasses.AppController;
-import com.example.frontend.SupportingClasses.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;

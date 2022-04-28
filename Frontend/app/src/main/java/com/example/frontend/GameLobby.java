@@ -1,9 +1,10 @@
 package com.example.frontend;
 
-import static com.example.frontend.Constants.URL;
-import static com.example.frontend.Constants.WSURL;
-import static com.example.frontend.Constants.tag_json_obj;
+import static com.example.frontend.SupportingClasses.Constants.URL;
+import static com.example.frontend.SupportingClasses.Constants.WSURL;
+import static com.example.frontend.SupportingClasses.Constants.tag_json_obj;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Set;
 
 public class GameLobby extends AppCompatActivity {
     String authToken = LoginScreen.getAuthToken();
@@ -68,15 +70,18 @@ public class GameLobby extends AppCompatActivity {
 
                 @Override
                 public void onMessage(String message) {
+                    Log.d("Websocket Message: ", message);
                     TextView playerCount = (TextView) findViewById(R.id.host_game_player_count_textview);
                     try {
                         JSONObject jsonMessage = new JSONObject(message);
-                        int numPlayers = jsonMessage.getInt("num-players");
-                        playerCount.setText(numPlayers);
+                        if(jsonMessage.getString("type").equals("player-join")){
+                            int numPlayers = jsonMessage.getInt("num-players");
+                            String numPlayerString = "Players: " + Integer.toString(numPlayers) + "/4";
+                            playerCount.setText(numPlayerString);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.d("Websocket Message: ", message);
                 }
 
                 @Override
@@ -140,3 +145,5 @@ public class GameLobby extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(hostLobbyRequest);
     }
 }
+
+
