@@ -7,6 +7,7 @@ import static com.example.frontend.SupportingClasses.Constants.tag_json_obj;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,6 +71,8 @@ public class GameLobby extends AppCompatActivity {
 
                 @Override
                 public void onMessage(String message) {
+                    View myView = findViewById(android.R.id.content).getRootView();
+                    myView.postInvalidate();
                     Log.d("Websocket Message: ", message);
                     TextView playerCount = (TextView) findViewById(R.id.host_game_player_count_textview);
                     try {
