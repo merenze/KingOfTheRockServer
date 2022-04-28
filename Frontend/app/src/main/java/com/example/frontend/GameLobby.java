@@ -68,6 +68,14 @@ public class GameLobby extends AppCompatActivity {
 
                 @Override
                 public void onMessage(String message) {
+                    TextView playerCount = (TextView) findViewById(R.id.host_game_player_count_textview);
+                    try {
+                        JSONObject jsonMessage = new JSONObject(message);
+                        int numPlayers = jsonMessage.getInt("num-players");
+                        playerCount.setText(numPlayers);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     Log.d("Websocket Message: ", message);
                 }
 
