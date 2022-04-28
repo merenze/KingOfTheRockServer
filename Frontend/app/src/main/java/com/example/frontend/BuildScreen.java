@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Class for the logic of the screen to build a structure
+ *
+ * @author Noah Cordova
+ */
 public class BuildScreen extends AppCompatActivity {
 
     @Override

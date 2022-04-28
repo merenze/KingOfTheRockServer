@@ -20,7 +20,10 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.frontend.Entities.IUser;
+import com.example.frontend.Entities.User;
 import com.example.frontend.SupportingClasses.AppController;
+import com.example.frontend.SupportingClasses.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +31,11 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
+/**
+ * Class for the logic of the screen to login
+ *
+ * @author Noah Cordova
+ */
 public class LoginScreen extends AppCompatActivity {
 
     private String TAG = LoginScreen.class.getSimpleName();
@@ -43,7 +51,7 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        loginButton = (Button) findViewById(R.id.activity_login_screen_button_login);
+        loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
 
         loginButton.setOnClickListener(view -> {
             EditText etUsernameOrEmail = (EditText) findViewById(R.id.activity_login_screen_et_username);
@@ -66,6 +74,8 @@ public class LoginScreen extends AppCompatActivity {
                                 if (response.getString("isAdmin").equals("true")) {
                                     startActivity(new Intent(view.getContext(), AdminDashboard.class));
                                 } else {
+                                    currentUser = new User(response.getString("auth-token"), username, false);
+                                    Log.d(TAG, currentUser.toString());
                                     startActivity(new Intent(view.getContext(), UserDashboard.class));
                                     Log.d(tag_json_obj, response.toString());
                                 }
@@ -109,6 +119,8 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
+    public static User getCurrentUser() {
+        return currentUser;
     public static String getAuthToken() {
         return authToken;
     }

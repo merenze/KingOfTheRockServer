@@ -1,7 +1,7 @@
 package com.example.frontend;
 
-import static com.example.frontend.Constants.URL;
-import static com.example.frontend.Constants.tag_json_arr;
+import static com.example.frontend.SupportingClasses.Constants.URL;
+import static com.example.frontend.SupportingClasses.Constants.tag_json_arr;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.frontend.Entities.IUser;
 import com.example.frontend.SupportingClasses.AppController;
 
 import org.json.JSONArray;
@@ -21,17 +22,28 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+/**
+ * Class for the logic of the screen to display a list of all users
+ *
+ * @author Dan Rosenhamer
+ */
 public class UserListScreen extends AppCompatActivity {
+
+    private String TAG = UserListScreen.class.getSimpleName();
+    private IUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list_screen);
 
+        currentUser = LoginScreen.getCurrentUser();
+        Log.d(TAG, currentUser.toString());
+
         //Request to pull list of users from the backend
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL + "/users" + "?auth-token=" + LoginScreen.getAuthToken(),
+                URL + "/users" + "?auth-token=" + currentUser.getAuthToken(),
                 null,
                 response -> {
                     // Process the JSON

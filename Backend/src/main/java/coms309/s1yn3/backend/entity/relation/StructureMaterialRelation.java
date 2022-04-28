@@ -3,9 +3,9 @@ package coms309.s1yn3.backend.entity.relation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import coms309.s1yn3.backend.entity.Material;
 import coms309.s1yn3.backend.entity.Structure;
+import coms309.s1yn3.backend.entity.relation.id.StructureMaterialId;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @IdClass(StructureMaterialId.class)
@@ -62,7 +62,9 @@ public class StructureMaterialRelation {
 	 */
 	public StructureMaterialRelation(Structure structure, Material material, int amount) {
 		this.structure = structure;
+		this.structureName = structure.getName();
 		this.material = material;
+		this.materialName = material.getName();
 		this.amount = amount;
 	}
 
@@ -147,7 +149,3 @@ public class StructureMaterialRelation {
 	}
 }
 
-class StructureMaterialId implements Serializable {
-	private String structureName;
-	private String materialName;
-}

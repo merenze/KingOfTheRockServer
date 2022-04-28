@@ -51,6 +51,7 @@ public class User {
 
 	/**
 	 * For use in UserRepository queries.
+	 *
 	 * @param id
 	 * @param email
 	 * @param username
@@ -70,9 +71,10 @@ public class User {
 
 	/**
 	 * Create a new User.
-	 * @param email Unique email address for this User.
+	 *
+	 * @param email    Unique email address for this User.
 	 * @param username Unique username for this User.
-	 * @param isAdmin Admin status of this User.
+	 * @param isAdmin  Admin status of this User.
 	 */
 	public User(String email, String username, boolean isAdmin) {
 		this.email = email;
@@ -155,6 +157,7 @@ public class User {
 	/**
 	 * Do not set this to null.
 	 * Instead, use disconnectFromLobby.
+	 *
 	 * @param lobby The Lobby in which this player waits.
 	 */
 	public void setLobby(Lobby lobby) {
@@ -166,5 +169,20 @@ public class User {
 	 */
 	public String toString() {
 		return username;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof User)) {
+			return false;
+		}
+		User user = (User) o;
+		return id == user.id &&
+				username.equals(user.username) &&
+				email.equals(user.email) &&
+				isAdmin == user.isAdmin;
 	}
 }

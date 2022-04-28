@@ -60,49 +60,14 @@ public class LobbyController extends AbstractController {
 		}
 		// Create a new Lobby hosted by the requesting User.
 		Lobby lobby = new Lobby(generateLobbyCode());
-		lobby.addPlayer(user);
 		lobby.setHost(user);
 		repositories().getLobbyRepository().saveAndFlush(lobby);
-		repositories().getUserRepository().saveAndFlush(user);
-		logger.infof("User <%s> now hosting lobby <%s>", user.getUsername(), lobby.getCode());
 		logger.debugf("New lobby created: %s", lobby);
+		logger.infof("User <%s> now hosting lobby <%s>", user.getUsername(), lobby.getCode());
 		// Prepare and return the success response.
 		HashMap<String, String> responseBody = new HashMap<>();
 		responseBody.put("code", lobby.getCode());
 		return new ResponseEntity(responseBody, HttpStatus.OK);
-	}
-
-	/**
-	 * Request to disconnect from a lobby.
-	 */
-	@PostMapping("/lobby/disconnect")
-	public @ResponseBody ResponseEntity disconnect(HttpServletRequest request) {
-		User user = sender(request);
-		Lobby lobby = user.getLobby();
-		if (lobby == null) {
-			HashMap<String, String> responseBody = new HashMap<>();
-			responseBody.put("message", "User is not connected to a lobby.");
-			logger.warnf("User <%s> attempted disconnect (not connected)", user.getUsername());
-			return new ResponseEntity(responseBody, HttpStatus.OK);
-		}
-		// Remove the user from the lobby.
-		lobby.removePlayer(user);
-		logger.infof("User <%s> disconnected from lobby <%s>", user.getUsername(), lobby.getCode());
-		logger.debugf("Before <%s> disconnect: %s", user, lobby);
-		if (lobby.getHost() == user) {
-			logger.warnf("User <%s> was hosting lobby <%s>; removing host", user.getUsername(), lobby.getCode());
-			lobby.setHost(null);
-		}
-		repositories().getLobbyRepository().saveAndFlush(lobby);
-		repositories().getUserRepository().saveAndFlush(user);
-		logger.debugf("After <%s> disconnect: %s", user, lobby);
-		// If the lobby is now empty, destroy it.
-		if (lobby.getPlayers().size() <= 0) {
-			logger.warnf("Lobby <%s> is now empty; destroying.", lobby.getCode());
-			repositories().getLobbyRepository().delete(lobby);
-			logger.warnf("Lobby <%s> destroyed.", lobby.getCode());
-		}
-		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	/**
