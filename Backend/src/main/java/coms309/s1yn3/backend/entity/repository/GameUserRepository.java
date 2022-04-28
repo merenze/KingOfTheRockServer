@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface GameUserRepository extends JpaRepository<GameUserRelation, GameUserId> {
-	GameUserRelation findByGameAndUser(Game game, User user);
+	List<GameUserRelation> findByGameAndUser(Game game, User user);
 
 	List<GameUserRelation> findByGame(Game game);
 

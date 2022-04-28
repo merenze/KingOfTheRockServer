@@ -40,4 +40,16 @@ public class Material {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Material)) {
+			return false;
+		}
+		Material material = (Material) o;
+		return name.equals(material.name);
+	}
 }

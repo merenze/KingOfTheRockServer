@@ -1,5 +1,6 @@
-package coms309.s1yn3.backend.service.entityprovider;
+package coms309.s1yn3.backend.service;
 
+import coms309.s1yn3.backend.service.entityprovider.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,11 +8,13 @@ import org.springframework.stereotype.Service;
  * Contains handles to individual specialized entity providers.
  */
 @Service
-public class EntityProviderService {
+public class EntityProviderProviderService {
 	@Autowired GameProviderService gameProviderService;
 	@Autowired LobbyProviderService lobbyProviderService;
 	@Autowired StructureProviderService structureProviderService;
 	@Autowired MaterialProviderService materialProviderService;
+	@Autowired GameUserProviderService gameUserProviderService;
+	@Autowired GameUserMaterialProviderService gameUserMaterialProviderService;
 
 	public GameProviderService getGameProvider() {
 		return gameProviderService;
@@ -27,5 +30,13 @@ public class EntityProviderService {
 
 	public MaterialProviderService getMaterialProvider() {
 		return materialProviderService;
+	}
+
+	public GameUserProviderService getGameUserProvider() {
+		return gameUserProviderService;
+	}
+
+	public GameUserMaterialProviderService getGameUserMaterialProvider() {
+		return gameUserMaterialProviderService;
 	}
 }

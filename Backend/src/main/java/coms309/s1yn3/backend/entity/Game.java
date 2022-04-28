@@ -60,4 +60,13 @@ public class Game {
 	public void addUserRelation(User user) {
 		GameUserRelation gameUserRelation;
 	}
+
+	public boolean hasPlayer(User user) {
+		for (GameUserRelation userRelation : userRelations) {
+			if (userRelation.getUser().equals(user)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

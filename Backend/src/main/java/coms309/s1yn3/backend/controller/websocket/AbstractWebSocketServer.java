@@ -1,8 +1,9 @@
 package coms309.s1yn3.backend.controller.websocket;
 
 import coms309.s1yn3.backend.entity.User;
+import coms309.s1yn3.backend.service.AbstractEntityManagerService;
 import coms309.s1yn3.backend.service.SessionProviderService;
-import coms309.s1yn3.backend.service.entityprovider.AbstractEntityManagerService;
+import coms309.s1yn3.backend.service.entityprovider.AbstractEntityProviderService;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

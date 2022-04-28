@@ -1,9 +1,11 @@
 package coms309.s1yn3.backend.entity.relation.id;
 
 import coms309.s1yn3.backend.entity.Game;
+import coms309.s1yn3.backend.entity.User;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -18,6 +20,31 @@ public class GameUserId implements Serializable {
 	private int gameId;
 	@Column(name = "user")
 	private int userId;
+
+	public GameUserId() {
+
+	}
+
+	public GameUserId(Game game, User user) {
+		gameId = game.getId();
+		userId = user.getId();
+	}
+
+	public int getGameId() {
+		return gameId;
+	}
+
+	public void setGameId(int gameId) {
+		this.gameId = gameId;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 
 	@Override
 	public boolean equals(Object o) {
