@@ -47,15 +47,15 @@ public class GuestLobby extends AppCompatActivity {
 
                         if(jsonMessage.getString("type").equals("lobby")) {
                             String lobbyCodeString = jsonMessage.getJSONObject("lobby").getString("code");
-                            TextView lobbyCode = (TextView) findViewById(R.id.join_game_lobby_code_textview);
-                            lobbyCode.setText(lobbyCodeString);
+//                            TextView lobbyCode = (TextView) findViewById(R.id.join_game_lobby_code_textview);
+//                            lobbyCode.setText(lobbyCodeString);
                         }
 
                         if (jsonMessage.getString("type").equals("player-join")) {
                             int numPlayers = jsonMessage.getInt("num-players");
                             String numPlayerString = "Players: " + numPlayers + "/4";
-                            TextView playerCount = (TextView) findViewById(R.id.join_game_player_count_textview);
-                            playerCount.setText(numPlayerString);
+//                            TextView playerCount = (TextView) findViewById(R.id.join_game_player_count_textview);
+//                            playerCount.setText(numPlayerString);
                         }
 
 
@@ -71,6 +71,7 @@ public class GuestLobby extends AppCompatActivity {
 
                 @Override
                 public void onError(Exception ex) {
+                    Log.d("What", " the fuck");
                     Log.d("Exception:", ex.toString());
                 }
             };
@@ -83,49 +84,5 @@ public class GuestLobby extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_game_lobby);
-
-        TextView guestLobbyCodeText = (TextView) findViewById(R.id.join_game_lobby_code_textview);
-
-        guestLobbyCodeText.setText(lobbyCode);
-
-//        JsonObjectRequest hostLobbyRequest = new JsonObjectRequest(
-//                Request.Method.POST,
-//                URL + "/lobby/join/" + lobbyCode + "?auth-token=" + authToken,
-//                null,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        try {
-//                            lobbyCode = response.getString("code");
-//                            Log.d(GameLobby.class.toString(), lobbyCode);
-//                            holdResponse();
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        NetworkResponse response = error.networkResponse;
-//                        if ((error instanceof ServerError || error instanceof NetworkError || error instanceof TimeoutError || error instanceof AuthFailureError || error instanceof ParseError)) {
-//                            try {
-//                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-//                                JSONObject obj = new JSONObject(res);
-//                                if (obj.has("message")) {
-//                                    try {
-//                                        Log.d(tag_json_obj, obj.getString("message"));
-//                                    } catch (JSONException e) {
-//                                        Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
-//                                    }
-//                                }
-//                            } catch (UnsupportedEncodingException | JSONException e) {
-//                                Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
-//                            }
-//                        }
-//                    }
-//                });
-//
-//        AppController.getInstance().addToRequestQueue(hostLobbyRequest);
     }
 }
