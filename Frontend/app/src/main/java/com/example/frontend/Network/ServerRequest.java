@@ -2,15 +2,21 @@ package com.example.frontend.Network;
 
 import android.util.Log;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.frontend.SupportingClasses.AppController;
 import com.example.frontend.Logic.IVolleyListener;
+
+import java.io.UnsupportedEncodingException;
 
 public class ServerRequest implements IServerRequest {
 
@@ -45,11 +51,33 @@ public class ServerRequest implements IServerRequest {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("ServerRequest", "in onErrorResponse method");
-                        if (error.getMessage() != null){
-                            l.onError(error.getMessage());
-                        } else {
-                            l.onError("Error, no error message received");
+
+                        //my original code, doesn't handle all errors
+//                        if (error.getMessage() != null){
+//                            l.onError(error.getMessage());
+//                        } else {
+//                            l.onError("Error, no error message received");
+//                        }
+
+                        //new onErrorResponse method body - from error handling in old code
+                        NetworkResponse response = error.networkResponse;
+                        if(error instanceof ServerError && response != null){
+                            try {
+                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                JSONObject obj = new JSONObject(res);
+                                Log.d("ServerRequest", obj.toString());
+//                                if (obj.has(username)) {
+//                                    try {
+//                                        Log.d(TAG, obj.getString(username));
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+                            } catch (UnsupportedEncodingException | JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
+
                     }
                 }
         );
