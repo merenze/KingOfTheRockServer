@@ -46,9 +46,9 @@ public class GuestLobby extends AppCompatActivity {
                         JSONObject jsonMessage = new JSONObject(message);
 
                         if(jsonMessage.getString("type").equals("lobby")) {
-                            String lobbbyCodeString = jsonMessage.getJSONObject("lobby").getString("code");
+                            String lobbyCodeString = jsonMessage.getJSONObject("lobby").getString("code");
                             TextView lobbyCode = (TextView) findViewById(R.id.join_game_lobby_code_textview);
-                            lobbyCode.setText(lobbbyCodeString);
+                            lobbyCode.setText(lobbyCodeString);
                         }
 
                         if (jsonMessage.getString("type").equals("player-join")) {
