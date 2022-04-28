@@ -77,8 +77,12 @@ public class LobbyServer extends AbstractWebSocketServer {
 		session.getBasicRemote().sendText(lobbyMessage.toString());
 		logger.infof("%s connected to lobby %s", user.getUsername(), lobby.getCode());
 		// Broadcast the join message to the Lobby
-		broadcast(lobby, "%s joined the lobby.", user.getUsername());
+		JSONObject joinMessage = new JSONObject();
+		joinMessage.put("type", "player-join");
+		joinMessage.put("username", user.getUsername());
+		joinMessage.put("num-players", lobby.getPlayers().size());
 		// Start the game
+		broadcast(lobby, joinMessage.toString());
 		if (lobby.getPlayers().size() >= Game.MAX_PLAYERS) {
 			logger.infof("Lobby <%s> is full, starting game", lobby.getCode());
 			Game game = startGame(lobby);
@@ -120,7 +124,11 @@ public class LobbyServer extends AbstractWebSocketServer {
 		}
 		// Broadcast disconnect to remaining players
 		else {
-			broadcast(lobby, "%s disconnected from the lobby.", user.getUsername());
+			JSONObject leaveMessage = new JSONObject();
+			leaveMessage.put("type", "player-leave");
+			leaveMessage.put("username", user.getUsername());
+			leaveMessage.put("num-players", lobby.getPlayers().size());
+			broadcast(lobby, leaveMessage.toString());
 		}
 	}
 
