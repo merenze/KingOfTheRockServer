@@ -46,6 +46,15 @@ public class AdminDashboard extends AppCompatActivity {
             }
         });
 
+        Button buttonToJoinGame = findViewById(R.id.admin_dashboard_join_game_button);
+
+        buttonToJoinGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), JoinGameScreen.class));
+            }
+        });
+
         Button buttonToHostGame = findViewById(R.id.admin_dashboard_host_game_button);
         buttonToHostGame.setOnClickListener(new View.OnClickListener() {
             @Override

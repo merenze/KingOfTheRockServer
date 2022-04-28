@@ -37,10 +37,20 @@ public class UserDashboard extends AppCompatActivity {
         setContentView(R.layout.activity_user_dashboard);
 
         Button buttonToFindUser = findViewById(R.id.user_dashboard_find_user_button);
+
         buttonToFindUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(view.getContext(), SearchForUserScreen.class));
+            }
+        });
+
+        Button buttonToJoinGame = findViewById(R.id.user_dashboard_join_game_button);
+
+        buttonToJoinGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), JoinGameScreen.class));
             }
         });
 

@@ -35,6 +35,7 @@ public class LoginScreen extends AppCompatActivity {
     private String username;
     private String password;
     private Button loginButton;
+    private String url_coms309_backend_server = "http://coms-309-015.class.las.iastate.edu:8080";
     private static String authToken;
 
     @Override
@@ -71,16 +72,24 @@ public class LoginScreen extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                            Log.d(tag_json_obj, response.toString());
                         }
-                        }, new Response.ErrorListener() {
+                    }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.d("TestTag", "in onErrorResponse body");
                             NetworkResponse response = error.networkResponse;
-                            if (error instanceof ServerError && response != null) {
+                            if(error instanceof ServerError && response != null){
                                 try {
                                     String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                                     JSONObject obj = new JSONObject(res);
+                                    if (obj.has(username)) {
+                                        try {
+                                            Log.d(TAG, obj.getString(username));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
                                     if (obj.has("auth-token")) {
                                         try {
                                             Log.d(TAG, obj.getString("auth-token"));
