@@ -42,12 +42,19 @@ public class GuestLobby extends AppCompatActivity {
                     View myView = findViewById(android.R.id.content).getRootView();
                     myView.postInvalidate();
                     Log.d("Websocket Message: ", message);
-                    TextView playerCount = (TextView) findViewById(R.id.join_game_player_count_textview);
                     try {
                         JSONObject jsonMessage = new JSONObject(message);
+
+                        if(jsonMessage.getString("type").equals("lobby")) {
+                            String lobbbyCodeString = jsonMessage.getJSONObject("lobby").getString("code");
+                            TextView lobbyCode = (TextView) findViewById(R.id.join_game_lobby_code_textview);
+                            lobbyCode.setText(lobbbyCodeString);
+                        }
+
                         if (jsonMessage.getString("type").equals("player-join")) {
                             int numPlayers = jsonMessage.getInt("num-players");
                             String numPlayerString = "Players: " + numPlayers + "/4";
+                            TextView playerCount = (TextView) findViewById(R.id.join_game_player_count_textview);
                             playerCount.setText(numPlayerString);
                         }
 
