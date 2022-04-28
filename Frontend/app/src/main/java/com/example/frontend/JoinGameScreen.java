@@ -2,6 +2,7 @@ package com.example.frontend;
 
 import static com.example.frontend.SupportingClasses.Constants.WSURL;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class JoinGameScreen extends AppCompatActivity {
-    private String lobbyCode = "";
+    private String lobbyCode;
     private String authToken = LoginScreen.getAuthToken();
 
     private WebSocketClient lobbyWebSocket;
@@ -120,8 +121,11 @@ public class JoinGameScreen extends AppCompatActivity {
         buttonToSubmitCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), GuestLobby.class));
                 EditText etLobbyCode = (EditText) findViewById(R.id.join_game_code_text);
+
                 lobbyCode = etLobbyCode.getText().toString().trim();
+
                 instantiateWebsocket();
                 lobbyWebSocket.connect();
             }

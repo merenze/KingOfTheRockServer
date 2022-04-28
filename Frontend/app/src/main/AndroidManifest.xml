@@ -15,6 +15,9 @@
         android:theme="@style/Theme.frontend"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".GuestLobby"
+            android:exported="false" />
+        <activity
             android:name=".JoinGameScreen"
             android:exported="false" />
         <activity
