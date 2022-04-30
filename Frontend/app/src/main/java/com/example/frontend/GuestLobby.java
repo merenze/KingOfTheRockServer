@@ -25,14 +25,22 @@ public class GuestLobby extends AppCompatActivity {
     String lobbyCode;
     private WebSocketClient lobbyWebSocket;
 
-    Draft[] drafts = {
-            new Draft_6455()
-    };
+    Draft[] drafts;
+
+    {
+        drafts = new Draft[]{
+                new Draft_6455()
+        };
+    }
+
+    /**
+     * Creates a lobby websocket connection and handles all messages
+     */
     private void instantiateWebsocket() {
         try {
             String endpoint = String.format("%s/lobby/%s/%s", WSURL, lobbyCode, authToken);
             Log.d(GameLobby.class.toString(), String.format("Attempting WS connection to %s", endpoint));
-            lobbyWebSocket = new WebSocketClient(new URI(endpoint), (Draft) drafts[0]) {
+            lobbyWebSocket = new WebSocketClient(new URI(endpoint), drafts[0]) {
                 @Override
                 public void onOpen(ServerHandshake handshakedata) {
                     Log.d("OPEN", "Opening guests websocket, lc: " + lobbyCode);
@@ -48,14 +56,14 @@ public class GuestLobby extends AppCompatActivity {
 
                         if(jsonMessage.getString("type").equals("lobby")) {
                             String lobbyCodeString = jsonMessage.getJSONObject("lobby").getString("code");
-                            TextView lobbyCode = (TextView) findViewById(R.id.join_game_lobby_code_textview);
+                            TextView lobbyCode = findViewById(R.id.join_game_lobby_code_textview);
                             lobbyCode.setText(lobbyCodeString);
                         }
 
                         if (jsonMessage.getString("type").equals("player-join")) {
                             int numPlayers = jsonMessage.getInt("num-players");
                             String numPlayerString = "Players: " + numPlayers + "/4";
-                            TextView playerCount = (TextView) findViewById(R.id.join_game_player_count_textview);
+                            TextView playerCount = findViewById(R.id.join_game_player_count_textview);
                             playerCount.setText(numPlayerString);
                         }
 
