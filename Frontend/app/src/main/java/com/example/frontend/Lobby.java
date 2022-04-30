@@ -41,6 +41,8 @@ public class Lobby extends AppCompatActivity {
     String lobbyCode;
     private WebSocketClient lobbyWebSocket;
 
+    private long pressedTime;
+
     Draft[] drafts = {
             new Draft_6455()
     };
@@ -116,9 +118,16 @@ public class Lobby extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        lobbyWebSocket.close();
-        startActivity(new Intent(getBaseContext(), JoinGameScreen.class));
-        Toast.makeText(getBaseContext(), "Leaving lobby", Toast.LENGTH_SHORT).show();
+
+        if(pressedTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+            lobbyWebSocket.close();
+            startActivity(new Intent(getBaseContext(), JoinGameScreen.class));
+            Toast.makeText(getBaseContext(), "Leaving lobby", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+        }
+        pressedTime = System.currentTimeMillis();
     }
 
     JsonObjectRequest hostLobbyRequest = new JsonObjectRequest(
