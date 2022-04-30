@@ -79,17 +79,18 @@ public class GameServer extends AbstractWebSocketServer {
 		// Give player four random resources
 		for (int i = 0; i < 4; i++) {
 			Material material = materials.get(random.nextInt(materials.size()));
-			// If the user already has the material
-			entityProviders()
-					.getGameUserMaterialProvider()
-					.findByGameAndUserAndMaterial(game, user, material)
-					.add(1);
+			GameUserMaterialRelation gameUserMaterialRelation =
+					entityProviders()
+							.getGameUserMaterialProvider()
+							.findByGameAndUserAndMaterial(game, user, material);
+			gameUserMaterialRelation.add(1);
 			logger.infof(
 					"Game <%s>: Granted %s to <%s>",
 					game.getId(),
 					material.getName(),
 					user.getUsername()
 			);
+			repositories().getGameUserMaterialRepository().save(gameUserMaterialRelation);
 		}
 	}
 }
