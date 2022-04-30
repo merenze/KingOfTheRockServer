@@ -40,8 +40,9 @@ public class JoinGameScreen extends AppCompatActivity {
                 EditText etLobbyCode = (EditText) findViewById(R.id.join_game_code_text);
                 lobbyCode = etLobbyCode.getText().toString().trim();
 
-                Intent intent = new Intent(view.getContext(), GuestLobby.class);
+                Intent intent = new Intent(view.getContext(), Lobby.class);
                 intent.putExtra("lobbyCode", lobbyCode);
+                intent.putExtra("isHost", false);
 
                 startActivity(intent);
             }
