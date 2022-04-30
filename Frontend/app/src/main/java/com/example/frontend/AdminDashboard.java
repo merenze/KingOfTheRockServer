@@ -42,7 +42,7 @@ public class AdminDashboard extends AppCompatActivity {
         buttonToHostGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), GameLobby.class));
+                startActivity(new Intent(view.getContext(), HostLobby.class));
             }
         });
     }

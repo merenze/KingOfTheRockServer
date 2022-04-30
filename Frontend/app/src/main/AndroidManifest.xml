@@ -36,7 +36,7 @@
             android:name=".GameViewScreen"
             android:exported="false" />
         <activity
-            android:name=".GameLobby"
+            android:name=".HostLobby"
             android:exported="false" />
         <activity
             android:name=".SearchForUserScreen"

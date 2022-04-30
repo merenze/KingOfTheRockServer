@@ -2,6 +2,7 @@ package com.example.frontend;
 
 import static com.example.frontend.SupportingClasses.Constants.WSURL;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,7 +40,7 @@ public class GuestLobby extends AppCompatActivity {
     private void instantiateWebsocket() {
         try {
             String endpoint = String.format("%s/lobby/%s/%s", WSURL, lobbyCode, authToken);
-            Log.d(GameLobby.class.toString(), String.format("Attempting WS connection to %s", endpoint));
+            Log.d(HostLobby.class.toString(), String.format("Attempting WS connection to %s", endpoint));
             lobbyWebSocket = new WebSocketClient(new URI(endpoint), drafts[0]) {
                 @Override
                 public void onOpen(ServerHandshake handshakedata) {
@@ -67,6 +68,10 @@ public class GuestLobby extends AppCompatActivity {
                             playerCount.setText(numPlayerString);
                         }
 
+//                        if(jsonMessage.getString("type").equals("start-game")) {
+//
+//                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -89,7 +94,9 @@ public class GuestLobby extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(getBaseContext(), "pls no", Toast.LENGTH_SHORT).show();
+        lobbyWebSocket.close();
+        startActivity(new Intent(getBaseContext(), JoinGameScreen.class));
+        Toast.makeText(getBaseContext(), "Leaving lobby", Toast.LENGTH_SHORT).show();
     }
 
     @Override

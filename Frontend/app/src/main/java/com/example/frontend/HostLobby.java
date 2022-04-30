@@ -35,7 +35,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class GameLobby extends AppCompatActivity {
+public class HostLobby extends AppCompatActivity {
     String authToken = LoginScreen.getAuthToken();
     String lobbyCode;
     private WebSocketClient lobbyWebSocket;
@@ -59,7 +59,7 @@ public class GameLobby extends AppCompatActivity {
     private void instantiateWebsocket() {
         try {
             String endpoint = String.format("%s/lobby/%s/%s", WSURL, lobbyCode, authToken);
-            Log.d(GameLobby.class.toString(), String.format("Attempting WS connection to %s", endpoint));
+            Log.d(HostLobby.class.toString(), String.format("Attempting WS connection to %s", endpoint));
             lobbyWebSocket = new WebSocketClient(new URI(endpoint), (Draft) drafts[0]) {
                 @Override
                 public void onOpen(ServerHandshake handshakedata) {
@@ -74,11 +74,19 @@ public class GameLobby extends AppCompatActivity {
                     TextView playerCount = (TextView) findViewById(R.id.host_game_player_count_textview);
                     try {
                         JSONObject jsonMessage = new JSONObject(message);
+
                         if (jsonMessage.getString("type").equals("player-join")) {
                             int numPlayers = jsonMessage.getInt("num-players");
                             String numPlayerString = "Players: " + numPlayers + "/4";
                             playerCount.setText(numPlayerString);
                         }
+
+                        if(jsonMessage.getString("type").equals("player-leave")) {
+                            int numPlayers = jsonMessage.getInt("num-players");
+                            String numPlayerString = "Players: " + numPlayers + "/4";
+                            playerCount.setText(numPlayerString);
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -113,7 +121,7 @@ public class GameLobby extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             lobbyCode = response.getString("code");
-                            Log.d(GameLobby.class.toString(), lobbyCode);
+                            Log.d(HostLobby.class.toString(), lobbyCode);
                             holdResponse();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -132,11 +140,11 @@ public class GameLobby extends AppCompatActivity {
                                     try {
                                         Log.d(tag_json_obj, obj.getString("message"));
                                     } catch (JSONException e) {
-                                        Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
+                                        Log.e(HostLobby.class.toString(), Log.getStackTraceString(e));
                                     }
                                 }
                             } catch (UnsupportedEncodingException | JSONException e) {
-                                Log.e(GameLobby.class.toString(), Log.getStackTraceString(e));
+                                Log.e(HostLobby.class.toString(), Log.getStackTraceString(e));
                             }
                         }
                     }

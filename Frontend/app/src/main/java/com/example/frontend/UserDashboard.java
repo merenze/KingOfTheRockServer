@@ -45,7 +45,7 @@ public class UserDashboard extends AppCompatActivity {
                 //TODO
                 //create game lobby from backend end yada yada
 
-                startActivity(new Intent(view.getContext(), GameLobby.class));
+                startActivity(new Intent(view.getContext(), HostLobby.class));
             }
         });
     }
