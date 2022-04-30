@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,17 +48,16 @@ public class GuestLobby extends AppCompatActivity {
 
                         if(jsonMessage.getString("type").equals("lobby")) {
                             String lobbyCodeString = jsonMessage.getJSONObject("lobby").getString("code");
-//                            TextView lobbyCode = (TextView) findViewById(R.id.join_game_lobby_code_textview);
-//                            lobbyCode.setText(lobbyCodeString);
+                            TextView lobbyCode = (TextView) findViewById(R.id.join_game_lobby_code_textview);
+                            lobbyCode.setText(lobbyCodeString);
                         }
 
                         if (jsonMessage.getString("type").equals("player-join")) {
                             int numPlayers = jsonMessage.getInt("num-players");
                             String numPlayerString = "Players: " + numPlayers + "/4";
-//                            TextView playerCount = (TextView) findViewById(R.id.join_game_player_count_textview);
-//                            playerCount.setText(numPlayerString);
+                            TextView playerCount = (TextView) findViewById(R.id.join_game_player_count_textview);
+                            playerCount.setText(numPlayerString);
                         }
-
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -71,7 +71,6 @@ public class GuestLobby extends AppCompatActivity {
 
                 @Override
                 public void onError(Exception ex) {
-                    Log.d("What", " the fuck");
                     Log.d("Exception:", ex.toString());
                 }
             };
@@ -81,8 +80,21 @@ public class GuestLobby extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Toast.makeText(getBaseContext(), "pls no", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_game_lobby);
+
+        Bundle bundle = getIntent().getExtras();
+
+        lobbyCode = bundle.getString("lobbyCode");
+        Log.d("lobby code: ", lobbyCode);
+
+        instantiateWebsocket();
+        lobbyWebSocket.connect();
     }
 }
