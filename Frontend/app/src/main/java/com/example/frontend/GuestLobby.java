@@ -68,9 +68,12 @@ public class GuestLobby extends AppCompatActivity {
                             playerCount.setText(numPlayerString);
                         }
 
-//                        if(jsonMessage.getString("type").equals("start-game")) {
-//
-//                        }
+                        if(jsonMessage.getString("type").equals("player-leave")) {
+                            int numPlayers = jsonMessage.getInt("num-players");
+                            String numPlayerString = "Players: " + numPlayers + "/4";
+                            TextView playerCount = findViewById(R.id.join_game_player_count_textview);
+                            playerCount.setText(numPlayerString);
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();

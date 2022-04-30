@@ -4,10 +4,12 @@ import static com.example.frontend.SupportingClasses.Constants.URL;
 import static com.example.frontend.SupportingClasses.Constants.WSURL;
 import static com.example.frontend.SupportingClasses.Constants.tag_json_obj;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -108,47 +110,54 @@ public class HostLobby extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        lobbyWebSocket.close();
+        startActivity(new Intent(getBaseContext(), JoinGameScreen.class));
+        Toast.makeText(getBaseContext(), "Leaving lobby", Toast.LENGTH_SHORT).show();
+    }
+
+    JsonObjectRequest hostLobbyRequest = new JsonObjectRequest(
+            Request.Method.POST,
+            URL + "/lobby/host" + "?auth-token=" + authToken,
+            null,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        lobbyCode = response.getString("code");
+                        Log.d(HostLobby.class.toString(), lobbyCode);
+                        holdResponse();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    NetworkResponse response = error.networkResponse;
+                    if ((error instanceof ServerError || error instanceof NetworkError || error instanceof TimeoutError || error instanceof AuthFailureError || error instanceof ParseError)) {
+                        try {
+                            String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                            JSONObject obj = new JSONObject(res);
+                            if (obj.has("message")) {
+                                try {
+                                    Log.d(tag_json_obj, obj.getString("message"));
+                                } catch (JSONException e) {
+                                    Log.e(HostLobby.class.toString(), Log.getStackTraceString(e));
+                                }
+                            }
+                        } catch (UnsupportedEncodingException | JSONException e) {
+                            Log.e(HostLobby.class.toString(), Log.getStackTraceString(e));
+                        }
+                    }
+                }
+            });
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_game_lobby);
-
-        JsonObjectRequest hostLobbyRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                URL + "/lobby/host" + "?auth-token=" + authToken,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            lobbyCode = response.getString("code");
-                            Log.d(HostLobby.class.toString(), lobbyCode);
-                            holdResponse();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        NetworkResponse response = error.networkResponse;
-                        if ((error instanceof ServerError || error instanceof NetworkError || error instanceof TimeoutError || error instanceof AuthFailureError || error instanceof ParseError)) {
-                            try {
-                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                                JSONObject obj = new JSONObject(res);
-                                if (obj.has("message")) {
-                                    try {
-                                        Log.d(tag_json_obj, obj.getString("message"));
-                                    } catch (JSONException e) {
-                                        Log.e(HostLobby.class.toString(), Log.getStackTraceString(e));
-                                    }
-                                }
-                            } catch (UnsupportedEncodingException | JSONException e) {
-                                Log.e(HostLobby.class.toString(), Log.getStackTraceString(e));
-                            }
-                        }
-                    }
-                });
 
         AppController.getInstance().addToRequestQueue(hostLobbyRequest);
     }
