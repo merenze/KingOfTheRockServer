@@ -1,15 +1,13 @@
 package coms309.s1yn3.backend.entity.repository;
 
-import coms309.s1yn3.backend.entity.Game;
-import coms309.s1yn3.backend.entity.Material;
 import coms309.s1yn3.backend.entity.MaterialSpawner;
-import coms309.s1yn3.backend.entity.User;
+import coms309.s1yn3.backend.entity.relation.GameUserRelation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface MaterialSpawnerRepository extends JpaRepository<Material, Integer> {
-	List<MaterialSpawner> findByGameAndUser(Game game, User user);
+public interface MaterialSpawnerRepository extends JpaRepository<MaterialSpawner, Integer> {
+	List<MaterialSpawner> findByGameUserRelation(GameUserRelation gameUserRelation);
 
-	List<MaterialSpawner> findByGameAndUserAndSpawnNumber(Game game, User user, int spawnNumber);
+	List<MaterialSpawner> findByGameUserRelationAndSpawnNumber(GameUserRelation gameUserRelation, int spawnNumber);
 }

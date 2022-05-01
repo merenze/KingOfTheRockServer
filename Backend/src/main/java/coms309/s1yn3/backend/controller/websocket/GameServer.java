@@ -7,6 +7,8 @@ import coms309.s1yn3.backend.entity.relation.GameUserMaterialRelation;
 import coms309.s1yn3.backend.entity.relation.GameUserRelation;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnOpen;
@@ -45,13 +47,15 @@ public class GameServer extends AbstractWebSocketServer {
 			);
 			session.close();
 		}
+		// TODO disconnect user from previous sessions
+		addSession(user, session);
 		logger.infof("User <%s> connected to game <%s>", user.getUsername(), game.getId());
 		initializeMaterials(game, user);
+		offerSpawnerOptions(game, user);
 	}
 
 	/**
 	 * Set the User's initial materials for the Game.
-	 *
 	 * @param game
 	 * @param user
 	 */
@@ -108,5 +112,45 @@ public class GameServer extends AbstractWebSocketServer {
 		}
 		gameUserRelation.setHasInitialMaterials(true);
 		repositories().getGameUserRepository().save(gameUserRelation);
+	}
+
+	/**
+	 * Set the User's initial resource spawners for the Game.
+	 * Should only be called AFTER initializeMaterials,
+	 * as it depends on preexisting GameUserMaterialRelations.
+	 */
+	private static void offerSpawnerOptions(Game game, User user) throws IOException {
+		GameUserRelation gameUserRelation =
+				entityProviders()
+						.getGameUserProvider()
+						.findByGameAndUser(game, user);
+		JSONObject message = new JSONObject();
+		message.put("type", "spawner-options");
+		JSONObject spawnerOptions = new JSONObject();
+		// For each material,
+		for (GameUserMaterialRelation gameUserMaterialRelation : gameUserRelation.getMaterialRelations()) {
+			// Create an array of options.
+			JSONArray options = new JSONArray();
+			// Add four options to the array.
+			for (int i = 0; i < 4; i++) {
+				options.put(roll() + roll());
+			}
+			spawnerOptions.put(gameUserMaterialRelation.getMaterial().getName(), options);
+		}
+		message.put("options", spawnerOptions);
+		logger.infof(
+				"Game <%s>: Giving spawner options to <%s>: %s",
+				game.getId(),
+				user.getUsername(),
+				message.toString()
+		);
+		getSession(user).getBasicRemote().sendText(message.toString());
+	}
+
+	/**
+	 * @return An integer from [1, 6].
+	 */
+	private static int roll() {
+		return new Random().nextInt(6) + 1;
 	}
 }
