@@ -31,6 +31,11 @@ public class GameUserRelation {
 	private int userId;
 
 	/**
+	 * Whether the User has received their initial resources for the Game.
+	 */
+	private boolean hasInitialResources;
+
+	/**
 	 * Game associated with this relation.
 	 */
 	@ManyToOne(targetEntity = Game.class)
@@ -155,6 +160,20 @@ public class GameUserRelation {
 	 */
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	/**
+	 * @return Whether the User has received their initial resources for the Game.
+	 */
+	private boolean getHasInitialResources() {
+		return hasInitialResources;
+	}
+
+	/**
+	 * @param hasInitialResources Whether the User has received their initial resources for the Game.
+	 */
+	private void setHasInitialResources(boolean hasInitialResources) {
+		this.hasInitialResources = hasInitialResources;
 	}
 
 	/**
