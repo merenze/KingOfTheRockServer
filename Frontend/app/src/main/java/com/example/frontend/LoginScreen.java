@@ -19,7 +19,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.frontend.Entities.IUser;
-import com.example.frontend.Entities.User;
 import com.example.frontend.Logic.LoginLogic;
 import com.example.frontend.Network.ServerRequest;
 import com.example.frontend.SupportingClasses.AppController;
@@ -78,6 +77,12 @@ public class LoginScreen extends AppCompatActivity implements IView {
     @Override
     public void logText(String s) {
         Log.d("LoginScreen", s);
+    }
+
+    @Override
+    public void makeToast(String message){
+        Log.d("LoginScreen", "making Toast...");
+        Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override

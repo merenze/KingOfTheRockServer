@@ -1,6 +1,7 @@
 package com.example.frontend.Logic;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.frontend.Entities.IUser;
 import com.example.frontend.Entities.User;
@@ -64,5 +65,6 @@ public class LoginLogic implements IVolleyListener {
     @Override
     public void onError (String errorMessage) {
         r.logText(errorMessage);
+        r.makeToast("Invalid login credentials");
     }
 }

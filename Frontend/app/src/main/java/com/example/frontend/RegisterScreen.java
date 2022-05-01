@@ -66,6 +66,11 @@ public class RegisterScreen extends AppCompatActivity implements IView {
     }
 
     @Override
+    public void makeToast(String message){
+        Toast.makeText(RegisterScreen.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public void switchActivity(){
         startActivity(new Intent(getApplicationContext(), LoginScreen.class));
     }
