@@ -38,7 +38,6 @@ public class LoginScreen extends AppCompatActivity {
     private static String currentUsername = ""; // changed to correct current username upon successful login
     private String username;
     private String password;
-    private Button loginButton;
     private static String authToken;
     private static User currentUser;
 
@@ -47,7 +46,7 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        loginButton = (Button) findViewById(R.id.activity_login_screen_button_login);
+        Button loginButton = (Button) findViewById(R.id.activity_login_screen_button_login);
 
         loginButton.setOnClickListener(view -> {
             EditText etUsernameOrEmail = (EditText) findViewById(R.id.activity_login_screen_et_username);
@@ -73,39 +72,36 @@ public class LoginScreen extends AppCompatActivity {
                                     currentUser = new User(response.getString("auth-token"), username, false);
                                     Log.d(TAG, currentUser.toString());
                                     startActivity(new Intent(view.getContext(), UserDashboard.class));
-                                    Log.d(tag_json_obj, response.toString());
                                 }
                             } catch (JSONException e) {
+                                Log.d(LoginScreen.class.toString(), "Error on login request");
                                 e.printStackTrace();
                             }
                             Log.d(tag_json_obj, response.toString());
                         }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("TestTag", "in onErrorResponse body");
-                            NetworkResponse response = error.networkResponse;
-                            if (error instanceof ServerError && response != null) {
-                                try {
-                                    String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                                    JSONObject obj = new JSONObject(res);
-                                    if (obj.has(username)) {
-                                        try {
-                                            Log.d(TAG, obj.getString(username));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
+                    }, error -> {
+                        Log.d("TestTag", "in onErrorResponse body");
+                        NetworkResponse response = error.networkResponse;
+                        if (error instanceof ServerError && response != null) {
+                            try {
+                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                JSONObject obj = new JSONObject(res);
+                                if (obj.has(username)) {
+                                    try {
+                                        Log.d(TAG, obj.getString(username));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                    if (obj.has("auth-token")) {
-                                        try {
-                                            Log.d(TAG, obj.getString("auth-token"));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                } catch (UnsupportedEncodingException | JSONException e) {
-                                    e.printStackTrace();
                                 }
+                                if (obj.has("auth-token")) {
+                                    try {
+                                        Log.d(TAG, obj.getString("auth-token"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            } catch (UnsupportedEncodingException | JSONException e) {
+                                e.printStackTrace();
                             }
                         }
                     });

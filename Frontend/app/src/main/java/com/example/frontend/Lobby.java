@@ -2,7 +2,6 @@ package com.example.frontend;
 
 import static com.example.frontend.SupportingClasses.Constants.URL;
 import static com.example.frontend.SupportingClasses.Constants.WSURL;
-import static com.example.frontend.SupportingClasses.Constants.tag_json_obj;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -78,7 +77,7 @@ public class Lobby extends AppCompatActivity {
                     try {
                         JSONObject jsonMessage = new JSONObject(message);
 
-                        if(jsonMessage.getString("type").equals("lobby")) {
+                        if (jsonMessage.getString("type").equals("lobby")) {
                             String lobbyCodeString = jsonMessage.getJSONObject("lobby").getString("code");
                             TextView lobbyCode = findViewById(R.id.join_game_lobby_code_textview);
                             lobbyCode.setText(lobbyCodeString);
@@ -90,14 +89,14 @@ public class Lobby extends AppCompatActivity {
                             playerCount.setText(numPlayerString);
                         }
 
-                        if(jsonMessage.getString("type").equals("player-leave")) {
+                        if (jsonMessage.getString("type").equals("player-leave")) {
                             int numPlayers = jsonMessage.getInt("num-players");
                             String numPlayerString = "Players: " + numPlayers + "/4";
                             playerCount.setText(numPlayerString);
                         }
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.d(Lobby.class.toString(), "Unable to create JSONObject for websocket message");
                     }
                 }
 
@@ -112,6 +111,7 @@ public class Lobby extends AppCompatActivity {
                 }
             };
         } catch (URISyntaxException uriSyntaxException) {
+            Log.d(Lobby.class.toString(), "Unable to establish websocket connection");
             uriSyntaxException.printStackTrace();
         }
     }
@@ -119,7 +119,7 @@ public class Lobby extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(pressedTime + 2000 > System.currentTimeMillis()) {
+        if (pressedTime + 2000 > System.currentTimeMillis()) {
             super.onBackPressed();
             lobbyWebSocket.close();
             startActivity(new Intent(getBaseContext(), JoinGameScreen.class));
@@ -142,6 +142,7 @@ public class Lobby extends AppCompatActivity {
                         Log.d(Lobby.class.toString(), lobbyCode);
                         holdResponse();
                     } catch (JSONException e) {
+                        Log.d(Lobby.class.toString(), "Code not found in response");
                         e.printStackTrace();
                     }
                 }
@@ -152,12 +153,9 @@ public class Lobby extends AppCompatActivity {
                     try {
                         String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
                         JSONObject obj = new JSONObject(res);
+
                         if (obj.has("message")) {
-                            try {
-                                Log.d(tag_json_obj, obj.getString("message"));
-                            } catch (JSONException e) {
-                                Log.e(Lobby.class.toString(), Log.getStackTraceString(e));
-                            }
+                            Log.d(Lobby.class.toString(), "Error on host: " + obj.getString("message"));
                         }
                     } catch (UnsupportedEncodingException | JSONException e) {
                         Log.e(Lobby.class.toString(), Log.getStackTraceString(e));
@@ -174,7 +172,7 @@ public class Lobby extends AppCompatActivity {
         boolean isHost = bundle.getBoolean("isHost");
         lobbyCode = bundle.getString("lobbyCode");
 
-        if(isHost) {
+        if (isHost) {
             AppController.getInstance().addToRequestQueue(hostLobbyRequest);
         } else {
             instantiateWebsocket();

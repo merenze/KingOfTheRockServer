@@ -79,6 +79,7 @@ public class RegisterScreen extends AppCompatActivity {
                                         startActivity(new Intent(view.getContext(), LoginScreen.class));
                                     }
                                 } catch (JSONException e) {
+                                    Log.d(RegisterScreen.class.toString(), "Problem with register request response");
                                     e.printStackTrace();
                                 }
                             }
@@ -102,6 +103,7 @@ public class RegisterScreen extends AppCompatActivity {
                                             Toast.makeText(RegisterScreen.this, obj.getString("email"),
                                                     Toast.LENGTH_LONG).show();
                                         } catch (JSONException e) {
+                                            Log.d(RegisterScreen.class.toString(), "Duplicate email error");
                                             e.printStackTrace();
                                         }
                                     }
@@ -111,10 +113,12 @@ public class RegisterScreen extends AppCompatActivity {
                                             Toast.makeText(RegisterScreen.this, obj.getString("username"),
                                                     Toast.LENGTH_LONG).show();
                                         } catch (JSONException e) {
+                                            Log.d(RegisterScreen.class.toString(), "Duplicate username error");
                                             e.printStackTrace();
                                         }
                                     }
                                 } catch (UnsupportedEncodingException | JSONException e) {
+                                    Log.d(RegisterScreen.class.toString(), "Network response error");
                                     e.printStackTrace();
                                 }
                             }
