@@ -19,8 +19,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.frontend.Entities.IUser;
-import com.example.frontend.Entities.User;
+import com.example.frontend.Logic.LoginLogic;
+import com.example.frontend.Network.ServerRequest;
 import com.example.frontend.SupportingClasses.AppController;
+import com.example.frontend.SupportingClasses.IView;
 import com.example.frontend.SupportingClasses.Constants;
 
 import org.json.JSONException;
@@ -34,82 +36,62 @@ import java.util.HashMap;
  *
  * @author Noah Cordova
  */
-public class LoginScreen extends AppCompatActivity {
+public class LoginScreen extends AppCompatActivity implements IView {
 
     private String TAG = LoginScreen.class.getSimpleName();
-    private static User currentUser;
+    private static IUser currentUser;
     private Button loginButton;
+    private LoginLogic logic;
+    private EditText etUsernameOrEmail, etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new AppController();
         setContentView(R.layout.activity_login_screen);
 
+        etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
+        etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
         loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
 
+        ServerRequest serverRequest = new ServerRequest();
+        logic = new LoginLogic(this, serverRequest);
+
         loginButton.setOnClickListener(view -> {
-            EditText etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
-            EditText etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
             String username = etUsernameOrEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
-            HashMap<String, String> parameters = new HashMap<String, String>();
-            parameters.put("username", username);
-            parameters.put("password", password);
-
-            JSONObject jsonObject = new JSONObject(parameters);
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, Constants.URL + "/login", jsonObject, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d(TAG, response.toString());
-
-                            //switch screens on login
-                            try {
-                                if(response.getBoolean("isAdmin")){
-                                    currentUser = new User(response.getString("auth-token"), username, true);
-                                    Log.d(TAG, currentUser.toString());
-                                    startActivity(new Intent(view.getContext(), AdminDashboard.class));
-                                } else {
-                                    currentUser = new User(response.getString("auth-token"), username, false);
-                                    Log.d(TAG, currentUser.toString());
-                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
-                                    //startActivity(new Intent(view.getContext(), GameViewScreen.class));
-                                }
-                            } catch (JSONException exception) {
-                                exception.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("TestTag", "in onErrorResponse body");
-                            NetworkResponse response = error.networkResponse;
-                            if(error instanceof ServerError && response != null){
-                                try {
-                                    String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                                    JSONObject obj = new JSONObject(res);
-                                    if (obj.has(username)) {
-                                        try {
-                                            Log.d(TAG, obj.getString(username));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                } catch (UnsupportedEncodingException | JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    });
-
-            //Add request to queue
-            AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_obj);
+            try {
+                logic.loginUser(username, password);
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+            }
         });
     }
 
-    public static User getCurrentUser() {
+    public static IUser getCurrentUser() {
         return currentUser;
+    }
+
+    @Override
+    public void logText(String s) {
+        Log.d("LoginScreen", s);
+    }
+
+    @Override
+    public void makeToast(String message){
+        Log.d("LoginScreen", "making Toast...");
+        Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void switchActivity(){
+        currentUser = logic.getCurrentUser();
+        Log.d("LoginScreen", currentUser.toString());
+        if(currentUser.getIsAdmin()){
+            startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
+        } else {
+            startActivity(new Intent(getApplicationContext(), UserDashboard.class));
+        }
     }
 }
