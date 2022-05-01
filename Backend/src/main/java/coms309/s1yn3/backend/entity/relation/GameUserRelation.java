@@ -33,7 +33,7 @@ public class GameUserRelation {
 	/**
 	 * Whether the User has received their initial resources for the Game.
 	 */
-	private boolean hasInitialResources;
+	private boolean hasInitialMaterials;
 
 	/**
 	 * Game associated with this relation.
@@ -163,17 +163,17 @@ public class GameUserRelation {
 	}
 
 	/**
-	 * @return Whether the User has received their initial resources for the Game.
+	 * @return Whether the User has received their initial materials for the Game.
 	 */
-	private boolean getHasInitialResources() {
-		return hasInitialResources;
+	public boolean getHasInitialMaterials() {
+		return hasInitialMaterials;
 	}
 
 	/**
-	 * @param hasInitialResources Whether the User has received their initial resources for the Game.
+	 * @param hasInitialMaterials Whether the User has received their initial materials for the Game.
 	 */
-	private void setHasInitialResources(boolean hasInitialResources) {
-		this.hasInitialResources = hasInitialResources;
+	public void setHasInitialMaterials(boolean hasInitialMaterials) {
+		this.hasInitialMaterials = hasInitialMaterials;
 	}
 
 	/**

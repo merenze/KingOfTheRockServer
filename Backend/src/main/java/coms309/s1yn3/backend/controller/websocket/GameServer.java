@@ -4,6 +4,7 @@ import coms309.s1yn3.backend.entity.Game;
 import coms309.s1yn3.backend.entity.Material;
 import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.entity.relation.GameUserMaterialRelation;
+import coms309.s1yn3.backend.entity.relation.GameUserRelation;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Component;
@@ -55,28 +56,41 @@ public class GameServer extends AbstractWebSocketServer {
 	 * @param user
 	 */
 	private static void initializeMaterials(Game game, User user) {
-		logger.infof("Game <%s>: Assigning materials to <%s>", game.getId(), user.getUsername());
+		GameUserRelation gameUserRelation =
+				entityProviders()
+						.getGameUserProvider()
+						.findByGameAndUser(game, user);
+		if (gameUserRelation.getHasInitialMaterials()) {
+			logger.infof(
+					"Game <%s>: <%s> already assigned initial materials",
+					game.getId(),
+					user.getUsername()
+			);
+			return;
+		}
+		logger.infof(
+				"Game <%s>: Assigning materials to <%s>",
+				game.getId(),
+				user.getUsername()
+		);
 		List<Material> materials = entityProviders().getMaterialProvider().findAll();
 		// Give the user a relation to every material
 		for (Material material : materials) {
-			entityProviders()
-					.getGameUserProvider()
-					.findByGameAndUser(game, user)
-					.addMaterialRelation(
-							repositories()
-									.getGameUserMaterialRepository()
-									.save(
-											new GameUserMaterialRelation(
-													entityProviders()
-															.getGameUserProvider()
-															.findByGameAndUser(game, user),
-													material
-											)
-									))
-			;
+			gameUserRelation.addMaterialRelation(
+					repositories()
+							.getGameUserMaterialRepository()
+							.save(
+									new GameUserMaterialRelation(
+											entityProviders()
+													.getGameUserProvider()
+													.findByGameAndUser(game, user),
+											material
+									)
+							)
+			);
 		}
-		Random random = new Random();
 		// Give player four random resources
+		Random random = new Random();
 		for (int i = 0; i < 4; i++) {
 			Material material = materials.get(random.nextInt(materials.size()));
 			GameUserMaterialRelation gameUserMaterialRelation =
@@ -92,5 +106,7 @@ public class GameServer extends AbstractWebSocketServer {
 			);
 			repositories().getGameUserMaterialRepository().save(gameUserMaterialRelation);
 		}
+		gameUserRelation.setHasInitialMaterials(true);
+		repositories().getGameUserRepository().save(gameUserRelation);
 	}
 }
