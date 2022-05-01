@@ -46,7 +46,7 @@ public class Lobby extends AppCompatActivity {
             new Draft_6455()
     };
 
-    public void holdResponse() {
+    private void holdResponse() {
         TextView lobbyCodeText = findViewById(R.id.join_game_lobby_code_textview);
         if (lobbyCode != null) {
             lobbyCodeText.setText(lobbyCode);
@@ -56,6 +56,34 @@ public class Lobby extends AppCompatActivity {
 
         instantiateWebsocket();
         lobbyWebSocket.connect();
+    }
+
+    private void parseWebsocketMessage(JSONObject websocketMessage, TextView lobbyCode, TextView playerCount) {
+        try {
+            String messageString = websocketMessage.getString("type");
+
+            switch (messageString) {
+                case "lobby":
+                    String lobbyCodeString = websocketMessage.getJSONObject("lobby").getString("code");
+                    lobbyCode.setText(lobbyCodeString);
+                    break;
+
+                case "player-join":
+                case "player-leave":
+                    int numPlayers = websocketMessage.getInt("num-players");
+                    String numPlayerString = "Players: " + numPlayers + "/4";
+                    playerCount.setText(numPlayerString);
+                    break;
+
+                case "start-game":
+                    //TODO switch players from lobby to game websocket
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d(Lobby.class.toString(), "Error parsing websocket message");
+        }
+
     }
 
     private void instantiateWebsocket() {
@@ -74,26 +102,11 @@ public class Lobby extends AppCompatActivity {
                     myView.postInvalidate();
                     Log.d("Websocket Message: ", message);
                     TextView playerCount = findViewById(R.id.join_game_player_count_textview);
+                    TextView lobbyCode = findViewById(R.id.join_game_lobby_code_textview);
                     try {
                         JSONObject jsonMessage = new JSONObject(message);
 
-                        if (jsonMessage.getString("type").equals("lobby")) {
-                            String lobbyCodeString = jsonMessage.getJSONObject("lobby").getString("code");
-                            TextView lobbyCode = findViewById(R.id.join_game_lobby_code_textview);
-                            lobbyCode.setText(lobbyCodeString);
-                        }
-
-                        if (jsonMessage.getString("type").equals("player-join")) {
-                            int numPlayers = jsonMessage.getInt("num-players");
-                            String numPlayerString = "Players: " + numPlayers + "/4";
-                            playerCount.setText(numPlayerString);
-                        }
-
-                        if (jsonMessage.getString("type").equals("player-leave")) {
-                            int numPlayers = jsonMessage.getInt("num-players");
-                            String numPlayerString = "Players: " + numPlayers + "/4";
-                            playerCount.setText(numPlayerString);
-                        }
+                        parseWebsocketMessage(jsonMessage, lobbyCode, playerCount);
 
                     } catch (JSONException e) {
                         Log.d(Lobby.class.toString(), "Unable to create JSONObject for websocket message");
