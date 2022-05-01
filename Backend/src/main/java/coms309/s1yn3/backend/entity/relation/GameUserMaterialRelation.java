@@ -46,6 +46,10 @@ public class GameUserMaterialRelation {
 	private int amount;
 
 	/**
+	 * When this number is "rolled",
+	 */
+
+	/**
 	 * Default constructor for use by JPA.
 	 */
 	public GameUserMaterialRelation() {
