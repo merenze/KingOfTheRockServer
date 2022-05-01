@@ -38,12 +38,6 @@ public class LoginLogic implements IVolleyListener {
 
         Log.d("LoginLogic", "in loginUser, sending login request");
         serverRequest.sendToServer(url, newUserObj, "POST");
-
-        //String authToken = serverRequest.getServerResponse().getString("auth-token");
-        //boolean isAdmin = serverRequest.getServerResponse().getBoolean("isAdmin");
-
-        //currentUser = new User(authToken, username, isAdmin);
-        //Log.d("LoginLogic", currentUser.toString());
     }
 
     public User getCurrentUser(){

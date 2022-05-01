@@ -41,5 +41,6 @@ public class RegistrationLogic implements IVolleyListener {
     public void onError (String errorMessage) {
         Log.d("RegistrationLogic", "in onError method");
         r.logText(errorMessage);
+        r.makeToast("Invalid email or username");
     }
 }

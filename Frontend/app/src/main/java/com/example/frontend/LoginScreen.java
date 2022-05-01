@@ -62,7 +62,6 @@ public class LoginScreen extends AppCompatActivity implements IView {
             String password = etPassword.getText().toString().trim();
 
             try {
-                Log.d(TAG, "calling logic.loginUser...");
                 logic.loginUser(username, password);
             } catch (JSONException exception) {
                 exception.printStackTrace();
