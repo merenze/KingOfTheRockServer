@@ -155,10 +155,6 @@ public class GameServer extends AbstractWebSocketServer {
 		return new Random().nextInt(6) + 1;
 	}
 
-	public static void message(User user, Object message) throws IOException {
-		getSession(user).getBasicRemote().sendText(message.toString());
-	}
-
 	public static void broadcast(Game game, Object message) throws IOException {
 		for(GameUserRelation gameUserRelation : game.getUserRelations()) {
 			message(gameUserRelation.getUser(), message);

@@ -3,12 +3,12 @@ package coms309.s1yn3.backend.controller.websocket;
 import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.service.AbstractEntityManagerService;
 import coms309.s1yn3.backend.service.SessionProviderService;
-import coms309.s1yn3.backend.service.entityprovider.AbstractEntityProviderService;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.websocket.Session;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,5 +46,9 @@ public class AbstractWebSocketServer extends AbstractEntityManagerService {
 
 	protected static SessionProviderService authSessions() {
 		return sessionProviderService;
+	}
+
+	public static void message(User user, Object message) throws IOException {
+		getSession(user).getBasicRemote().sendText(message.toString());
 	}
 }
