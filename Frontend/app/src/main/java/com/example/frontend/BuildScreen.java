@@ -36,7 +36,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
 
         currentUser = LoginScreen.getCurrentUser();
         ServerRequest serverRequest = new ServerRequest();
-        logic = new BuildLogic(this, serverRequest);
+        logic = new BuildLogic(this, serverRequest, getCurrentUser());
 
 
         Button townButton = (Button)findViewById(R.id.activity_build_screen_button_structure_town);
@@ -87,12 +87,12 @@ public class BuildScreen extends AppCompatActivity implements IView {
             }
         });
 
-        Button farmButton = (Button)findViewById(R.id.activity_build_screen_button_structure_farm);
-        farmButton.setOnClickListener(new View.OnClickListener() {
+        Button gardenButton = (Button)findViewById(R.id.activity_build_screen_button_structure_garden);
+        gardenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    logic.buildStructure("farm");
+                    logic.buildStructure("garden");
                 } catch (JSONException exception) {
                     exception.printStackTrace();
                 }
