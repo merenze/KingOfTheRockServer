@@ -44,6 +44,6 @@ public class User implements IUser {
 
     @Override
     public String toString(){
-        return "Current user: {authToken,\"" + authToken + "\" ;username,\"" + username + "\"; isAdmin," + isAdmin + "}";
+        return "Current user: {authToken,\"" + authToken + "\"; username,\"" + username + "\"; isAdmin," + isAdmin + "}";
     }
 }
