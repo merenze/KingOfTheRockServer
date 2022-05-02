@@ -32,7 +32,7 @@ public class TradeLogic implements IVolleyListener {
     public void submitTrade(int stoneQuantity, int woodQuantity, int foodQuantity, int waterQuantity) throws JSONException {
         Log.d(TAG, "attempting to create a trade request...");
         //String url =  Constants.URL + "/trade" + "?auth-token=" + currentUser.getAuthToken();
-        String url =  "https://ec47ead7-50a1-4b83-a6e6-10fdf0916962.mock.pstmn.io/build?auth-token=000001";
+        String url =  "https://ec47ead7-50a1-4b83-a6e6-10fdf0916962.mock.pstmn.io/trade?auth-token=000001";
 
         JSONObject newTradeObj = new JSONObject();
         newTradeObj.put("stone", stoneQuantity);
