@@ -24,6 +24,7 @@ public class JoinGameScreen extends AppCompatActivity {
 
             Intent intent = new Intent(view.getContext(), Lobby.class);
             intent.putExtra("lobbyCode", lobbyCode);
+            intent.putExtra("isHost", false);
 
             startActivity(intent);
         });

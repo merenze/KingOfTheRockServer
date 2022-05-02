@@ -29,6 +29,10 @@ public class UserDashboard extends AppCompatActivity {
 
         Button buttonToHostGame = findViewById(R.id.user_dashboard_host_game_button);
 
-        buttonToHostGame.setOnClickListener(view -> startActivity(new Intent(view.getContext(), Lobby.class)));
+        buttonToHostGame.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), Lobby.class);
+            intent.putExtra("isHost", true);
+            startActivity(intent);
+        });
     }
 }
