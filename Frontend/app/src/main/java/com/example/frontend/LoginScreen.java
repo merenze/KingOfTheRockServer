@@ -88,10 +88,11 @@ public class LoginScreen extends AppCompatActivity implements IView {
     public void switchActivity(){
         currentUser = logic.getCurrentUser();
         Log.d("LoginScreen", currentUser.toString());
-        if(currentUser.getIsAdmin()){
-            startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
-        } else {
-            startActivity(new Intent(getApplicationContext(), UserDashboard.class));
-        }
+//        if(currentUser.getIsAdmin()){
+//            startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
+//        } else {
+//            startActivity(new Intent(getApplicationContext(), UserDashboard.class));
+//        }
+        startActivity(new Intent(getApplicationContext(), TradeScreen.class));
     }
 }
