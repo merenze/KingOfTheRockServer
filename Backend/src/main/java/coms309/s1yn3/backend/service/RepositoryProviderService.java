@@ -14,6 +14,9 @@ public class RepositoryProviderService {
 	@Autowired StructureRepository structureRepository;
 	@Autowired MaterialRepository materialRepository;
 	@Autowired StructureMaterialRepository structureMaterialRepository;
+	@Autowired GameUserMaterialRepository gameUserMaterialRepository;
+	@Autowired GameUserStructureRepository gameUserStructureRepository;
+	@Autowired MaterialSpawnerRepository materialSpawnerRepository;
 
 	public LobbyRepository getLobbyRepository() {
 		return lobbyRepository;
@@ -45,5 +48,17 @@ public class RepositoryProviderService {
 
 	public StructureMaterialRepository getStructureMaterialRepository() {
 		return structureMaterialRepository;
+	}
+
+	public GameUserMaterialRepository getGameUserMaterialRepository() {
+		return gameUserMaterialRepository;
+	}
+
+	public GameUserStructureRepository getGameUserStructureRepository() {
+		return gameUserStructureRepository;
+	}
+
+	public MaterialSpawnerRepository getMaterialSpawnerRepository() {
+		return materialSpawnerRepository;
 	}
 }

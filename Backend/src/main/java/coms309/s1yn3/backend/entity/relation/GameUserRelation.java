@@ -2,8 +2,11 @@ package coms309.s1yn3.backend.entity.relation;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import coms309.s1yn3.backend.entity.Game;
+import coms309.s1yn3.backend.entity.Material;
 import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.entity.relation.id.GameUserId;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,6 +31,16 @@ public class GameUserRelation {
 	private int userId;
 
 	/**
+	 * Whether the User has received their initial materials for the Game.
+	 */
+	private boolean hasInitialMaterials;
+
+	/**
+	 * Whether the User has received their initial material spawners for the Game.
+	 */
+	private boolean hasInitialSpawners;
+
+	/**
 	 * Game associated with this relation.
 	 */
 	@ManyToOne(targetEntity = Game.class)
@@ -48,13 +61,21 @@ public class GameUserRelation {
 	/**
 	 * List of relations to the Structures built by this User in this Game.
 	 */
-	@OneToMany(targetEntity = GameUserStructureRelation.class, mappedBy = "gameUserId")
+	@OneToMany(
+			targetEntity = GameUserStructureRelation.class,
+			mappedBy = "gameUserRelation"
+	)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<GameUserStructureRelation> structureRelations;
 
 	/**
 	 * List of relations to the Materials possessed by this User in this Game.
 	 */
-	@OneToMany(targetEntity = GameUserMaterialRelation.class, mappedBy = "gameUserId")
+	@OneToMany(
+			targetEntity = GameUserMaterialRelation.class,
+			mappedBy = "gameUserRelation"
+	)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<GameUserMaterialRelation> materialRelations;
 
 	/**
@@ -66,6 +87,7 @@ public class GameUserRelation {
 
 	/**
 	 * Create a new relation between the given Game and User.
+	 *
 	 * @param game
 	 * @param user
 	 */
@@ -87,6 +109,7 @@ public class GameUserRelation {
 	/**
 	 * For use by JPA.
 	 * Don't use this.
+	 *
 	 * @param gameId
 	 */
 	public void setGameId(int gameId) {
@@ -103,6 +126,7 @@ public class GameUserRelation {
 	/**
 	 * For use by JPA.
 	 * Don't use this.
+	 *
 	 * @param userId
 	 */
 	public void setUserId(int userId) {
@@ -119,6 +143,7 @@ public class GameUserRelation {
 	/**
 	 * For use by JPA.
 	 * Don't use this.
+	 *
 	 * @param game
 	 */
 	public void setGame(Game game) {
@@ -135,10 +160,39 @@ public class GameUserRelation {
 	/**
 	 * For use by JPA.
 	 * Don't use this.
+	 *
 	 * @param user
 	 */
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	/**
+	 * @return Whether the User has received their initial materials for the Game.
+	 */
+	public boolean getHasInitialMaterials() {
+		return hasInitialMaterials;
+	}
+
+	/**
+	 * @param hasInitialMaterials Whether the User has received their initial materials for the Game.
+	 */
+	public void setHasInitialMaterials(boolean hasInitialMaterials) {
+		this.hasInitialMaterials = hasInitialMaterials;
+	}
+
+	/**
+	 * @return Whether the User has received their initial material spawners for the Game.
+	 */
+	public boolean getHasInitialSpawners() {
+		return hasInitialSpawners;
+	}
+
+	/**
+	 * @param hasInitialSpawners Whether the User has received their initial material spawners for the Game.
+	 */
+	public void setHasInitialSpawners(boolean hasInitialSpawners) {
+		this.hasInitialSpawners = hasInitialSpawners;
 	}
 
 	/**
@@ -151,10 +205,21 @@ public class GameUserRelation {
 	/**
 	 * For use by JPA.
 	 * Don't use this.
+	 *
 	 * @param structureRelations
 	 */
 	public void setStructureRelations(List<GameUserStructureRelation> structureRelations) {
 		this.structureRelations = structureRelations;
+	}
+
+	/**
+	 * Add a Structure relation to this relation.
+	 *
+	 * @param structureRelation
+	 */
+	public void addStructureRelation(GameUserStructureRelation structureRelation) {
+		structureRelations.add(structureRelation);
+		structureRelation.setGameUserRelation(this);
 	}
 
 	/**
@@ -166,10 +231,47 @@ public class GameUserRelation {
 
 	/**
 	 * For use by JPA. Don't use this.
+	 *
 	 * @param materialRelations
 	 */
 	public void setMaterialRelations(List<GameUserMaterialRelation> materialRelations) {
 		this.materialRelations = materialRelations;
+	}
+
+	/**
+	 * Add a material relation to this relation.
+	 *
+	 * @param materialRelation
+	 */
+	public void addMaterialRelation(GameUserMaterialRelation materialRelation) {
+		materialRelations.add(materialRelation);
+		materialRelation.setGameUserRelation(this);
+	}
+
+	/**
+	 * @param material
+	 * @return True if this relation has a relation to the given Material.
+	 */
+	public boolean hasMaterial(Material material) {
+		for (GameUserMaterialRelation materialRelation : materialRelations) {
+			if (materialRelation.getMaterial().equals(material)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof GameUserRelation)) {
+			return false;
+		}
+		GameUserRelation gameUserRelation = (GameUserRelation) o;
+		return game.equals(gameUserRelation.game) &&
+				user.equals(gameUserRelation.user);
 	}
 }
 

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface MaterialRepository extends JpaRepository<Material, String> {
 	List<Material> findByName(String name);
+
+	List<Material> findAll();
 }
