@@ -6,10 +6,80 @@
     android:layout_height="match_parent"
     tools:context=".BuildScreen">
 
+    <TextView
+        android:id="@+id/activity_build_screen_tv_cost_mine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stone (x3)"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintStart_toEndOf="@+id/activity_build_screen_button_structure_mine"
+        app:layout_constraintTop_toBottomOf="@+id/activity_build_screen_button_structure_house"
+        app:layout_constraintVertical_bias="0.044" />
+
+    <TextView
+        android:id="@+id/activity_build_screen_tv_cost_lumberyard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wood (x3)"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.075"
+        app:layout_constraintStart_toEndOf="@+id/activity_build_screen_button_structure_lumberyard"
+        app:layout_constraintTop_toBottomOf="@+id/activity_build_screen_button_structure_mine"
+        app:layout_constraintVertical_bias="0.065" />
+
+    <TextView
+        android:id="@+id/activity_build_screen_tv_cost_garden"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Food (x2), Water"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.126"
+        app:layout_constraintStart_toEndOf="@+id/activity_build_screen_button_structure_garden"
+        app:layout_constraintTop_toBottomOf="@+id/activity_build_screen_button_structure_lumberyard"
+        app:layout_constraintVertical_bias="0.072" />
+
+    <TextView
+        android:id="@+id/activity_build_screen_tv_cost_garden2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stone, Wood, Water"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.172"
+        app:layout_constraintStart_toEndOf="@+id/activity_build_screen_button_structure_well"
+        app:layout_constraintTop_toBottomOf="@+id/activity_build_screen_button_structure_garden"
+        app:layout_constraintVertical_bias="0.105" />
+
+    <TextView
+        android:id="@+id/activity_build_screen_tv_cost_house"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wood (x2), Food, Water"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.312"
+        app:layout_constraintStart_toEndOf="@+id/activity_build_screen_button_structure_house"
+        app:layout_constraintTop_toBottomOf="@+id/activity_build_screen_button_structure_town"
+        app:layout_constraintVertical_bias="0.032" />
+
     <Button
         android:id="@+id/activity_build_screen_button_structure_town"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:text="Town"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +91,7 @@
     <Button
         android:id="@+id/activity_build_screen_button_structure_house"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:text="House"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +103,7 @@
     <Button
         android:id="@+id/activity_build_screen_button_structure_mine"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:text="Mine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +115,7 @@
     <Button
         android:id="@+id/activity_build_screen_button_structure_lumberyard"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:text="Lumberyard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,10 +125,10 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/activity_build_screen_button_structure_farm"
+        android:id="@+id/activity_build_screen_button_structure_garden"
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="Farm"
+        android:layout_height="80dp"
+        android:text="Garden"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.051"
@@ -69,13 +139,13 @@
     <Button
         android:id="@+id/activity_build_screen_button_structure_well"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:text="Well"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.051"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_build_screen_button_structure_farm"
+        app:layout_constraintTop_toBottomOf="@+id/activity_build_screen_button_structure_garden"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -127,4 +197,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
+
+    <TextView
+        android:id="@+id/activity_build_screen_tv_cost_town"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stone (x3), Wood (x2)"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.227"
+        app:layout_constraintStart_toEndOf="@+id/activity_build_screen_button_structure_town"
+        app:layout_constraintTop_toTopOf="@+id/activity_build_screen_button_structure_town"
+        app:layout_constraintVertical_bias="0.037" />
 </androidx.constraintlayout.widget.ConstraintLayout>

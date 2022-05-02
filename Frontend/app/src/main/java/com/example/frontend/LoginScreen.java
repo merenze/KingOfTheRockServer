@@ -1,15 +1,15 @@
 package com.example.frontend;
 
-import static com.example.frontend.SupportingClasses.Constants.URL;
 import static com.example.frontend.SupportingClasses.Constants.tag_json_obj;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -18,8 +18,12 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.frontend.Entities.User;
+import com.example.frontend.Entities.IUser;
+import com.example.frontend.Logic.LoginLogic;
+import com.example.frontend.Network.ServerRequest;
 import com.example.frontend.SupportingClasses.AppController;
+import com.example.frontend.SupportingClasses.IView;
+import com.example.frontend.SupportingClasses.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,95 +36,62 @@ import java.util.HashMap;
  *
  * @author Noah Cordova
  */
-public class LoginScreen extends AppCompatActivity {
+public class LoginScreen extends AppCompatActivity implements IView {
 
     private String TAG = LoginScreen.class.getSimpleName();
-    private static String currentUsername = ""; // changed to correct current username upon successful login
-    private String username;
-    private String password;
-    private static String authToken;
-    private static User currentUser;
+    private static IUser currentUser;
+    private Button loginButton;
+    private LoginLogic logic;
+    private EditText etUsernameOrEmail, etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new AppController();
         setContentView(R.layout.activity_login_screen);
 
-        Button loginButton = (Button) findViewById(R.id.activity_login_screen_button_login);
+        etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
+        etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
+        loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
+
+        ServerRequest serverRequest = new ServerRequest();
+        logic = new LoginLogic(this, serverRequest);
 
         loginButton.setOnClickListener(view -> {
-            EditText etUsernameOrEmail = (EditText) findViewById(R.id.activity_login_screen_et_username);
-            EditText etPassword = (EditText) findViewById(R.id.activity_login_screen_et_password);
-            username = etUsernameOrEmail.getText().toString().trim();
-            password = etPassword.getText().toString().trim();
+            String username = etUsernameOrEmail.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
 
-            HashMap<String, String> parameters = new HashMap<String, String>();
-            parameters.put("username", username);
-            parameters.put("password", password);
-
-            JSONObject jsonObject = new JSONObject(parameters);
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, URL + "/login", jsonObject, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                authToken = response.getString("auth-token");
-                                if (response.getString("isAdmin").equals("true")) {
-                                    startActivity(new Intent(view.getContext(), AdminDashboard.class));
-                                } else {
-                                    currentUser = new User(response.getString("auth-token"), username, false);
-                                    Log.d(TAG, currentUser.toString());
-                                    startActivity(new Intent(view.getContext(), UserDashboard.class));
-                                }
-                            } catch (JSONException e) {
-                                Log.d(LoginScreen.class.toString(), "Error on login request");
-                                e.printStackTrace();
-                            }
-                            Log.d(tag_json_obj, response.toString());
-                        }
-                    }, error -> {
-                        Log.d("TestTag", "in onErrorResponse body");
-                        NetworkResponse response = error.networkResponse;
-                        if (error instanceof ServerError && response != null) {
-                            try {
-                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                                JSONObject obj = new JSONObject(res);
-                                if (obj.has(username)) {
-                                    try {
-                                        Log.d(TAG, obj.getString(username));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                if (obj.has("auth-token")) {
-                                    try {
-                                        Log.d(TAG, obj.getString("auth-token"));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            } catch (UnsupportedEncodingException | JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
-            //Add request to queue
-            AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag_json_obj);
+            try {
+                logic.loginUser(username, password);
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+            }
         });
     }
 
-    public static User getCurrentUser() {
+    public static IUser getCurrentUser() {
         return currentUser;
     }
 
-    public static String getAuthToken() {
-        return authToken;
+    @Override
+    public void logText(String s) {
+        Log.d("LoginScreen", s);
     }
 
-    public static String getUsername() {
-        return currentUsername;
+    @Override
+    public void makeToast(String message){
+        Log.d("LoginScreen", "making Toast...");
+        Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void switchActivity(){
+        currentUser = logic.getCurrentUser();
+        Log.d("LoginScreen", currentUser.toString());
+        if(currentUser.getIsAdmin()){
+            startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
+        } else {
+            startActivity(new Intent(getApplicationContext(), UserDashboard.class));
+        }
+    }
 }
