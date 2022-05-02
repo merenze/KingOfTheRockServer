@@ -79,8 +79,8 @@ public class GameViewScreen extends AppCompatActivity {
     }
 
     public void initialTextUpdate() {
-        View myView = findViewById(android.R.id.content).getRootView();
-        myView.postInvalidate();
+//        View myView = findViewById(android.R.id.content).getRootView();
+//        myView.postInvalidate();
         foodQty.setText(0);
         woodQty.setText(0);
         stoneQty.setText(0);
