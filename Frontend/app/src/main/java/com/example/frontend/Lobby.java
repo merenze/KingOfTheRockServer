@@ -22,6 +22,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.frontend.Entities.IUser;
 import com.example.frontend.SupportingClasses.AppController;
 
 import org.java_websocket.client.WebSocketClient;
@@ -36,7 +37,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class Lobby extends AppCompatActivity {
-    String authToken = LoginScreen.getAuthToken();
+    IUser currentUser = LoginScreen.getCurrentUser();
+    String authToken = currentUser.getAuthToken();
     String lobbyCode;
     private WebSocketClient lobbyWebSocket;
 

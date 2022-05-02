@@ -1,13 +1,13 @@
 package com.example.frontend;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.frontend.Entities.IUser;
 import com.example.frontend.Logic.BuildLogic;
@@ -39,7 +39,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
         logic = new BuildLogic(this, serverRequest, getCurrentUser());
 
 
-        Button townButton = (Button)findViewById(R.id.activity_build_screen_button_structure_town);
+        Button townButton = (Button) findViewById(R.id.activity_build_screen_button_structure_town);
         townButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,7 +51,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             }
         });
 
-        Button houseButton = (Button)findViewById(R.id.activity_build_screen_button_structure_house);
+        Button houseButton = (Button) findViewById(R.id.activity_build_screen_button_structure_house);
         houseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,7 +63,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             }
         });
 
-        Button mineButton = (Button)findViewById(R.id.activity_build_screen_button_structure_mine);
+        Button mineButton = (Button) findViewById(R.id.activity_build_screen_button_structure_mine);
         mineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +75,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             }
         });
 
-        Button lumberyardButton = (Button)findViewById(R.id.activity_build_screen_button_structure_lumberyard);
+        Button lumberyardButton = (Button) findViewById(R.id.activity_build_screen_button_structure_lumberyard);
         lumberyardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,7 +87,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             }
         });
 
-        Button gardenButton = (Button)findViewById(R.id.activity_build_screen_button_structure_garden);
+        Button gardenButton = (Button) findViewById(R.id.activity_build_screen_button_structure_garden);
         gardenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,7 +99,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             }
         });
 
-        Button wellButton = (Button)findViewById(R.id.activity_build_screen_button_structure_well);
+        Button wellButton = (Button) findViewById(R.id.activity_build_screen_button_structure_well);
         wellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +111,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             }
         });
 
-        Button cancelButton = (Button)findViewById(R.id.activity_build_screen_button_cancel);
+        Button cancelButton = (Button) findViewById(R.id.activity_build_screen_button_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,7 +119,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             }
         });
 
-        Button chatButton = (Button)findViewById(R.id.activity_build_screen_button_chat);
+        Button chatButton = (Button) findViewById(R.id.activity_build_screen_button_chat);
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,7 +127,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             }
         });
 
-        Button menuButton = (Button)findViewById(R.id.activity_build_screen_button_menu);
+        Button menuButton = (Button) findViewById(R.id.activity_build_screen_button_menu);
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,12 +146,13 @@ public class BuildScreen extends AppCompatActivity implements IView {
     }
 
     @Override
-    public void makeToast(String message){
+    public void makeToast(String message) {
         Log.d(TAG, "making Toast...");
         Toast.makeText(BuildScreen.this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void switchActivity(){}
+    public void switchActivity() {
+    }
 
 }

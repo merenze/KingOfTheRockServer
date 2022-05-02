@@ -1,7 +1,5 @@
 package com.example.frontend;
 
-import static com.example.frontend.SupportingClasses.Constants.WSURL;
-
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
