@@ -2,7 +2,6 @@ package com.example.frontend;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,19 +17,15 @@ public class JoinGameScreen extends AppCompatActivity {
 
         Button buttonToSubmitCode = (Button) findViewById(R.id.join_game_submit_code_button);
 
-        buttonToSubmitCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        buttonToSubmitCode.setOnClickListener(view -> {
 
-                EditText etLobbyCode = (EditText) findViewById(R.id.join_game_code_text);
-                lobbyCode = etLobbyCode.getText().toString().trim();
+            EditText etLobbyCode = (EditText) findViewById(R.id.join_game_code_text);
+            lobbyCode = etLobbyCode.getText().toString().trim();
 
-                Intent intent = new Intent(view.getContext(), Lobby.class);
-                intent.putExtra("lobbyCode", lobbyCode);
-                intent.putExtra("isHost", false);
+            Intent intent = new Intent(view.getContext(), Lobby.class);
+            intent.putExtra("lobbyCode", lobbyCode);
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
 
     }

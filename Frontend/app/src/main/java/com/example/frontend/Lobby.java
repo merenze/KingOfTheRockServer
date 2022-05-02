@@ -188,10 +188,9 @@ public class Lobby extends AppCompatActivity {
         setContentView(R.layout.activity_lobby);
 
         Bundle bundle = getIntent().getExtras();
-        boolean isHost = bundle.getBoolean("isHost");
         lobbyCode = bundle.getString("lobbyCode");
 
-        if (isHost) {
+        if (currentUser.getIsAdmin()) {
             AppController.getInstance().addToRequestQueue(hostLobbyRequest);
         } else {
             instantiateWebsocket();
