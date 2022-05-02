@@ -53,7 +53,6 @@ public class ServerRequest implements IServerRequest {
 //                        }
 
                         l.onError("Invalid login credentials");
-
                     }
                 }
         );
