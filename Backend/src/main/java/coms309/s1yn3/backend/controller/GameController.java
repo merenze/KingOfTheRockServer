@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 public class GameController extends AbstractController {
@@ -42,6 +39,7 @@ public class GameController extends AbstractController {
 			responseBody.put("message", String.format("No game found with id <%s>", gameId));
 			return new ResponseEntity(responseBody, HttpStatus.NOT_FOUND);
 		}
+		// TODO Validate that the user has an open GameServer connection
 		GameUserRelation gameUserRelation = entityProviders().getGameUserProvider().findByGameAndUser(game, user);
 		if (gameUserRelation == null) {
 			Map<String, String> responseBody = new HashMap<>();
@@ -103,6 +101,14 @@ public class GameController extends AbstractController {
 		// No more spawners for you!
 		gameUserRelation.setHasInitialSpawners(true);
 		repositories().getGameUserRepository().save(gameUserRelation);
+		// TODO this should be called at the same time for everyone, after all requests are in
+		GameServer.timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				GameServer.collectMaterials(game, user);
+			}
+		}, 0, 5000); // TODO change to 30000
+
 		// Return the spawner list as a response
 		return new ResponseEntity(repositories().getMaterialSpawnerRepository().findByGameUserRelation(gameUserRelation), HttpStatus.OK);
 	}

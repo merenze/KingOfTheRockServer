@@ -2,6 +2,7 @@ package coms309.s1yn3.backend.controller.websocket;
 
 import coms309.s1yn3.backend.entity.Game;
 import coms309.s1yn3.backend.entity.Material;
+import coms309.s1yn3.backend.entity.MaterialSpawner;
 import coms309.s1yn3.backend.entity.User;
 import coms309.s1yn3.backend.entity.relation.GameUserMaterialRelation;
 import coms309.s1yn3.backend.entity.relation.GameUserRelation;
@@ -16,13 +17,13 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Component
 @ServerEndpoint("/game/{game-id}/{auth-token}")
 public class GameServer extends AbstractWebSocketServer {
 	private static final Logger logger = LoggerFactory.logger(AbstractWebSocketServer.class);
+	public static final Timer timer = new Timer();
 
 	@OnOpen
 	public void onOpen(
@@ -52,10 +53,19 @@ public class GameServer extends AbstractWebSocketServer {
 		logger.infof("User <%s> connected to game <%s>", user.getUsername(), game.getId());
 		initializeMaterials(game, user);
 		offerSpawnerOptions(game, user);
+
+		// Get spawner request after thirty seconds
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				getSpawnerRequest(user);
+			}
+		}, 30000);
 	}
 
 	/**
 	 * Set the User's initial materials for the Game.
+	 *
 	 * @param game
 	 * @param user
 	 */
@@ -119,7 +129,7 @@ public class GameServer extends AbstractWebSocketServer {
 	 * Should only be called AFTER initializeMaterials,
 	 * as it depends on preexisting GameUserMaterialRelations.
 	 */
-	private static void offerSpawnerOptions(Game game, User user) throws IOException {
+	private static void offerSpawnerOptions(Game game, User user) {
 		GameUserRelation gameUserRelation =
 				entityProviders()
 						.getGameUserProvider()
@@ -155,14 +165,61 @@ public class GameServer extends AbstractWebSocketServer {
 		return new Random().nextInt(6) + 1;
 	}
 
-	private static void getSpawnerRequest(User user) throws IOException {
+	private static void getSpawnerRequest(User user) {
 		JSONObject message = new JSONObject();
 		message.put("type", "end-selection-timer");
 		message(user, message);
 	}
 
-	public static void broadcast(Game game, Object message) throws IOException {
-		for(GameUserRelation gameUserRelation : game.getUserRelations()) {
+	public static void collectMaterials(Game game, User user) {
+		GameUserRelation gameUserRelation =
+				entityProviders()
+						.getGameUserProvider()
+						.findByGameAndUser(game, user);
+		JSONObject message = new JSONObject();
+		message.put("type", "resource-update");
+		// Get spawn numbers
+		int die1 = roll();
+		int die2 = roll();
+		message.put("dice", new JSONArray(Arrays.asList(die1, die2)));
+		// Get materials
+		List<Material> allMaterials = repositories().getMaterialRepository().findAll();
+		Map<String, Integer> collectedMaterials = new HashMap<>();
+		// Start by giving 0 of each material
+		for (Material material : allMaterials) {
+			collectedMaterials.put(material.getName(), 0);
+		}
+		// For each spawner that matches the number rolled,
+		for (MaterialSpawner spawner : repositories()
+				.getMaterialSpawnerRepository()
+				.findByGameUserRelationAndSpawnNumber(gameUserRelation, die1 + die2)) {
+			String materialName = spawner.getMaterialName();
+			// Increment the amount gathered for that material.
+			collectedMaterials.put(
+					materialName,
+					collectedMaterials.get(materialName) + 1
+			);
+		}
+		// For each material,
+		for (Material material : allMaterials) {
+			// Get the relation to that material.
+			GameUserMaterialRelation gameUserMaterialRelation =
+					entityProviders()
+							.getGameUserMaterialProvider()
+							.findByGameAndUserAndMaterial(game, user, material);
+			// Add the collected amount of the material to that relation.
+			gameUserMaterialRelation.add(collectedMaterials.get(material.getName()));
+			// Save that relation.
+			repositories().getGameUserMaterialRepository().save(gameUserMaterialRelation);
+		}
+		// TODO Add resources gathered from built structures
+		message.put("materials", new JSONObject(collectedMaterials));
+		logger.infof("Game <%s>: <%s> collected %s", game.getId(), user.getUsername(), collectedMaterials);
+		message(user, message);
+	}
+
+	public static void broadcast(Game game, Object message) {
+		for (GameUserRelation gameUserRelation : game.getUserRelations()) {
 			message(gameUserRelation.getUser(), message);
 		}
 	}
