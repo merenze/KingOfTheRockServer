@@ -48,7 +48,12 @@ public class AbstractWebSocketServer extends AbstractEntityManagerService {
 		return sessionProviderService;
 	}
 
-	public static void message(User user, Object message) throws IOException {
-		getSession(user).getBasicRemote().sendText(message.toString());
+	public static void message(User user, Object message) {
+		try {
+			getSession(user).getBasicRemote().sendText(message.toString());
+		} catch (IOException ex) {
+			logger.errorf("Failed to message <%s>", user.getUsername());
+			ex.printStackTrace();
+		}
 	}
 }
