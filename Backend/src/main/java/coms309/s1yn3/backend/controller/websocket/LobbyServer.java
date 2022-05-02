@@ -82,7 +82,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 		joinMessage.put("username", user.getUsername());
 		joinMessage.put("num-players", lobby.getPlayers().size());
 		// Start the game
-		broadcast(lobby, joinMessage.toString());
+		broadcast(lobby, joinMessage);
 		if (lobby.getPlayers().size() >= Game.MAX_PLAYERS) {
 			logger.infof("Lobby <%s> is full, starting game", lobby.getCode());
 			Game game = startGame(lobby);
@@ -128,7 +128,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 			leaveMessage.put("type", "player-leave");
 			leaveMessage.put("username", user.getUsername());
 			leaveMessage.put("num-players", lobby.getPlayers().size());
-			broadcast(lobby, leaveMessage.toString());
+			broadcast(lobby, leaveMessage);
 		}
 	}
 
@@ -136,18 +136,13 @@ public class LobbyServer extends AbstractWebSocketServer {
 	 * Broadcast a message to all Users in a Lobby.
 	 *
 	 * @param lobby
-	 * @param format
-	 * @param o
+	 * @param message
 	 */
-	public static void broadcast(Lobby lobby, String format, Object... o) {
-		String message = String.format(format, o);
-		logger.infof("Broadcast to <%s>: %s", lobby.getCode(), message);
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("type", "player-message");
-		jsonObject.put("message", message);
+	public static void broadcast(Lobby lobby, JSONObject message) {
+		logger.infof("Broadcast to <%s>: %s", lobby.getCode(), message.toString());
 		for (User player : lobby.getPlayers()) {
 			try {
-				getSession(player).getBasicRemote().sendText(jsonObject.toString());
+				getSession(player).getBasicRemote().sendText(message.toString());
 			} catch (NullPointerException ex) {
 				logger.warnf("<%s> has lobby <%s> in database but no active session", player.getUsername(), lobby.getCode());
 			} catch (IOException ex) {
@@ -162,7 +157,6 @@ public class LobbyServer extends AbstractWebSocketServer {
 	 * @param lobby
 	 */
 	private Game startGame(Lobby lobby) {
-		broadcast(lobby, "Starting game");
 		// Saving before instantiating so we can generate the ID
 		Game game = repositories().getGameRepository().saveAndFlush(new Game());
 		for (User player : lobby.getPlayers()) {
