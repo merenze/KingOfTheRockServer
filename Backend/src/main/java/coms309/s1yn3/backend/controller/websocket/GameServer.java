@@ -23,6 +23,7 @@ import java.util.*;
 @ServerEndpoint("/game/{game-id}/{auth-token}")
 public class GameServer extends AbstractWebSocketServer {
 	private static final Logger logger = LoggerFactory.logger(AbstractWebSocketServer.class);
+	public static final Timer timer = new Timer();
 
 	@OnOpen
 	public void onOpen(
@@ -53,7 +54,6 @@ public class GameServer extends AbstractWebSocketServer {
 		initializeMaterials(game, user);
 		offerSpawnerOptions(game, user);
 
-		Timer timer = new Timer();
 		// Get spawner request after thirty seconds
 		timer.schedule(new TimerTask() {
 			@Override
@@ -177,28 +177,44 @@ public class GameServer extends AbstractWebSocketServer {
 						.getGameUserProvider()
 						.findByGameAndUser(game, user);
 		JSONObject message = new JSONObject();
+		message.put("type", "resource-update");
+		// Get spawn numbers
 		int die1 = roll();
 		int die2 = roll();
 		message.put("dice", new JSONArray(Arrays.asList(die1, die2)));
-		Map<Material, Integer> gatheredMaterials = new HashMap<>();
+		// Get materials
+		List<Material> allMaterials = repositories().getMaterialRepository().findAll();
+		Map<String, Integer> collectedMaterials = new HashMap<>();
 		// Start by giving 0 of each material
-		for (Material material : repositories().getMaterialRepository().findAll()) {
-			gatheredMaterials.put(material, 0);
+		for (Material material : allMaterials) {
+			collectedMaterials.put(material.getName(), 0);
 		}
 		// For each spawner that matches the number rolled,
 		for (MaterialSpawner spawner : repositories()
 				.getMaterialSpawnerRepository()
 				.findByGameUserRelationAndSpawnNumber(gameUserRelation, die1 + die2)) {
-			Material material = spawner.getMaterial();
+			String materialName = spawner.getMaterialName();
 			// Increment the amount gathered for that material.
-			gatheredMaterials.put(
-					material,
-					gatheredMaterials.get(material) + 1
+			collectedMaterials.put(
+					materialName,
+					collectedMaterials.get(materialName) + 1
 			);
 		}
+		// For each material,
+		for (Material material : allMaterials) {
+			// Get the relation to that material.
+			GameUserMaterialRelation gameUserMaterialRelation =
+					entityProviders()
+							.getGameUserMaterialProvider()
+							.findByGameAndUserAndMaterial(game, user, material);
+			// Add the collected amount of the material to that relation.
+			gameUserMaterialRelation.add(collectedMaterials.get(material.getName()));
+			// Save that relation.
+			repositories().getGameUserMaterialRepository().save(gameUserMaterialRelation);
+		}
 		// TODO Add resources gathered from built structures
-		message.put("materials", new JSONObject(gatheredMaterials));
-		logger.infof("Game <%s>: <%s> collected %s", game.getId(), user.getUsername(), gatheredMaterials);
+		message.put("materials", new JSONObject(collectedMaterials));
+		logger.infof("Game <%s>: <%s> collected %s", game.getId(), user.getUsername(), collectedMaterials);
 		message(user, message);
 	}
 
