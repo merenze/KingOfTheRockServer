@@ -151,8 +151,14 @@ public class GameServer extends AbstractWebSocketServer {
 	/**
 	 * @return An integer from [1, 6].
 	 */
-	private static int roll() {
+	public static int roll() {
 		return new Random().nextInt(6) + 1;
+	}
+
+	private static void getSpawnerRequest(User user) throws IOException {
+		JSONObject message = new JSONObject();
+		message.put("type", "end-selection-timer");
+		message(user, message);
 	}
 
 	public static void broadcast(Game game, Object message) throws IOException {

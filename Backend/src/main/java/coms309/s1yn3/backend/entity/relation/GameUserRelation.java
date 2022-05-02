@@ -31,9 +31,14 @@ public class GameUserRelation {
 	private int userId;
 
 	/**
-	 * Whether the User has received their initial resources for the Game.
+	 * Whether the User has received their initial materials for the Game.
 	 */
 	private boolean hasInitialMaterials;
+
+	/**
+	 * Whether the User has received their initial material spawners for the Game.
+	 */
+	private boolean hasInitialSpawners;
 
 	/**
 	 * Game associated with this relation.
@@ -174,6 +179,20 @@ public class GameUserRelation {
 	 */
 	public void setHasInitialMaterials(boolean hasInitialMaterials) {
 		this.hasInitialMaterials = hasInitialMaterials;
+	}
+
+	/**
+	 * @return Whether the User has received their initial material spawners for the Game.
+	 */
+	public boolean getHasInitialSpawners() {
+		return hasInitialSpawners;
+	}
+
+	/**
+	 * @param hasInitialSpawners Whether the User has received their initial material spawners for the Game.
+	 */
+	public void setHasInitialSpawners(boolean hasInitialSpawners) {
+		this.hasInitialSpawners = hasInitialSpawners;
 	}
 
 	/**
