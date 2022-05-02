@@ -32,37 +32,21 @@ public class GameViewScreen extends AppCompatActivity {
         Log.d("GameViewScreen", currentUser.toString());
 
         Button tradeButton = (Button) findViewById(R.id.activity_game_view_screen_button_trade);
-        tradeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), TradeScreen.class));
-            }
-        });
+        tradeButton.setOnClickListener(view -> startActivity(new Intent(view.getContext(), TradeScreen.class)));
 
         Button buildButton = (Button) findViewById(R.id.activity_game_view_screen_button_build);
-        buildButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), BuildScreen.class));
-            }
-        });
+        buildButton.setOnClickListener(view -> startActivity(new Intent(view.getContext(), BuildScreen.class)));
 
         Button menuButton = (Button) findViewById(R.id.activity_game_view_screen_button_menu);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //start menu pop-up
-            }
+        menuButton.setOnClickListener(view -> {
+            //start menu pop-up
         });
 
         Button chatButton = (Button) findViewById(R.id.activity_game_view_screen_button_chat);
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //start chat pop-up
+        chatButton.setOnClickListener(view -> {
+            //start chat pop-up
 //                createChatBoxDialog();
 
-            }
         });
 
     }
