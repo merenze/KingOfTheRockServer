@@ -1,5 +1,9 @@
 package com.example.frontend;
 
+import static com.example.frontend.SupportingClasses.Constants.tag_json_obj;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,15 +11,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.frontend.Entities.IUser;
 import com.example.frontend.Logic.LoginLogic;
 import com.example.frontend.Network.ServerRequest;
 import com.example.frontend.SupportingClasses.AppController;
 import com.example.frontend.SupportingClasses.IView;
+import com.example.frontend.SupportingClasses.Constants;
 
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 /**
  * Class for the logic of the screen to login
