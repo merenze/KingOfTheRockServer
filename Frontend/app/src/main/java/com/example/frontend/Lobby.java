@@ -79,7 +79,7 @@ public class Lobby extends AppCompatActivity {
 
                 case "start-game":
                     //TODO switch players from lobby to game websocket
-                    int gameID = websocketMessage.getInt("id");
+                    int gameID = websocketMessage.getJSONObject("game").getInt("id");
                     Intent intent = new Intent(getBaseContext(), GameViewScreen.class);
                     intent.putExtra("game-id", gameID);
                     startActivity(intent);
