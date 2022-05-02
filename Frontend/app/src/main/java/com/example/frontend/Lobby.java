@@ -60,8 +60,9 @@ public class Lobby extends AppCompatActivity {
         lobbyWebSocket.connect();
     }
 
-    private void parseWebsocketMessage(JSONObject websocketMessage, TextView lobbyCode, TextView playerCount) {
+    private void parseWebsocketMessage(String jsonMessageString, TextView lobbyCode, TextView playerCount) {
         try {
+            JSONObject websocketMessage = new JSONObject(jsonMessageString);
             String messageString = websocketMessage.getString("type");
 
             switch (messageString) {
@@ -81,7 +82,7 @@ public class Lobby extends AppCompatActivity {
                     //TODO switch players from lobby to game websocket
                     int gameID = websocketMessage.getJSONObject("game").getInt("id");
                     Intent intent = new Intent(getBaseContext(), GameViewScreen.class);
-                    intent.putExtra("game-id", gameID);
+                    intent.putExtra("game-object-string", jsonMessageString);
                     startActivity(intent);
                     break;
             }
@@ -109,14 +110,7 @@ public class Lobby extends AppCompatActivity {
                     Log.d("Websocket Message: ", message);
                     TextView playerCount = findViewById(R.id.join_game_player_count_textview);
                     TextView lobbyCode = findViewById(R.id.join_game_lobby_code_textview);
-                    try {
-                        JSONObject jsonMessage = new JSONObject(message);
-
-                        parseWebsocketMessage(jsonMessage, lobbyCode, playerCount);
-
-                    } catch (JSONException e) {
-                        Log.d(Lobby.class.toString(), "Unable to create JSONObject for websocket message");
-                    }
+                    parseWebsocketMessage(message, lobbyCode, playerCount);
                 }
 
                 @Override

@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.frontend.Entities.IUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Class for the logic of the screen of the main game of the user
@@ -20,16 +24,39 @@ public class GameViewScreen extends AppCompatActivity {
 
     private IUser currentUser;
 
-    AlertDialog.Builder dialogBuilder;
-    AlertDialog dialog;
+    private TextView waterQty;
+    private TextView stoneQty;
+    private TextView foodQty;
+    private TextView woodQty;
+
+//    AlertDialog.Builder dialogBuilder;
+//    AlertDialog dialog;
+
+    JSONObject jsonGameObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_view_screen);
 
+        foodQty = findViewById(R.id.activity_game_view_screen_tv_resource_food_quantity);
+        stoneQty = findViewById(R.id.activity_game_view_screen_tv_resource_stone_quantity);
+        waterQty = findViewById(R.id.activity_game_view_screen_tv_resource_water_quantity);
+        woodQty = findViewById(R.id.activity_game_view_screen_tv_resource_wood_quantity);
+
         currentUser = LoginScreen.getCurrentUser();
-        Log.d("GameViewScreen", currentUser.toString());
+
+        Bundle bundle = getIntent().getExtras();
+        String jsonString = bundle.getString("game-object-string");
+
+        try {
+            jsonGameObject = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            Log.d(GameViewScreen.class.toString(), "Error converting JSON string to JSON");
+            e.printStackTrace();
+        }
+
+        initialTextUpdate();
 
         Button tradeButton = (Button) findViewById(R.id.activity_game_view_screen_button_trade);
         tradeButton.setOnClickListener(view -> startActivity(new Intent(view.getContext(), TradeScreen.class)));
@@ -49,6 +76,15 @@ public class GameViewScreen extends AppCompatActivity {
 
         });
 
+    }
+
+    public void initialTextUpdate() {
+        View myView = findViewById(android.R.id.content).getRootView();
+        myView.postInvalidate();
+        foodQty.setText(0);
+        woodQty.setText(0);
+        stoneQty.setText(0);
+        waterQty.setText(0);
     }
     /*
     public void createChatBoxDialog() {
