@@ -1,6 +1,5 @@
 package coms309.s1yn3.backend.controller;
 
-import com.mysql.cj.xdevapi.JsonArray;
 import coms309.s1yn3.backend.controller.websocket.GameServer;
 import coms309.s1yn3.backend.entity.*;
 import coms309.s1yn3.backend.entity.relation.GameUserMaterialRelation;
@@ -238,7 +237,6 @@ public class GameController extends AbstractController {
 			responseBody.getJSONObject("structures")
 					.put(gusRelation.getStructureName(), gusRelation.getAmount());
 		}
-		logger.debug(2);
 		responseBody.put("materials", new JSONObject());
 		for (GameUserMaterialRelation gameUserMaterialRelation : repositories()
 				.getGameUserMaterialRepository()
@@ -252,5 +250,43 @@ public class GameController extends AbstractController {
 		}
 		logger.debugf("Game <%s>: <%s> now has %s", gameId, user.getUsername(), responseBody.toString());
 		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
+	}
+
+	/**
+	 * Request to get materials in a trade.
+	 * @param request
+	 * @param gameId ID of the game where the trade happens
+	 * @param wantsNames Array of the names of materials which the User wants
+	 */
+	@PostMapping("/game/trade/{gameId}/request")
+	public ResponseEntity tradeRequest(
+			HttpServletRequest request,
+			@PathVariable int gameId,
+			@RequestBody String[] wantsNames
+	) {
+		// Get the user
+		User user = sender(request);
+		// Get the game
+		Game game = entityProviders().getGameProvider().findById(gameId);
+		if (game == null) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("No game found with id <%s>", gameId));
+			return new ResponseEntity(responseBody, HttpStatus.NOT_FOUND);
+		}
+		// Check that user is connected to the game WS endpoint
+		if (!GameServer.hasUser(user)) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("User <%s> not connected to game <%s>", user.getId(), gameId));
+		}
+		// Get the game-user relation
+		GameUserRelation gameUserRelation = entityProviders().getGameUserProvider().findByGameAndUser(game, user);
+		if (gameUserRelation == null) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("User <%s> is not a member of game <%s>", user.getUsername(), game.getId()));
+			return new ResponseEntity(responseBody, HttpStatus.FORBIDDEN);
+		}
+
+		// TODO
+		return new ResponseEntity(HttpStatus.OK);
 	}
 }

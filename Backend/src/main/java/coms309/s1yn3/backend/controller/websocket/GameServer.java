@@ -227,7 +227,7 @@ public class GameServer extends AbstractWebSocketServer {
 						.getGameUserProvider()
 						.findByGameAndUser(game, user);
 		JSONObject message = new JSONObject();
-		message.put("type", "resource-update");
+		message.put("type", "material-update");
 		// Get spawn numbers
 		int die1 = roll();
 		int die2 = roll();

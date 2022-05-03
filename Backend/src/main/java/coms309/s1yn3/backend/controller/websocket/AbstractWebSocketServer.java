@@ -48,6 +48,10 @@ public class AbstractWebSocketServer extends AbstractEntityManagerService {
 		return sessionProviderService;
 	}
 
+	public static boolean hasUser(User user) {
+		return uidToSession.containsKey(user.getId());
+	}
+
 	public static void message(User user, Object message) {
 		try {
 			getSession(user)
