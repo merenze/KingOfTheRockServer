@@ -258,7 +258,7 @@ public class GameController extends AbstractController {
 	 * @param gameId ID of the game where the trade happens
 	 * @param wantsNames Array of the names of materials which the User wants
 	 */
-	@PostMapping("/game/trade/{gameId}/request")
+	@PostMapping("/game/wants/{gameId}")
 	public ResponseEntity tradeRequest(
 			HttpServletRequest request,
 			@PathVariable int gameId,
@@ -273,20 +273,30 @@ public class GameController extends AbstractController {
 			responseBody.put("message", String.format("No game found with id <%s>", gameId));
 			return new ResponseEntity(responseBody, HttpStatus.NOT_FOUND);
 		}
-		// Check that user is connected to the game WS endpoint
-		if (!GameServer.hasUser(user)) {
-			Map<String, String> responseBody = new HashMap<>();
-			responseBody.put("message", String.format("User <%s> not connected to game <%s>", user.getId(), gameId));
-		}
 		// Get the game-user relation
-		GameUserRelation gameUserRelation = entityProviders().getGameUserProvider().findByGameAndUser(game, user);
+		GameUserRelation gameUserRelation = entityProviders()
+				.getGameUserProvider()
+				.findByGameAndUser(game, user);
 		if (gameUserRelation == null) {
 			Map<String, String> responseBody = new HashMap<>();
 			responseBody.put("message", String.format("User <%s> is not a member of game <%s>", user.getUsername(), game.getId()));
 			return new ResponseEntity(responseBody, HttpStatus.FORBIDDEN);
 		}
-
+		// Check that user is connected to the game WS endpoint
+		if (!GameServer.hasUser(user)) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("User <%s> not connected to game <%s>", user.getUsername(), gameId));
+			return new ResponseEntity(responseBody, HttpStatus.FORBIDDEN);
+		}
+		JSONObject message = new JSONObject();
+		message.put("type", "material-wants");
+		message.put("user", new JSONObject());
+		message.getJSONObject("user").put("id", user.getId());
+		message.getJSONObject("user").put("username", user.getUsername());
+		message.getJSONObject("user").put("score", gameUserRelation.getScore());
+		// TODO Add User's structures?
+		message.put("wants", new JSONArray(wantsNames));
 		// TODO
-		return new ResponseEntity(HttpStatus.OK);
+		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 }
