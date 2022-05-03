@@ -304,4 +304,14 @@ public class GameController extends AbstractController {
 		responseBody.put("status", HttpStatus.OK.toString());
 		return new ResponseEntity(HttpStatus.OK);
 	}
+
+	@PostMapping("/game/trade/{gameId}/request/{userId}")
+	public ResponseEntity tradeRequest(
+			HttpServletRequest request,
+			@PathVariable int gameId,
+			@PathVariable int userId
+	) {
+		// TODO
+		return new ResponseEntity(HttpStatus.OK);
+	}
 }
