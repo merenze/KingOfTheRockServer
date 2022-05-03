@@ -15,6 +15,8 @@ public class EntityProviderProviderService {
 	@Autowired MaterialProviderService materialProviderService;
 	@Autowired GameUserProviderService gameUserProviderService;
 	@Autowired GameUserMaterialProviderService gameUserMaterialProviderService;
+	@Autowired GameUserStructureProviderService gameUserStructureProviderService;
+	@Autowired StructureMaterialProviderService structureMaterialProviderService;
 
 	public GameProviderService getGameProvider() {
 		return gameProviderService;
@@ -38,5 +40,13 @@ public class EntityProviderProviderService {
 
 	public GameUserMaterialProviderService getGameUserMaterialProvider() {
 		return gameUserMaterialProviderService;
+	}
+
+	public GameUserStructureProviderService getGameUserStructureProvider() {
+		return gameUserStructureProviderService;
+	}
+
+	public StructureMaterialProviderService getStructureMaterialProvider() {
+		return structureMaterialProviderService;
 	}
 }

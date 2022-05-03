@@ -13,7 +13,11 @@ import java.util.List;
 @Service
 public class GameUserMaterialProviderService extends AbstractEntityProviderService {
 
-	public GameUserMaterialRelation findByGameAndUserAndMaterial(Game game, User user, Material material) {
+	public GameUserMaterialRelation findByGameAndUserAndMaterial(
+			Game game,
+			User user,
+			Material material
+	) {
 		GameUserMaterialRelation gameUserMaterialRelation;
 		try {
 			gameUserMaterialRelation = repositories()
@@ -31,6 +35,23 @@ public class GameUserMaterialProviderService extends AbstractEntityProviderServi
 			return null;
 		}
 
+		return gameUserMaterialRelation;
+	}
+
+	public GameUserMaterialRelation findByGameUserRelationAndMaterial(
+			GameUserRelation gameUserRelation,
+			Material material
+	) {
+		GameUserMaterialRelation gameUserMaterialRelation;
+		try {
+			gameUserMaterialRelation =
+					repositories()
+							.getGameUserMaterialRepository()
+							.findByGameUserRelationAndMaterial(gameUserRelation, material)
+							.get(0);
+		} catch (IndexOutOfBoundsException ex) {
+			return null;
+		}
 		return gameUserMaterialRelation;
 	}
 

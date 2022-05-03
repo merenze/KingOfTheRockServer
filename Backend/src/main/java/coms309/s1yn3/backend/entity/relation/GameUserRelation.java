@@ -31,9 +31,19 @@ public class GameUserRelation {
 	private int userId;
 
 	/**
+	 * The User's score for this Game.
+	 */
+	private int score;
+
+	/**
 	 * Whether the User has received their initial materials for the Game.
 	 */
 	private boolean hasInitialMaterials;
+
+	/**
+	 * Whether the User has received their initial Structures for the Game.
+	 */
+	private boolean hasInitialStructures;
 
 	/**
 	 * Whether the User has received their initial material spawners for the Game.
@@ -168,6 +178,27 @@ public class GameUserRelation {
 	}
 
 	/**
+	 * @return The User's score for this game.
+	 */
+	public int getScore() {
+		return score;
+	}
+
+	/**
+	 * @param score  The User's score for this game.
+	 */
+	public void setScore(int score) {
+		this.score = 1;
+	}
+
+	/**
+	 * @param points The number of points to add to the score.
+	 */
+	public void addScore(int points) {
+		score += points;
+	}
+
+	/**
 	 * @return Whether the User has received their initial materials for the Game.
 	 */
 	public boolean getHasInitialMaterials() {
@@ -193,6 +224,20 @@ public class GameUserRelation {
 	 */
 	public void setHasInitialSpawners(boolean hasInitialSpawners) {
 		this.hasInitialSpawners = hasInitialSpawners;
+	}
+
+	/**
+	 * @return Whether the User has their initial Structures for the Game.
+	 */
+	public boolean getHasInitialStructures() {
+		return hasInitialStructures;
+	}
+
+	/**
+	 * @param hasInitialStructures Whether the User has their initial Structures for the Game.
+	 */
+	public void setHasInitialStructures(boolean hasInitialStructures) {
+		this.hasInitialStructures = hasInitialStructures;
 	}
 
 	/**
