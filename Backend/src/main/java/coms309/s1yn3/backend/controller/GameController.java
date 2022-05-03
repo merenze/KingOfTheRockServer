@@ -290,13 +290,16 @@ public class GameController extends AbstractController {
 		}
 		JSONObject message = new JSONObject();
 		message.put("type", "material-wants");
-		message.put("user", new JSONObject());
-		message.getJSONObject("user").put("id", user.getId());
-		message.getJSONObject("user").put("username", user.getUsername());
-		message.getJSONObject("user").put("score", gameUserRelation.getScore());
-		// TODO Add User's structures?
+		message.put("user", user.getUsername());
 		message.put("wants", new JSONArray(wantsNames));
-		// TODO
-		return new ResponseEntity(message.toMap(), HttpStatus.OK);
+		// For each user in the game
+		for (GameUserRelation gur : game.getUserRelations()) {
+			// If the user is not the requesting user
+			if (!gur.getUser().equals(user)) {
+				// Send the material wants message to the user
+				GameServer.message(gur.getUser(), message);
+			}
+		}
+		return new ResponseEntity(HttpStatus.OK);
 	}
 }
