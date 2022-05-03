@@ -300,6 +300,8 @@ public class GameController extends AbstractController {
 				GameServer.message(gur.getUser(), message);
 			}
 		}
+		Map<String, String> responseBody = new HashMap<>();
+		responseBody.put("status", HttpStatus.OK.toString());
 		return new ResponseEntity(HttpStatus.OK);
 	}
 }
