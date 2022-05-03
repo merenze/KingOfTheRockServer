@@ -1,11 +1,9 @@
 package coms309.s1yn3.backend.controller.websocket;
 
-import coms309.s1yn3.backend.entity.Game;
-import coms309.s1yn3.backend.entity.Material;
-import coms309.s1yn3.backend.entity.MaterialSpawner;
-import coms309.s1yn3.backend.entity.User;
+import coms309.s1yn3.backend.entity.*;
 import coms309.s1yn3.backend.entity.relation.GameUserMaterialRelation;
 import coms309.s1yn3.backend.entity.relation.GameUserRelation;
+import coms309.s1yn3.backend.entity.relation.GameUserStructureRelation;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.json.JSONArray;
@@ -24,6 +22,10 @@ import java.util.*;
 public class GameServer extends AbstractWebSocketServer {
 	private static final Logger logger = LoggerFactory.logger(AbstractWebSocketServer.class);
 	public static final Timer timer = new Timer();
+	/**
+	 * The number of points required to win.
+	 */
+	public static final int VICTORY_SCORE = 10;
 
 	@OnOpen
 	public void onOpen(
@@ -48,9 +50,11 @@ public class GameServer extends AbstractWebSocketServer {
 			);
 			session.close();
 		}
+		// TODO Don't allow joining a finished game
 		// TODO disconnect user from previous sessions
 		addSession(user, session);
 		logger.infof("User <%s> connected to game <%s>", user.getUsername(), game.getId());
+		initializeStructures(game, user);
 		initializeMaterials(game, user);
 		offerSpawnerOptions(game, user);
 
@@ -76,14 +80,14 @@ public class GameServer extends AbstractWebSocketServer {
 						.findByGameAndUser(game, user);
 		if (gameUserRelation.getHasInitialMaterials()) {
 			logger.infof(
-					"Game <%s>: <%s> already assigned initial materials",
+					"Game <%s>: <%s> already assigned initial structures",
 					game.getId(),
 					user.getUsername()
 			);
 			return;
 		}
 		logger.infof(
-				"Game <%s>: Assigning materials to <%s>",
+				"Game <%s>: Assigning structures to <%s>",
 				game.getId(),
 				user.getUsername()
 		);
@@ -120,8 +124,54 @@ public class GameServer extends AbstractWebSocketServer {
 			);
 			repositories().getGameUserMaterialRepository().save(gameUserMaterialRelation);
 		}
+		gameUserRelation.setHasInitialStructures(true);
 		gameUserRelation.setHasInitialMaterials(true);
 		repositories().getGameUserRepository().save(gameUserRelation);
+	}
+
+	/**
+	 * Set the User's initial Structures for the Game.
+	 */
+	public static void initializeStructures(Game game, User user) {
+		GameUserRelation gameUserRelation =
+				entityProviders()
+						.getGameUserProvider()
+						.findByGameAndUser(game, user);
+		if (gameUserRelation.getHasInitialStructures()) {
+			logger.infof(
+					"Game <%s>: <%s> already assigned initial structures",
+					game.getId(),
+					user.getUsername()
+			);
+			return;
+		}
+
+		List<Structure> structures = entityProviders().getStructureProvider().findAll();
+		// Give the user a relation to every material
+		for (Structure structure : structures) {
+			gameUserRelation.addStructureRelation(
+					repositories()
+							.getGameUserStructureRepository()
+							.save(
+									new GameUserStructureRelation(
+											gameUserRelation,
+											structure
+									)
+							)
+			);
+		}
+		// Map structures to JSON
+		JSONObject message = new JSONObject();
+		message.put("type", "structures");
+		message.put("structures", new JSONObject());
+		for (GameUserStructureRelation gameUserStructureRelation : repositories()
+				.getGameUserStructureRepository()
+				.findByGameUserRelation(gameUserRelation)) {
+			message.getJSONObject("structures").put(
+					gameUserStructureRelation.getStructureName(),
+					gameUserStructureRelation.getAmount());
+		}
+		message(user, message);
 	}
 
 	/**
@@ -212,7 +262,12 @@ public class GameServer extends AbstractWebSocketServer {
 			// Save that relation.
 			repositories().getGameUserMaterialRepository().save(gameUserMaterialRelation);
 		}
-		// TODO Add resources gathered from built structures
+		// Add resources gathered from built structures
+		addStructureBonus(gameUserRelation, collectedMaterials, "mine", "stone");
+		addStructureBonus(gameUserRelation, collectedMaterials, "lumberyard", "wood");
+		addStructureBonus(gameUserRelation, collectedMaterials, "garden", "food");
+		addStructureBonus(gameUserRelation, collectedMaterials, "well", "water");
+		// Build the message
 		message.put("materials", new JSONObject(collectedMaterials));
 		logger.infof("Game <%s>: <%s> collected %s", game.getId(), user.getUsername(), collectedMaterials);
 		message(user, message);
@@ -222,5 +277,55 @@ public class GameServer extends AbstractWebSocketServer {
 		for (GameUserRelation gameUserRelation : game.getUserRelations()) {
 			message(gameUserRelation.getUser(), message);
 		}
+	}
+
+	/**
+	 * Add material bonus for structures.
+	 * @param gameUserRelation The GameUserRelation to which this bonus is added.
+	 * @param structureName The name of the Structure that provides the bonus.
+	 * @param materialName The name of the Material for which this Structure provides a bonus.
+	 */
+	private static void addStructureBonus(
+			GameUserRelation gameUserRelation,
+			Map<String, Integer> collectedMaterials,
+			String structureName,
+			String materialName
+	) {
+		GameUserMaterialRelation gameUserMaterialRelation;
+		// Get the material relation
+		gameUserMaterialRelation =
+				entityProviders()
+						.getGameUserMaterialProvider()
+						.findByGameUserRelationAndMaterial(
+								gameUserRelation,
+								entityProviders()
+										.getMaterialProvider()
+										.findByName(materialName));
+		// Add a material for each structure
+		int bonus = entityProviders()
+				.getGameUserStructureProvider()
+				.findByGameUserRelationAndStructure(
+						gameUserRelation,
+						entityProviders()
+								.getStructureProvider()
+								.findByName(structureName)
+
+				)
+				.getAmount();
+		gameUserMaterialRelation.add(bonus);
+		repositories()
+				.getGameUserMaterialRepository()
+				.save(gameUserMaterialRelation);
+		// Update message
+		collectedMaterials.put(materialName, collectedMaterials.get(materialName) + bonus);
+		// Log
+		logger.debugf(
+				"Game <%s>: +%d <%s> to <%s> for <%s>",
+				gameUserRelation.getGameId(),
+				bonus,
+				materialName,
+				gameUserRelation.getUser().getUsername(),
+				structureName
+		);
 	}
 }

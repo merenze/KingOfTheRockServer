@@ -11,12 +11,6 @@ import javax.persistence.*;
 @IdClass(GameUserStructureId.class)
 public class GameUserStructureRelation {
 	/**
-	 * This definition allows the key (game, user) to map to the game-user-relation.
-	 */
-	@EmbeddedId
-	private GameUserId gameUserId;
-
-	/**
 	 * ID of the game in the game-user relation.
 	 * Definition required in order to override the column name.
 	 */
@@ -44,10 +38,9 @@ public class GameUserStructureRelation {
 	 */
 	@ManyToOne
 	@JoinColumns({
-			@JoinColumn(name = "game", referencedColumnName = "game"),
-			@JoinColumn(name = "user", referencedColumnName = "user")
+			@JoinColumn(name = "game", referencedColumnName = "game", insertable = false, updatable = false),
+			@JoinColumn(name = "user", referencedColumnName = "user", insertable = false, updatable = false)
 	})
-	@MapsId("gameUserId")
 	@JsonBackReference
 	private GameUserRelation gameUserRelation;
 
@@ -55,7 +48,7 @@ public class GameUserStructureRelation {
 	 * Structure.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "structure")
+	@JoinColumn(name = "structure", insertable = false, updatable = false)
 	@MapsId("structureName")
 	@JsonBackReference
 	private Structure structure;
@@ -66,21 +59,21 @@ public class GameUserStructureRelation {
 	private int amount;
 
 	/**
-	 * Embedded GameUserId used for hacky mapping.
-	 * For use by JPA.
-	 * @return
+	 * Empty constructor for use by JPA.
 	 */
-	public GameUserId getGameUserId() {
-		return gameUserId;
+	public GameUserStructureRelation() {
+
 	}
 
 	/**
-	 * For use by JPA.
-	 * Don't use this.
-	 * @param gameUserId
+	 *
+	 * @param gameUserRelation GameUserRelation associated with this relation.
+	 * @param structure Structure associated with this relation.
 	 */
-	public void setGameUserId(GameUserId gameUserId) {
-		this.gameUserId = gameUserId;
+	public GameUserStructureRelation(GameUserRelation gameUserRelation, Structure structure) {
+		// TODO GameUserMaterial constructor, setters should match this one
+		setGameUserRelation(gameUserRelation);
+		setStructure(structure);
 	}
 
 	/**
@@ -145,6 +138,8 @@ public class GameUserStructureRelation {
 	 */
 	public void setGameUserRelation(GameUserRelation gameUserRelation) {
 		this.gameUserRelation = gameUserRelation;
+		this.gameId = gameUserRelation.getGameId();
+		this.userId = gameUserRelation.getUserId();
 	}
 
 	/**
@@ -159,6 +154,7 @@ public class GameUserStructureRelation {
 	 */
 	public void setStructure(Structure structure) {
 		this.structure = structure;
+		this.structureName = structure.getName();
 	}
 
 	/**

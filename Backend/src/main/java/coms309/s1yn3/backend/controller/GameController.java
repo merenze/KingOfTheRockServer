@@ -1,11 +1,12 @@
 package coms309.s1yn3.backend.controller;
 
+import com.mysql.cj.xdevapi.JsonArray;
 import coms309.s1yn3.backend.controller.websocket.GameServer;
-import coms309.s1yn3.backend.entity.Game;
-import coms309.s1yn3.backend.entity.Material;
-import coms309.s1yn3.backend.entity.MaterialSpawner;
-import coms309.s1yn3.backend.entity.User;
+import coms309.s1yn3.backend.entity.*;
+import coms309.s1yn3.backend.entity.relation.GameUserMaterialRelation;
 import coms309.s1yn3.backend.entity.relation.GameUserRelation;
+import coms309.s1yn3.backend.entity.relation.GameUserStructureRelation;
+import coms309.s1yn3.backend.entity.relation.StructureMaterialRelation;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.json.JSONArray;
@@ -24,12 +25,19 @@ import java.util.*;
 public class GameController extends AbstractController {
 	private static final Logger logger = LoggerFactory.logger(GameController.class);
 
+	/**
+	 * Request material spawners.
+	 * @param request
+	 * @param gameId
+	 * @param requestBody
+	 * @return
+	 */
 	@PostMapping("/game/spawners/{gameId}")
 	public ResponseEntity chooseSpawners(
 			HttpServletRequest request,
 			@PathVariable int gameId,
 			@RequestBody Map<String, int[]> requestBody
-			) {
+	) {
 		// Get the user
 		User user = sender(request);
 		// Get the game
@@ -107,9 +115,142 @@ public class GameController extends AbstractController {
 			public void run() {
 				GameServer.collectMaterials(game, user);
 			}
-		}, 0, 5000); // TODO change to 30000
+		}, 0, 30000);
 
 		// Return the spawner list as a response
 		return new ResponseEntity(repositories().getMaterialSpawnerRepository().findByGameUserRelation(gameUserRelation), HttpStatus.OK);
+	}
+
+	/**
+	 * Request to build a structure.
+	 * @param request
+	 * @param gameId
+	 * @param structureName
+	 * @return
+	 */
+	@PostMapping("/game/build/{gameId}/{structureName}")
+	public ResponseEntity build(
+			HttpServletRequest request,
+			@PathVariable int gameId,
+			@PathVariable String structureName
+	) {
+		// Get the user
+		User user = sender(request);
+		// Get the game
+		Game game = entityProviders().getGameProvider().findById(gameId);
+		if (game == null) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("No game found with id <%s>", gameId));
+			return new ResponseEntity(responseBody, HttpStatus.NOT_FOUND);
+		}
+		// TODO Check that user is connected to the game WS endpoint
+		// Get the game-user relation
+		GameUserRelation gameUserRelation = entityProviders().getGameUserProvider().findByGameAndUser(game, user);
+		if (gameUserRelation == null) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("User <%s> is not a member of game <%s>", user.getUsername(), game.getId()));
+			return new ResponseEntity(responseBody, HttpStatus.FORBIDDEN);
+		}
+		// Get the structure
+		Structure structure = entityProviders().getStructureProvider().findByName(structureName);
+		if (structure == null) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("No structure found with name <%s>", structureName));
+			return new ResponseEntity(responseBody, HttpStatus.NOT_FOUND);
+		}
+		// Get the recipe
+		List<StructureMaterialRelation> neededMaterials = structure.getMaterialRelations();
+		// Make sure the user has all required materials
+		for (StructureMaterialRelation neededMaterial : neededMaterials) {
+			Material material = neededMaterial.getMaterial();
+			int requiredAmount =
+					entityProviders()
+							.getStructureMaterialProvider()
+							.findByStructureAndMaterial(structure, material)
+							.getAmount();
+			int holdingAmount = entityProviders()
+					.getGameUserMaterialProvider()
+					.findByGameAndUserAndMaterial(game, user, material)
+					.getAmount();
+			logger.debugf(
+					"Game <%s>: <%s> has %d/%d %s for %s",
+					gameId,
+					user.getUsername(),
+					holdingAmount,
+					requiredAmount,
+					material.getName(),
+					structureName
+			);
+			if (holdingAmount < requiredAmount) {
+				Map<String, Object> responseBody = new HashMap<>();
+				responseBody.put("success", false);
+				responseBody.put("message", "Not enough required materials.");
+				return new ResponseEntity(responseBody, HttpStatus.BAD_REQUEST);
+			}
+		}
+		// Find the structure relation
+		GameUserStructureRelation gameUserStructureRelation =
+				entityProviders()
+						.getGameUserStructureProvider()
+								.findByGameUserRelationAndStructure(
+										gameUserRelation,
+										structure
+								);
+		// Increment the amount built
+		gameUserStructureRelation.incrementAmount();
+		repositories()
+				.getGameUserStructureRepository()
+						.save(gameUserStructureRelation);
+		logger.infof("Game <%s>: <%s> built <%s>", gameId, user.getUsername(), structureName);
+		// Remove used materials from the User's inventory
+		for (StructureMaterialRelation structureMaterialRelation : neededMaterials) {
+			GameUserMaterialRelation gameUserMaterialRelation =
+					entityProviders()
+							.getGameUserMaterialProvider()
+							.findByGameAndUserAndMaterial(
+									game,
+									user,
+									structureMaterialRelation.getMaterial()
+							);
+			gameUserMaterialRelation.remove(structureMaterialRelation.getAmount());
+			repositories()
+					.getGameUserMaterialRepository()
+					.save(gameUserMaterialRelation);
+		}
+		// Add to the User's score
+		gameUserRelation.addScore(structure.getPoints());
+		repositories().getGameUserRepository().save(gameUserRelation);
+		// Check for victory
+		if (gameUserRelation.getScore() >= GameServer.VICTORY_SCORE) {
+			JSONObject message = new JSONObject();
+			message.put("type", "game-over");
+			message.put("victor", user);
+			GameServer.broadcast(game, message);
+		}
+		// Build response body
+		JSONObject responseBody = new JSONObject();
+		responseBody.put("success", true);
+		responseBody.put("structures", new JSONObject());
+		responseBody.put("score", gameUserRelation.getScore());
+		for (GameUserStructureRelation gusRelation : repositories()
+				.getGameUserStructureRepository()
+				.findByGameUserRelation(gameUserRelation)) {
+			responseBody.getJSONObject("structures")
+					.put(gusRelation.getStructureName(), gusRelation.getAmount());
+		}
+		logger.debug(2);
+		responseBody.put("materials", new JSONObject());
+		for (GameUserMaterialRelation gameUserMaterialRelation : repositories()
+				.getGameUserMaterialRepository()
+				.findByGameUserRelation(gameUserRelation)) {
+			responseBody
+					.getJSONObject("materials")
+					.put(
+							gameUserMaterialRelation.getMaterial().getName(),
+							gameUserMaterialRelation.getAmount()
+					);
+		}
+		logger.debugf("Game <%s>: <%s> now has %s", gameId, user.getUsername(), responseBody.toString());
+		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
 	}
 }
