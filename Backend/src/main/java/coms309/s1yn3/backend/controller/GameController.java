@@ -247,7 +247,7 @@ public class GameController extends AbstractController {
 	 * @param wantsNames Array of the names of materials which the User wants
 	 */
 	@PostMapping("/game/wants/{gameId}")
-	public ResponseEntity tradeRequest(
+	public ResponseEntity wants(
 			HttpServletRequest request,
 			@PathVariable int gameId,
 			@RequestBody String[] wantsNames
@@ -358,11 +358,11 @@ public class GameController extends AbstractController {
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
-	@PostMapping("/game/trade/{gameId}/accept/{userId}")
+	@PostMapping("/game/trade/{gameId}/accept/{tradeId}")
 	public ResponseEntity tradeAccept(
 			HttpServletRequest request,
 			@PathVariable int gameId,
-			@PathVariable int userId
+			@PathVariable int tradeId
 	) {
 		// Check connection
 		JSONObject checkConnection = checkConnection(sender(request), gameId);
@@ -372,15 +372,31 @@ public class GameController extends AbstractController {
 		User user = (User) checkConnection.get("user");
 		Game game = (Game) checkConnection.get("game");
 		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
+		// Check existence of trade
+		if (!trades.containsKey(tradeId)) {
+			return new ResponseEntity(
+					new JSONObject()
+							.put("message", String.format("No trade found with id <%s>", tradeId))
+							.toMap(),
+					HttpStatus.NOT_FOUND
+			);
+		}
+		// Check target user connection
+		User targetUser = trades.get(tradeId).toUser;
+		checkConnection = checkConnection(targetUser, gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			trades.remove(tradeId);
+			return (ResponseEntity) checkConnection.get("response");
+		}
 		// TODO
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@PostMapping("/game/trade/{gameId}/decline/{userId}")
+	@PostMapping("/game/trade/{gameId}/decline/{tradeId}")
 	public ResponseEntity tradeDecline(
 			HttpServletRequest request,
 			@PathVariable int gameId,
-			@PathVariable int userId
+			@PathVariable int tradeId
 	) {
 		// Check connection
 		JSONObject checkConnection = checkConnection(sender(request), gameId);
@@ -390,12 +406,20 @@ public class GameController extends AbstractController {
 		User user = (User) checkConnection.get("user");
 		Game game = (Game) checkConnection.get("game");
 		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
+		// Check existence of trade
+		if (!trades.containsKey(tradeId)) {
+			return new ResponseEntity(
+					new JSONObject()
+							.put("message", String.format("No trade found with id <%s>", tradeId))
+							.toMap(),
+					HttpStatus.NOT_FOUND
+			);
+		}
 		// Check target user connection
-		User targetUser = repositories()
-				.getUserRepository()
-				.findById(userId);
+		User targetUser = trades.get(tradeId).toUser;
 		checkConnection = checkConnection(targetUser, gameId);
 		if (!checkConnection.getBoolean("pass")) {
+			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
 		}
 		// TODO
