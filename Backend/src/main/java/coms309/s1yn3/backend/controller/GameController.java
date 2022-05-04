@@ -389,6 +389,7 @@ public class GameController extends AbstractController {
 			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
 		}
+		// Mark trade accepted
 		trade.accepted = true;
 		// Build the accept message
 		JSONObject message = new JSONObject()
@@ -396,7 +397,7 @@ public class GameController extends AbstractController {
 				.put("from", trade.fromUser.getUsername())
 				.put("to", trade.toUser.getUsername())
 				.put("trade-id", tradeId);
-		GameServer.message(trade.toUser, message);
+		GameServer.message(trade.fromUser, message);
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
@@ -443,7 +444,7 @@ public class GameController extends AbstractController {
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
-	@PostMapping("/game/trade/{gameId}/add/{tradeId}/{materialName")
+	@PostMapping("/game/trade/{gameId}/add/{tradeId}/{materialName}")
 	public ResponseEntity addToTrade(
 			HttpServletRequest request,
 			@PathVariable int gameId,
@@ -475,18 +476,61 @@ public class GameController extends AbstractController {
 			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
 		}
-		// TODO update amount
+		// Check the trade has been accepted
+		if (!trade.accepted) {
+			return new ResponseEntity(
+					new JSONObject().put(
+							"message",
+							String.format(
+									"<%s> has not accepted <%s>'s trade offer.",
+									trade.toUser.getUsername(),
+									trade.fromUser.getUsername()
+							)
+					).toMap(),
+					HttpStatus.FORBIDDEN
+			);
+		}
+		// Get the material
+		Material material =
+				entityProviders()
+						.getMaterialProvider()
+						.findByName(materialName);
+		if (material == null) {
+			return new ResponseEntity(
+					new JSONObject()
+							.put("message", String.format("Material not found for name <%s>", materialName))
+							.toMap(),
+					HttpStatus.NOT_FOUND
+			);
+		}
+		// Get the user's material relation
+		GameUserMaterialRelation gameUserMaterialRelation =
+				entityProviders()
+						.getGameUserMaterialProvider()
+						.findByGameUserRelationAndMaterial(gameUserRelation, material);
+		// Verify the User has the material to add.
+		if (trade.offers.get(user.getId()).get(materialName) >= gameUserMaterialRelation.getAmount()) {
+			return new ResponseEntity(
+					new JSONObject()
+							.put("message", String.format("Not enough <%s> in inventory.", materialName))
+							.toMap(),
+					HttpStatus.FORBIDDEN
+			);
+		}
+		// Update amount
+		trade.addToOffer(user, material);
 		// Build update message
 		JSONObject message = new JSONObject()
 				.put("type", "trade-update")
 				.put("trade-id", tradeId)
-				.put("send", "TODO")
-				.put("receive", "TODO");
-		// TODO
+				.put("offer", new JSONObject(
+						trade.offers.get(user.getId())
+				));
+		GameServer.message(trade.getOther(user), message);
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
-	@PostMapping("/game/trade/{gameId}/remove/{tradeId}/{materialName")
+	@PostMapping("/game/trade/{gameId}/remove/{tradeId}/{materialName}")
 	public ResponseEntity removeFromTrade(
 			HttpServletRequest request,
 			@PathVariable int gameId,
@@ -578,14 +622,9 @@ public class GameController extends AbstractController {
 		User toUser;
 
 		/**
-		 * Material -> amount offered by the requesting User.
+		 * User ID -> {Material name -> amount offered by the User}
 		 */
-		Map<Material, Integer> fromOffer;
-
-		/**
-		 * Material -> amount offered by the requested User.
-		 */
-		Map<Material, Integer> toOffer;
+		Map<Integer, Map<String, Integer>> offers;
 
 		/**
 		 * Whether toUser has accepted the offer.
@@ -607,58 +646,72 @@ public class GameController extends AbstractController {
 		 * @param toUser   The User being requested to trade.
 		 */
 		Trade(User fromUser, User toUser) {
+			logger.debugf("Building trade between <%s> and <%s>");
 			this.fromUser = fromUser;
 			this.toUser = toUser;
-			this.fromOffer = new HashMap<>();
-			this.toOffer = new HashMap<>();
+			offers = new HashMap<>();
+			offers.put(fromUser.getId(), new HashMap<>());
+			offers.put(toUser.getId(), new HashMap<>());
+
 			for (Material material : repositories().getMaterialRepository().findAll()) {
-				fromOffer.put(material, 0);
-				toOffer.put(material, 0);
+				Map<String, Integer> offer;
+				logger.debugf("%s: Adding <%s>", this, material.getName());
+
+				offers.get(fromUser.getId()).put(material.getName(), 0);
+				offers.get(toUser.getId()).put(material.getName(), 0);
 			}
 		}
 
 		/**
-		 * Add one of the Material to the fromOffer.
+		 * Add one of the Material to the User's offer.
 		 *
+		 * @param user     User adding the material.
 		 * @param material Material to add.
 		 */
-		void addFrom(Material material) {
+		void addToOffer(User user, Material material) {
+			if (!user.equals(fromUser) && !user.equals(toUser)) {
+				throw new IllegalArgumentException("User must be associated with the trade.");
+			}
 			fromConfirmed = false;
 			toConfirmed = false;
-			fromOffer.put(material, fromOffer.get(material) + 1);
+			Map<String, Integer> offer = offers.get(user.getId());
+			offer.put(material.getName(), offer.get(material.getName()) + 1);
 		}
 
 		/**
-		 * Add one of the Material to the toOffer.
+		 * Remove one of the Material from the User's offer.
 		 *
+		 * @param user     User removing the material.
 		 * @param material Material to add.
 		 */
-		void addTo(Material material) {
+		void removeFromOffer(User user, Material material) {
+			if (!user.equals(fromUser) && !user.equals(toUser)) {
+				throw new IllegalArgumentException("User must be associated with the trade.");
+			}
 			fromConfirmed = false;
 			toConfirmed = false;
-			toOffer.put(material, toOffer.get(material) + 1);
+			Map<String, Integer> offer = offers.get(user.getId());
+			offer.put(material.getName(), offer.get(material) - 1);
 		}
 
 		/**
-		 * Remove one of the Material from the fromOffer.
+		 * Get the User of this trade which is NOT the given User.
 		 *
-		 * @param material Material to add.
+		 * @param user
 		 */
-		void removeFrom(Material material) {
-			fromConfirmed = false;
-			toConfirmed = false;
-			fromOffer.put(material, fromOffer.get(material) - 1);
+		User getOther(User user) {
+			if (user.equals(fromUser)) {
+				return toUser;
+			}
+			if (user.equals(toUser)) {
+				return fromUser;
+			}
+			throw new IllegalArgumentException("User must be associated with the trade.");
 		}
 
-		/**
-		 * Remove one of the Material from the toOffer.
-		 *
-		 * @param material Material to add.
-		 */
-		void removeTo(Material material) {
-			fromConfirmed = false;
-			toConfirmed = false;
-			toOffer.put(material, toOffer.get(material) - 1);
+		@Override
+		public String toString() {
+			return String.format("TRADE(%s, %s)", fromUser.getUsername(), toUser.getUsername());
 		}
 	}
 }
