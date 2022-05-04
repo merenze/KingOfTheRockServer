@@ -207,6 +207,7 @@ public class GameController extends AbstractController {
 			message.put("type", "game-over");
 			message.put("victor", user);
 			GameServer.broadcast(game, message);
+			GameServer.CollectionTimerTask.remove(game);
 		}
 		// Build response body
 		JSONObject responseBody = new JSONObject();
