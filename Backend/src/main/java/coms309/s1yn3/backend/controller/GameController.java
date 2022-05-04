@@ -25,7 +25,7 @@ public class GameController extends AbstractController {
 	private static final Logger logger = LoggerFactory.logger(GameController.class);
 
 	private static final Map<Integer, Trade> trades = new HashMap<>();
-	private static int nextTradeId = 0;
+	private static int nextTradeId = 1;
 
 	/**
 	 * Request material spawners.
@@ -396,7 +396,7 @@ public class GameController extends AbstractController {
 				.put("from", trade.fromUser.getUsername())
 				.put("to", trade.toUser.getUsername())
 				.put("trade-id", tradeId);
-		GameServer.message(trade.fromUser, message);
+		GameServer.message(trade.toUser, message);
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
@@ -424,14 +424,23 @@ public class GameController extends AbstractController {
 			);
 		}
 		// Check target user connection
-		User targetUser = trades.get(tradeId).toUser;
+		Trade trade = trades.get(tradeId);
+		User targetUser = trade.toUser;
 		checkConnection = checkConnection(targetUser, gameId);
 		if (!checkConnection.getBoolean("pass")) {
 			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
 		}
-		// TODO
-		return new ResponseEntity(HttpStatus.OK);
+		// Remove the trade
+		trades.remove(tradeId);
+		// Build the decline message
+		JSONObject message = new JSONObject()
+				.put("type", "trade-decline")
+				.put("from", trade.fromUser)
+				.put("to", trade.toUser)
+				.put("id", tradeId);
+		GameServer.message(trade.fromUser, message);
+		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
 	private static JSONObject checkConnection(User user, int gameId) {
