@@ -382,14 +382,22 @@ public class GameController extends AbstractController {
 			);
 		}
 		// Check target user connection
-		User targetUser = trades.get(tradeId).toUser;
+		Trade trade = trades.get(tradeId);
+		User targetUser = trade.toUser;
 		checkConnection = checkConnection(targetUser, gameId);
 		if (!checkConnection.getBoolean("pass")) {
 			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
 		}
-		// TODO
-		return new ResponseEntity(HttpStatus.OK);
+		trade.accepted = true;
+		// Build the accept message
+		JSONObject message = new JSONObject()
+				.put("type", "trade-accept")
+				.put("from", trade.fromUser.getUsername())
+				.put("to", trade.toUser.getUsername())
+				.put("trade-id", tradeId);
+		GameServer.message(trade.fromUser, message);
+		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
 	@PostMapping("/game/trade/{gameId}/decline/{tradeId}")
