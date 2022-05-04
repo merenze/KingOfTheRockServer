@@ -26,10 +26,6 @@ import com.example.frontend.SupportingClasses.IView;
 import com.example.frontend.SupportingClasses.Constants;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 
 /**
  * Class for the logic of the screen to login
@@ -79,20 +75,19 @@ public class LoginScreen extends AppCompatActivity implements IView {
     }
 
     @Override
-    public void makeToast(String message){
+    public void makeToast(String message) {
         Log.d("LoginScreen", "making Toast...");
         Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void switchActivity(){
+    public void switchActivity() {
         currentUser = logic.getCurrentUser();
         Log.d("LoginScreen", currentUser.toString());
-//        if(currentUser.getIsAdmin()){
-//            startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
-//        } else {
-//            startActivity(new Intent(getApplicationContext(), UserDashboard.class));
-//        }
-        startActivity(new Intent(getApplicationContext(), GameViewScreen.class));
+        if (currentUser.getIsAdmin()) {
+            startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
+        } else {
+            startActivity(new Intent(getApplicationContext(), UserDashboard.class));
+        }
     }
 }

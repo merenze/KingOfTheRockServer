@@ -40,18 +40,18 @@ public class BuildLogic implements IVolleyListener {
         serverRequest.sendToServer(url, null, "POST");
     }
 
-    public IUser getCurrentUser(){
+    public IUser getCurrentUser() {
         return currentUser;
     }
 
     @Override
     public void onSuccess(JSONObject response) {
         r.logText(response.toString());
-        r.makeToast(structureToBuild.substring(0,1).toUpperCase() + structureToBuild.substring(1) + " was built");
+        r.makeToast(structureToBuild.substring(0, 1).toUpperCase() + structureToBuild.substring(1) + " was built");
     }
 
     @Override
-    public void onError (String errorMessage) {
+    public void onError(String errorMessage) {
         r.logText(errorMessage);
     }
 }

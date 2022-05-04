@@ -77,12 +77,11 @@ public class UserListScreen extends AppCompatActivity {
     /*
     Converts JSONArray to an ArrayList
      */
-    private ArrayList<String> JSONArrayToList(JSONArray jarray){
+    private ArrayList<String> JSONArrayToList(JSONArray jarray) {
         ArrayList<String> myList = new ArrayList<String>();
-        for (int i = 0; i < jarray.length(); i++)
-        {
+        for (int i = 0; i < jarray.length(); i++) {
             try {
-                if(jarray.getJSONObject(i).getBoolean("isAdmin")){
+                if (jarray.getJSONObject(i).getBoolean("isAdmin")) {
                     myList.add(jarray.getJSONObject(i).getString("username") + "\n\t\t" + "Admin");
                 } else {
                     myList.add(jarray.getJSONObject(i).getString("username") + "\n\t\t" + "Player");
