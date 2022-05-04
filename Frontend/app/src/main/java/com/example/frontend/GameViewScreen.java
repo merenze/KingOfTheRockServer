@@ -23,7 +23,7 @@ import org.json.JSONObject;
 public class GameViewScreen extends AppCompatActivity {
 
     private IUser currentUser;
-    private String gameObjectString;
+    private JSONObject jsonGameObject;
 
     private TextView waterQty;
     private TextView stoneQty;
@@ -59,18 +59,15 @@ public class GameViewScreen extends AppCompatActivity {
         Log.d("GameViewScreen", currentUser.toString());
 
         Bundle bundle = getIntent().getExtras();
-        String jsonString = bundle.getString("game-object-string");
+        String jsonGameObjectString = bundle.getString("game-object-string");
 
         try {
-            jsonGameObject = new JSONObject(jsonString);
+            jsonGameObject = new JSONObject(jsonGameObjectString);
             initialTextUpdate();
         } catch (JSONException e) {
             Log.d(GameViewScreen.class.toString(), "Error converting JSON string to JSON");
             e.printStackTrace();
         }
-
-        Bundle bundle = getIntent().getExtras();
-        gameObjectString = bundle.getString("game-object-string");
 
         Button tradeButton = (Button) findViewById(R.id.activity_game_view_screen_button_trade);
         tradeButton.setOnClickListener(view -> startActivity(new Intent(view.getContext(), TradeScreen.class)));
@@ -80,7 +77,7 @@ public class GameViewScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), BuildScreen.class);
-                intent.putExtra("game-object-string", gameObjectString);
+                intent.putExtra("game-object-string", jsonGameObjectString);
                 startActivity(intent);
             }
         });

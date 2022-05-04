@@ -46,6 +46,7 @@ public class BuildLogic implements IVolleyListener {
 
     @Override
     public void onSuccess(JSONObject response) {
+        //TODO: something with response for gameview screen?
         r.logText(response.toString());
         r.makeToast(structureToBuild.substring(0, 1).toUpperCase() + structureToBuild.substring(1) + " was built");
     }
