@@ -105,12 +105,7 @@ public class GameController extends AbstractController {
 		gameUserRelation.setHasInitialSpawners(true);
 		repositories().getGameUserRepository().save(gameUserRelation);
 		// TODO this should be called at the same time for everyone, after all requests are in
-		GameServer.timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				GameServer.collectMaterials(game, user);
-			}
-		}, 0, 30000);
+		GameServer.CollectionTimerTask.add(game, user);
 		// Return the spawner list as a response
 		return new ResponseEntity(repositories().getMaterialSpawnerRepository().findByGameUserRelation(gameUserRelation), HttpStatus.OK);
 	}

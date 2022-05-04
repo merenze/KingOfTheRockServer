@@ -21,7 +21,9 @@ import java.util.*;
 @ServerEndpoint("/game/{game-id}/{auth-token}")
 public class GameServer extends AbstractWebSocketServer {
 	private static final Logger logger = LoggerFactory.logger(AbstractWebSocketServer.class);
-	public static final Timer timer = new Timer();
+	private static final Timer timer = new Timer();
+	private static final Map<Integer, CollectionTimerTask> timers = new HashMap<>();
+
 	/**
 	 * The number of points required to win.
 	 */
@@ -327,5 +329,41 @@ public class GameServer extends AbstractWebSocketServer {
 				gameUserRelation.getUser().getUsername(),
 				structureName
 		);
+	}
+
+	public static class CollectionTimerTask extends TimerTask {
+		Game game;
+		User user;
+
+		private CollectionTimerTask(Game game, User user) {
+			this.game = game;
+			this.user = user;
+		}
+
+		@Override
+		public void run() {
+			collectMaterials(game, user);
+		}
+
+		/**
+		 * Schedule the collection task for the game and user.
+		 * @param game
+		 * @param user
+		 */
+		public static void add(Game game, User user) {
+			timers.put(user.getId(), new CollectionTimerTask(game, user));
+			timer.schedule(timers.get(user.getId()), 0, 30000);
+		}
+
+		/**
+		 * Cancel the collection tasks for the Game and remove them from the map.
+		 * @param game
+		 */
+		public static void remove(Game game) {
+			for (GameUserRelation gameUserRelation : game.getUserRelations()) {
+				timers.get(gameUserRelation.getGameId()).cancel();
+				timers.remove(gameUserRelation.getGameId());
+			}
+		}
 	}
 }
