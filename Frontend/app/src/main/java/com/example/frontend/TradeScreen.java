@@ -1,7 +1,5 @@
 package com.example.frontend;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +16,8 @@ import com.example.frontend.SupportingClasses.AppController;
 import com.example.frontend.SupportingClasses.IView;
 
 import org.json.JSONException;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Class for the logic of the screen to trade resources

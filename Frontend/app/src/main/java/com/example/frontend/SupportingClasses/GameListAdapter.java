@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -23,10 +22,10 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter {
     /**
      * Constructs a new GameListAdapter from a list and context.
      *
-     * @param list List of String games
+     * @param list    List of String games
      * @param context given context
      */
-    public GameListAdapter(ArrayList<String> list, Context context){
+    public GameListAdapter(ArrayList<String> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -37,7 +36,7 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter {
      * @return size number
      */
     @Override
-    public int getCount(){
+    public int getCount() {
         return list.size();
     }
 
@@ -48,7 +47,7 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter {
      * @return game at given position
      */
     @Override
-    public Object getItem(int pos){
+    public Object getItem(int pos) {
         return list.get(pos);
     }
 
@@ -59,7 +58,7 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter {
      * @return id of the game at given position
      */
     @Override
-    public long getItemId(int pos){
+    public long getItemId(int pos) {
         //change to list.get(pos).getId(); if the games have an id
         return 0;
     }
@@ -67,15 +66,15 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter {
     /**
      * Returns the current View
      *
-     * @param position position of the view to be returned
+     * @param position    position of the view to be returned
      * @param convertView view to be returned after inflation
-     * @param parent group of views
+     * @param parent      group of views
      * @return given view after inflation
      */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        if(view == null){
+        if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             //TODO
             //view = inflater.inflate(R.layout.GAMELAYOUTNAME)

@@ -2,21 +2,18 @@ package com.example.frontend.Network;
 
 import android.util.Log;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.frontend.SupportingClasses.AppController;
 import com.example.frontend.Logic.IVolleyListener;
+import com.example.frontend.SupportingClasses.AppController;
 
-import java.io.UnsupportedEncodingException;
+import org.json.JSONObject;
 
 public class ServerRequest implements IServerRequest {
 
@@ -37,7 +34,7 @@ public class ServerRequest implements IServerRequest {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("ServerRequest", "in onResponse method");
-                        if (response != null ) {
+                        if (response != null) {
                             Log.d("ServerRequest", response.toString());
                             serverResponse = response;
                             l.onSuccess(response);
@@ -52,14 +49,11 @@ public class ServerRequest implements IServerRequest {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("ServerRequest", "in onErrorResponse method");
 
-                        //my original code, doesn't handle all errors
-//                        if (error.getMessage() != null){
-//                            l.onError(error.getMessage());
-//                        } else {
-//                            l.onError("Error, no error message received");
-//                        }
-
-                        l.onError("Invalid login credentials");
+                        if (error.getMessage() != null){
+                            l.onError("Volley Error, " + error.getMessage());
+                        } else {
+                            l.onError("Volley Error, null");
+                        }
 
                     }
                 }
@@ -68,7 +62,7 @@ public class ServerRequest implements IServerRequest {
         AppController.getInstance().addToRequestQueue(userRequest, tag_json_obj);
     }
 
-    public JSONObject getServerResponse(){
+    public JSONObject getServerResponse() {
         return serverResponse;
     }
 

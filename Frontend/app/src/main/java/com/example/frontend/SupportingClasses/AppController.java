@@ -89,6 +89,7 @@ public class AppController extends Application {
 
     /**
      * Cancels any requests in the volley request queue
+     *
      * @param tag tag to identify the cancellation
      */
     public void cancelPendingRequests(Object tag) {

@@ -1,8 +1,9 @@
 package com.example.frontend.SupportingClasses;
 
-import com.android.volley.toolbox.ImageLoader.ImageCache;
 import android.graphics.Bitmap;
 import android.util.LruCache;
+
+import com.android.volley.toolbox.ImageLoader.ImageCache;
 
 /**
  * Class for an LruCache of Bitmaps indexed by their String names
@@ -41,7 +42,7 @@ public class LruBitmapCache extends LruCache<String, Bitmap> implements ImageCac
     /**
      * Returns the size of a given Bitmap
      *
-     * @param key name of the Bitmap
+     * @param key   name of the Bitmap
      * @param value given Bitmap
      * @return size of given Bitmap
      */
@@ -64,7 +65,7 @@ public class LruBitmapCache extends LruCache<String, Bitmap> implements ImageCac
     /**
      * Puts a Bitmap into the LruBitmapCache
      *
-     * @param url url of a Bitmap
+     * @param url    url of a Bitmap
      * @param bitmap Bitmap
      */
     @Override
