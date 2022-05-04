@@ -4,8 +4,8 @@ import coms309.s1yn3.backend.entity.Material;
 import coms309.s1yn3.backend.entity.Structure;
 import coms309.s1yn3.backend.entity.relation.StructureMaterialRelation;
 import coms309.s1yn3.backend.filter.AuthFilter;
+import coms309.s1yn3.backend.service.AbstractEntityManagerService;
 import coms309.s1yn3.backend.service.SessionProviderService;
-import coms309.s1yn3.backend.service.entityprovider.AbstractEntityManagerService;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.json.JSONObject;
@@ -31,8 +31,11 @@ public class Application extends AbstractEntityManagerService {
 	 * Routes which should be protected by the AuthFilter.
 	 */
 	private static final String[] ROUTES_USER = {
+			"/game/build/*",
+			"/game/spawners/*",
+			"/game/trade/*",
+			"/game/wants/*",
 			"/lobby/host",
-			"/lobby/disconnect",
 			"/users",
 			"/users/*"
 	};

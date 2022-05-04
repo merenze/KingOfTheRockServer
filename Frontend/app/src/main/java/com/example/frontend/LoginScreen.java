@@ -74,6 +74,7 @@ public class LoginScreen extends AppCompatActivity implements IView {
     public void switchActivity() {
         currentUser = logic.getCurrentUser();
         Log.d("LoginScreen", currentUser.toString());
+        startActivity(new Intent(getApplicationContext(), GameViewScreen.class));
         if (currentUser.getIsAdmin()) {
             startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
         } else {
