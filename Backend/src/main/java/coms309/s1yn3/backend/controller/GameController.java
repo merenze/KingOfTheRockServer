@@ -443,6 +443,23 @@ public class GameController extends AbstractController {
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
+	@PostMapping("/game/trade/{gameId}/add/{tradeId}/{materialName")
+	public ResponseEntity addToTrade(
+			HttpServletRequest request,
+			@PathVariable int gameId,
+			@PathVariable int tradeId,
+			@PathVariable String materialName
+	) {
+
+		JSONObject message = new JSONObject()
+				.put("type", "trade-update")
+				.put("trade-id", tradeId)
+				.put("send", "TODO")
+				.put("receive", "TODO");
+		// TODO
+		return new ResponseEntity(message.toMap(), HttpStatus.OK);
+	}
+
 	private static JSONObject checkConnection(User user, int gameId) {
 		// Check the game exists
 		Game game = entityProviders().getGameProvider().findById(gameId);
