@@ -31,8 +31,10 @@ public class Application extends AbstractEntityManagerService {
 	 * Routes which should be protected by the AuthFilter.
 	 */
 	private static final String[] ROUTES_USER = {
-			"/game/spawners/*",
 			"/game/build/*",
+			"/game/spawners/*",
+			"/game/trade/*",
+			"/game/wants/*",
 			"/lobby/host",
 			"/users",
 			"/users/*"
