@@ -33,6 +33,7 @@ public class Application extends AbstractEntityManagerService {
 	private static final String[] ROUTES_USER = {
 			"/game/build/*",
 			"/game/spawners/*",
+			"/game/trade/*",
 			"/game/wants/*",
 			"/lobby/host",
 			"/users",

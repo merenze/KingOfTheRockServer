@@ -26,6 +26,7 @@ public class GameController extends AbstractController {
 
 	/**
 	 * Request material spawners.
+	 *
 	 * @param request
 	 * @param gameId
 	 * @param requestBody
@@ -37,22 +38,14 @@ public class GameController extends AbstractController {
 			@PathVariable int gameId,
 			@RequestBody Map<String, int[]> requestBody
 	) {
-		// Get the user
-		User user = sender(request);
-		// Get the game
-		Game game = entityProviders().getGameProvider().findById(gameId);
-		if (game == null) {
-			Map<String, String> responseBody = new HashMap<>();
-			responseBody.put("message", String.format("No game found with id <%s>", gameId));
-			return new ResponseEntity(responseBody, HttpStatus.NOT_FOUND);
+		// Check connection
+		JSONObject checkConnection = checkConnection(sender(request), gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			return (ResponseEntity) checkConnection.get("response");
 		}
-		// TODO Validate that the user has an open GameServer connection
-		GameUserRelation gameUserRelation = entityProviders().getGameUserProvider().findByGameAndUser(game, user);
-		if (gameUserRelation == null) {
-			Map<String, String> responseBody = new HashMap<>();
-			responseBody.put("message", String.format("User <%s> is not a member of game <%s>", user.getUsername(), game.getId()));
-			return new ResponseEntity(responseBody, HttpStatus.FORBIDDEN);
-		}
+		User user = (User) checkConnection.get("user");
+		Game game = (Game) checkConnection.get("game");
+		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
 		// Validate that spawners have not already been assigned
 		if (gameUserRelation.getHasInitialSpawners()) {
 			Map<String, String> responseBody = new HashMap<>();
@@ -122,6 +115,7 @@ public class GameController extends AbstractController {
 
 	/**
 	 * Request to build a structure.
+	 *
 	 * @param request
 	 * @param gameId
 	 * @param structureName
@@ -133,23 +127,14 @@ public class GameController extends AbstractController {
 			@PathVariable int gameId,
 			@PathVariable String structureName
 	) {
-		// Get the user
-		User user = sender(request);
-		// Get the game
-		Game game = entityProviders().getGameProvider().findById(gameId);
-		if (game == null) {
-			Map<String, String> responseBody = new HashMap<>();
-			responseBody.put("message", String.format("No game found with id <%s>", gameId));
-			return new ResponseEntity(responseBody, HttpStatus.NOT_FOUND);
+		// Check connection
+		JSONObject checkConnection = checkConnection(sender(request), gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			return (ResponseEntity) checkConnection.get("response");
 		}
-		// TODO Check that user is connected to the game WS endpoint
-		// Get the game-user relation
-		GameUserRelation gameUserRelation = entityProviders().getGameUserProvider().findByGameAndUser(game, user);
-		if (gameUserRelation == null) {
-			Map<String, String> responseBody = new HashMap<>();
-			responseBody.put("message", String.format("User <%s> is not a member of game <%s>", user.getUsername(), game.getId()));
-			return new ResponseEntity(responseBody, HttpStatus.FORBIDDEN);
-		}
+		User user = (User) checkConnection.get("user");
+		Game game = (Game) checkConnection.get("game");
+		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
 		// Get the structure
 		Structure structure = entityProviders().getStructureProvider().findByName(structureName);
 		if (structure == null) {
@@ -191,15 +176,15 @@ public class GameController extends AbstractController {
 		GameUserStructureRelation gameUserStructureRelation =
 				entityProviders()
 						.getGameUserStructureProvider()
-								.findByGameUserRelationAndStructure(
-										gameUserRelation,
-										structure
-								);
+						.findByGameUserRelationAndStructure(
+								gameUserRelation,
+								structure
+						);
 		// Increment the amount built
 		gameUserStructureRelation.incrementAmount();
 		repositories()
 				.getGameUserStructureRepository()
-						.save(gameUserStructureRelation);
+				.save(gameUserStructureRelation);
 		logger.infof("Game <%s>: <%s> built <%s>", gameId, user.getUsername(), structureName);
 		// Remove used materials from the User's inventory
 		for (StructureMaterialRelation structureMaterialRelation : neededMaterials) {
@@ -254,8 +239,9 @@ public class GameController extends AbstractController {
 
 	/**
 	 * Request to get materials in a trade.
+	 *
 	 * @param request
-	 * @param gameId ID of the game where the trade happens
+	 * @param gameId     ID of the game where the trade happens
 	 * @param wantsNames Array of the names of materials which the User wants
 	 */
 	@PostMapping("/game/wants/{gameId}")
@@ -290,7 +276,9 @@ public class GameController extends AbstractController {
 		}
 		JSONObject message = new JSONObject();
 		message.put("type", "material-wants");
-		message.put("user", user.getUsername());
+		message.put("user", new JSONObject());
+		message.getJSONObject("user").put("username", user.getUsername());
+		message.getJSONObject("user").put("id", user.getId());
 		message.put("wants", new JSONArray(wantsNames));
 		// For each user in the game
 		for (GameUserRelation gur : game.getUserRelations()) {
@@ -311,6 +299,17 @@ public class GameController extends AbstractController {
 			@PathVariable int gameId,
 			@PathVariable int userId
 	) {
+		JSONObject checkConnection = checkConnection(sender(request), gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			return (ResponseEntity) checkConnection.get("response");
+		}
+		User user = (User) checkConnection.get("user");
+		Game game = (Game) checkConnection.get("game");
+		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
+
+		logger.debug(user.getUsername());
+		logger.debug(game.getId());
+
 		// TODO
 		return new ResponseEntity(HttpStatus.OK);
 	}
@@ -321,6 +320,14 @@ public class GameController extends AbstractController {
 			@PathVariable int gameId,
 			@PathVariable int userId
 	) {
+		// Check connection
+		JSONObject checkConnection = checkConnection(sender(request), gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			return (ResponseEntity) checkConnection.get("response");
+		}
+		User user = (User) checkConnection.get("user");
+		Game game = (Game) checkConnection.get("game");
+		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
 		// TODO
 		return new ResponseEntity(HttpStatus.OK);
 	}
@@ -331,6 +338,14 @@ public class GameController extends AbstractController {
 			@PathVariable int gameId,
 			@PathVariable int userId
 	) {
+		// Check connection
+		JSONObject checkConnection = checkConnection(sender(request), gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			return (ResponseEntity) checkConnection.get("response");
+		}
+		User user = (User) checkConnection.get("user");
+		Game game = (Game) checkConnection.get("game");
+		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
 		// TODO
 		return new ResponseEntity(HttpStatus.OK);
 	}
@@ -341,7 +356,53 @@ public class GameController extends AbstractController {
 			@PathVariable int gameId,
 			@PathVariable int userId
 	) {
+
+		// Check connection
+		JSONObject checkConnection = checkConnection(sender(request), gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			return (ResponseEntity) checkConnection.get("response");
+		}
+		User user = (User) checkConnection.get("user");
+		Game game = (Game) checkConnection.get("game");
+		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
 		// TODO
 		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	private static JSONObject checkConnection(User user, int gameId) {
+		// Check the game exists
+		Game game = entityProviders().getGameProvider().findById(gameId);
+		if (game == null) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("No game found with id <%s>", gameId));
+			return new JSONObject()
+					.put("pass", false)
+					.put("response", new ResponseEntity(responseBody, HttpStatus.NOT_FOUND));
+		}
+		// Get the game-user relation
+		GameUserRelation gameUserRelation = entityProviders()
+				.getGameUserProvider()
+				.findByGameAndUser(game, user);
+		if (gameUserRelation == null) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("User <%s> is not a member of game <%s>", user.getUsername(), game.getId()));
+			return new JSONObject()
+					.put("pass", false)
+					.put("response", new ResponseEntity(responseBody, HttpStatus.FORBIDDEN));
+		}
+		// Check that user is connected to the game WS endpoint
+		if (!GameServer.hasUser(user)) {
+			Map<String, String> responseBody = new HashMap<>();
+			responseBody.put("message", String.format("User <%s> not connected to game <%s>", user.getUsername(), gameId));
+			return new JSONObject()
+					.put("pass", false)
+					.put("response", new ResponseEntity(responseBody, HttpStatus.FORBIDDEN));
+		}
+		// Return true
+		return new JSONObject()
+				.put("pass", true)
+				.put("user", user)
+				.put("game", game)
+				.put("relation", gameUserRelation);
 	}
 }
