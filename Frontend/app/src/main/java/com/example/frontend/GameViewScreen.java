@@ -19,6 +19,7 @@ import com.example.frontend.Entities.IUser;
 public class GameViewScreen extends AppCompatActivity {
 
     private IUser currentUser;
+    private String gameObjectString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,9 @@ public class GameViewScreen extends AppCompatActivity {
 
         currentUser = LoginScreen.getCurrentUser();
         Log.d("GameViewScreen", currentUser.toString());
+
+        Bundle bundle = getIntent().getExtras();
+        gameObjectString = bundle.getString("game-object-string");
 
         TextView tvWoodQuantity = (TextView)findViewById(R.id.activity_game_view_screen_tv_resource_wood_quantity);
         TextView tvStoneQuantity = (TextView)findViewById(R.id.activity_game_view_screen_tv_resource_stone_quantity);
@@ -45,7 +49,9 @@ public class GameViewScreen extends AppCompatActivity {
         buildButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), BuildScreen.class));
+                Intent intent = new Intent(getBaseContext(), BuildScreen.class);
+                intent.putExtra("game-object-string", gameObjectString);
+                startActivity(intent);
             }
         });
 

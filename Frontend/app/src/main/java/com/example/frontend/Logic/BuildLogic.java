@@ -30,14 +30,12 @@ public class BuildLogic implements IVolleyListener {
         this.currentUser = currentUser;
     }
 
-    public void buildStructure(String name) throws JSONException {
+    public void buildStructure(String structureName, String gameObjectString) throws JSONException {
         Log.d(TAG, "attempting to build a structure...");
-        //String url =  Constants.URL + "/build" + "?auth-token=" + currentUser.getAuthToken();
-        String url =  "https://ec47ead7-50a1-4b83-a6e6-10fdf0916962.mock.pstmn.io/build?auth-token=000001";
+        String url =  Constants.URL + "/game/build/" + gameObjectString + "/" + structureName + "?auth-token=" + currentUser.getAuthToken();
 
         JSONObject newBuildObj = new JSONObject();
-        newBuildObj.put("structure", name);
-        structureToBuild = name;
+        structureToBuild = structureName;
 
         Log.d(TAG, "sending build request...");
         serverRequest.sendToServer(url, newBuildObj, "POST");
