@@ -562,7 +562,21 @@ public class GameController extends AbstractController {
 			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
 		}
-		// Verify the User has the material to add.
+		// Check the trade has been accepted
+		if (!trade.accepted) {
+			return new ResponseEntity(
+					new JSONObject().put(
+							"message",
+							String.format(
+									"<%s> has not accepted <%s>'s trade offer.",
+									trade.toUser.getUsername(),
+									trade.fromUser.getUsername()
+							)
+					).toMap(),
+					HttpStatus.FORBIDDEN
+			);
+		}
+		// Check the offer has the material to remove.
 		if (trade.offers.get(user.getId()).get(materialName) <= 0) {
 			return new ResponseEntity(
 					new JSONObject()
@@ -584,6 +598,66 @@ public class GameController extends AbstractController {
 				.put("trade-id", tradeId)
 				.put("offer", new JSONObject(
 						trade.offers.get(user.getId())
+				));
+		GameServer.message(trade.getOther(user), message);
+		return new ResponseEntity(message.toMap(), HttpStatus.OK);
+	}
+
+	@PostMapping("/game/trade/{gameId}/confirm/{tradeId}")
+	public ResponseEntity tradeConfirm(
+			HttpServletRequest request,
+			@PathVariable int gameId,
+			@PathVariable int tradeId
+	) {
+
+		// Check connection
+		JSONObject checkConnection = checkConnection(sender(request), gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			return (ResponseEntity) checkConnection.get("response");
+		}
+		User user = (User) checkConnection.get("user");
+		Game game = (Game) checkConnection.get("game");
+		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
+		// Check existence of trade
+		if (!trades.containsKey(tradeId)) {
+			return new ResponseEntity(
+					new JSONObject()
+							.put("message", String.format("No trade found with id <%s>", tradeId))
+							.toMap(),
+					HttpStatus.NOT_FOUND
+			);
+		}
+		// Check target user connection
+		Trade trade = trades.get(tradeId);
+		User targetUser = trade.toUser;
+		checkConnection = checkConnection(targetUser, gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			trades.remove(tradeId);
+			return (ResponseEntity) checkConnection.get("response");
+		}
+		// Check the trade has been accepted
+		if (!trade.accepted) {
+			return new ResponseEntity(
+					new JSONObject().put(
+							"message",
+							String.format(
+									"<%s> has not accepted <%s>'s trade offer.",
+									trade.toUser.getUsername(),
+									trade.fromUser.getUsername()
+							)
+					).toMap(),
+					HttpStatus.FORBIDDEN
+			);
+		}
+		trade.confirm(user);
+		// TODO Update player inventories
+
+		JSONObject message = new JSONObject()
+				.put("type", "trade-confirm")
+				.put("trade-id", tradeId)
+				.put("offer", new JSONObject(
+						trade.offers
+								.get(trade.getOther(user).getId())
 				));
 		GameServer.message(trade.getOther(user), message);
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
@@ -662,7 +736,6 @@ public class GameController extends AbstractController {
 		 * @param toUser   The User being requested to trade.
 		 */
 		Trade(User fromUser, User toUser) {
-			logger.debugf("Building trade between <%s> and <%s>");
 			this.fromUser = fromUser;
 			this.toUser = toUser;
 			offers = new HashMap<>();
@@ -671,7 +744,6 @@ public class GameController extends AbstractController {
 
 			for (Material material : repositories().getMaterialRepository().findAll()) {
 				Map<String, Integer> offer;
-				logger.debugf("%s: Adding <%s>", this, material.getName());
 
 				offers.get(fromUser.getId()).put(material.getName(), 0);
 				offers.get(toUser.getId()).put(material.getName(), 0);
@@ -721,6 +793,36 @@ public class GameController extends AbstractController {
 			}
 			if (user.equals(toUser)) {
 				return fromUser;
+			}
+			throw new IllegalArgumentException("User must be associated with the trade.");
+		}
+
+
+		/**
+		 * Confirm (finalize) the trade for the given User.
+		 * @param user User confirming the trade.
+		 */
+		void confirm(User user) {
+			if (user.equals(fromUser)) {
+				fromConfirmed = true;
+			}
+			if (user.equals(toUser)) {
+				toConfirmed = true;
+			}
+			throw new IllegalArgumentException("User must be associated with the trade.");
+		}
+
+
+		/**
+		 * @param user
+		 * @return True if the User has confirmed (finalized) the trade.
+		 */
+		boolean confirmed(User user) {
+			if (user.equals(fromUser)) {
+				return fromConfirmed;
+			}
+			if (user.equals(toUser)) {
+				return toConfirmed;
 			}
 			throw new IllegalArgumentException("User must be associated with the trade.");
 		}
