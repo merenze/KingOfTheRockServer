@@ -562,14 +562,30 @@ public class GameController extends AbstractController {
 			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
 		}
-		// TODO update amount
+		// Verify the User has the material to add.
+		if (trade.offers.get(user.getId()).get(materialName) <= 0) {
+			return new ResponseEntity(
+					new JSONObject()
+							.put("message", String.format("No <%s> in offer.", materialName))
+							.toMap(),
+					HttpStatus.FORBIDDEN
+			);
+		}
+		// Get the material
+		Material material =
+				entityProviders()
+						.getMaterialProvider()
+						.findByName(materialName);
+		// Update amount
+		trade.removeFromOffer(user, material);
 		// Build update message
 		JSONObject message = new JSONObject()
 				.put("type", "trade-update")
 				.put("trade-id", tradeId)
-				.put("send", "TODO")
-				.put("receive", "TODO");
-		// TODO
+				.put("offer", new JSONObject(
+						trade.offers.get(user.getId())
+				));
+		GameServer.message(trade.getOther(user), message);
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
