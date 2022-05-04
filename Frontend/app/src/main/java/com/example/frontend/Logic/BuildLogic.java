@@ -34,11 +34,10 @@ public class BuildLogic implements IVolleyListener {
         Log.d(TAG, "attempting to build a structure...");
         String url =  Constants.URL + "/game/build/" + gameObjectString + "/" + structureName + "?auth-token=" + currentUser.getAuthToken();
 
-        JSONObject newBuildObj = new JSONObject();
         structureToBuild = structureName;
 
         Log.d(TAG, "sending build request...");
-        serverRequest.sendToServer(url, newBuildObj, "POST");
+        serverRequest.sendToServer(url, null, "POST");
     }
 
     public IUser getCurrentUser(){

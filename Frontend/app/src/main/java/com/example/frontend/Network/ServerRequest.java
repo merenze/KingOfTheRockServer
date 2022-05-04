@@ -52,14 +52,11 @@ public class ServerRequest implements IServerRequest {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("ServerRequest", "in onErrorResponse method");
 
-                        //my original code, doesn't handle all errors
-//                        if (error.getMessage() != null){
-//                            l.onError(error.getMessage());
-//                        } else {
-//                            l.onError("Error, no error message received");
-//                        }
-
-                        l.onError("Invalid login credentials");
+                        if (error.getMessage() != null){
+                            l.onError("Volley Error, " + error.getMessage());
+                        } else {
+                            l.onError("Volley Error, null");
+                        }
 
                     }
                 }
