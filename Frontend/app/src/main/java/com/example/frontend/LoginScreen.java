@@ -93,6 +93,6 @@ public class LoginScreen extends AppCompatActivity implements IView {
 //        } else {
 //            startActivity(new Intent(getApplicationContext(), UserDashboard.class));
 //        }
-        startActivity(new Intent(getApplicationContext(), TradeScreen.class));
+        startActivity(new Intent(getApplicationContext(), GameViewScreen.class));
     }
 }
