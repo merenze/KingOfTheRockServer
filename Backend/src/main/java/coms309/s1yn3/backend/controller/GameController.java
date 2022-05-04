@@ -24,6 +24,9 @@ import java.util.*;
 public class GameController extends AbstractController {
 	private static final Logger logger = LoggerFactory.logger(GameController.class);
 
+	private static final Map<Integer, Trade> trades = new HashMap<>();
+	private static int nextTradeId = 0;
+
 	/**
 	 * Request material spawners.
 	 *
@@ -108,7 +111,6 @@ public class GameController extends AbstractController {
 				GameServer.collectMaterials(game, user);
 			}
 		}, 0, 30000);
-
 		// Return the spawner list as a response
 		return new ResponseEntity(repositories().getMaterialSpawnerRepository().findByGameUserRelation(gameUserRelation), HttpStatus.OK);
 	}
@@ -299,9 +301,18 @@ public class GameController extends AbstractController {
 		if (!checkConnection.getBoolean("pass")) {
 			return (ResponseEntity) checkConnection.get("response");
 		}
-		GameUserRelation targetGameUserRelation = (GameUserRelation) checkConnection.get("relation");
-		// TODO
-		return new ResponseEntity(HttpStatus.OK);
+		// Create the trade and add it to the list.
+		int tradeId = nextTradeId++;
+		trades.put(tradeId, new Trade(user, targetUser));
+		// Build the trade request message.
+		JSONObject message = new JSONObject()
+				.put("type", "trade-request")
+				.put("from", user.getUsername())
+				.put("to", targetUser.getUsername())
+				.put("trade-id", tradeId);
+		GameServer.message(targetUser, message);
+		// Return the HTTP response.
+		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
 	@PostMapping("/game/trade/{gameId}/withdraw/{userId}")
@@ -411,5 +422,95 @@ public class GameController extends AbstractController {
 				.put("user", user)
 				.put("game", game)
 				.put("relation", gameUserRelation);
+	}
+
+	private class Trade {
+		/**
+		 * The User requesting the trade.
+		 */
+		User fromUser;
+
+		/**
+		 * The User being requested to trade.
+		 */
+		User toUser;
+
+		/**
+		 * Material -> amount offered by the requesting User.
+		 */
+		Map<Material, Integer> fromOffer;
+
+		/**
+		 * Material -> amount offered by the requested User.
+		 */
+		Map<Material, Integer> toOffer;
+
+		/**
+		 * Whether toUser has accepted the offer.
+		 */
+		boolean accepted;
+
+		/**
+		 * Whether fromUser has confirmed (finalized) the trade.
+		 */
+		boolean fromConfirmed;
+
+		/**
+		 * Whether toUser has confirmed (finalized) the trade.
+		 */
+		boolean toConfirmed;
+
+		/**
+		 * @param fromUser The User requesting to trade.
+		 * @param toUser The User being requested to trade.
+		 */
+		Trade(User fromUser, User toUser) {
+			this.fromUser = fromUser;
+			this.toUser = toUser;
+			this.fromOffer = new HashMap<>();
+			this.toOffer = new HashMap<>();
+			for(Material material : repositories().getMaterialRepository().findAll()) {
+				fromOffer.put(material, 0);
+				toOffer.put(material, 0);
+			}
+		}
+
+		/**
+		 * Add one of the Material to the fromOffer.
+		 * @param material Material to add.
+		 */
+		void addFrom(Material material) {
+			fromConfirmed = false;
+			toConfirmed = false;
+			fromOffer.put(material, fromOffer.get(material) + 1);
+		}
+		/**
+		 * Add one of the Material to the toOffer.
+		 * @param material Material to add.
+		 */
+		void addTo(Material material) {
+			fromConfirmed = false;
+			toConfirmed = false;
+			toOffer.put(material, toOffer.get(material) + 1);
+		}
+
+		/**
+		 * Remove one of the Material from the fromOffer.
+		 * @param material Material to add.
+		 */
+		void removeFrom(Material material) {
+			fromConfirmed = false;
+			toConfirmed = false;
+			fromOffer.put(material, fromOffer.get(material) - 1);
+		}
+		/**
+		 * Remove one of the Material from the toOffer.
+		 * @param material Material to add.
+		 */
+		void removeTo(Material material) {
+			fromConfirmed = false;
+			toConfirmed = false;
+			toOffer.put(material, toOffer.get(material) - 1);
+		}
 	}
 }
