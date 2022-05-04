@@ -315,31 +315,47 @@ public class GameController extends AbstractController {
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
-	@PostMapping("/game/trade/{gameId}/withdraw/{userId}")
+	@PostMapping("/game/trade/{gameId}/withdraw/{tradeId}")
 	public ResponseEntity tradeWithdraw(
 			HttpServletRequest request,
 			@PathVariable int gameId,
-			@PathVariable int userId
+			@PathVariable int tradeId
 	) {
 		// Check connection
 		JSONObject checkConnection = checkConnection(sender(request), gameId);
 		if (!checkConnection.getBoolean("pass")) {
+			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
 		}
 		User user = (User) checkConnection.get("user");
 		Game game = (Game) checkConnection.get("game");
 		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
+		// Check existence of trade
+		if (!trades.containsKey(tradeId)) {
+			return new ResponseEntity(
+					new JSONObject()
+							.put("message", String.format("No trade found with id <%s>", tradeId))
+							.toMap(),
+					HttpStatus.NOT_FOUND
+			);
+		}
 		// Check target user connection
-		User targetUser = repositories()
-				.getUserRepository()
-				.findById(userId);
+		User targetUser = trades.get(tradeId).toUser;
 		checkConnection = checkConnection(targetUser, gameId);
 		if (!checkConnection.getBoolean("pass")) {
+			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
 		}
-		GameUserRelation targetGameUserRelation = (GameUserRelation) checkConnection.get("relation");
-		// TODO
-		return new ResponseEntity(HttpStatus.OK);
+		// Remove trade
+		trades.remove(tradeId);
+		// Build withdraw message
+		JSONObject message = new JSONObject()
+				.put("type", "trade-withdraw")
+				.put("from", user.getUsername())
+				.put("to", targetUser.getUsername())
+				.put("trade-id", tradeId);
+		GameServer.message(targetUser, message);
+		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
 	@PostMapping("/game/trade/{gameId}/accept/{userId}")
@@ -382,7 +398,6 @@ public class GameController extends AbstractController {
 		if (!checkConnection.getBoolean("pass")) {
 			return (ResponseEntity) checkConnection.get("response");
 		}
-		GameUserRelation targetGameUserRelation = (GameUserRelation) checkConnection.get("relation");
 		// TODO
 		return new ResponseEntity(HttpStatus.OK);
 	}
@@ -462,14 +477,14 @@ public class GameController extends AbstractController {
 
 		/**
 		 * @param fromUser The User requesting to trade.
-		 * @param toUser The User being requested to trade.
+		 * @param toUser   The User being requested to trade.
 		 */
 		Trade(User fromUser, User toUser) {
 			this.fromUser = fromUser;
 			this.toUser = toUser;
 			this.fromOffer = new HashMap<>();
 			this.toOffer = new HashMap<>();
-			for(Material material : repositories().getMaterialRepository().findAll()) {
+			for (Material material : repositories().getMaterialRepository().findAll()) {
 				fromOffer.put(material, 0);
 				toOffer.put(material, 0);
 			}
@@ -477,6 +492,7 @@ public class GameController extends AbstractController {
 
 		/**
 		 * Add one of the Material to the fromOffer.
+		 *
 		 * @param material Material to add.
 		 */
 		void addFrom(Material material) {
@@ -484,8 +500,10 @@ public class GameController extends AbstractController {
 			toConfirmed = false;
 			fromOffer.put(material, fromOffer.get(material) + 1);
 		}
+
 		/**
 		 * Add one of the Material to the toOffer.
+		 *
 		 * @param material Material to add.
 		 */
 		void addTo(Material material) {
@@ -496,6 +514,7 @@ public class GameController extends AbstractController {
 
 		/**
 		 * Remove one of the Material from the fromOffer.
+		 *
 		 * @param material Material to add.
 		 */
 		void removeFrom(Material material) {
@@ -503,8 +522,10 @@ public class GameController extends AbstractController {
 			toConfirmed = false;
 			fromOffer.put(material, fromOffer.get(material) - 1);
 		}
+
 		/**
 		 * Remove one of the Material from the toOffer.
+		 *
 		 * @param material Material to add.
 		 */
 		void removeTo(Material material) {
