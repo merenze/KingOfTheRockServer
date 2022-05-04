@@ -2,18 +2,24 @@ package com.example.frontend;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.frontend.Entities.IUser;
+
 public class JoinGameScreen extends AppCompatActivity {
     private String lobbyCode;
+    private IUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_game_screen);
+
+        currentUser = LoginScreen.getCurrentUser();
 
         Button buttonToSubmitCode = (Button) findViewById(R.id.join_game_submit_code_button);
 
@@ -24,7 +30,8 @@ public class JoinGameScreen extends AppCompatActivity {
 
             Intent intent = new Intent(view.getContext(), Lobby.class);
             intent.putExtra("lobbyCode", lobbyCode);
-            intent.putExtra("isHost", false);
+            Log.d("Guest lobbyCode: ", lobbyCode);
+            currentUser.setIsHost(false);
 
             startActivity(intent);
         });

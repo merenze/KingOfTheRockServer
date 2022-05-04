@@ -181,13 +181,14 @@ public class Lobby extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
-        Bundle bundle = getIntent().getExtras();
-        lobbyCode = bundle.getString("lobbyCode");
-        boolean isHost = bundle.getBoolean("isHost");
+        currentUser = LoginScreen.getCurrentUser();
 
-        if (isHost) {
+        Bundle bundle = getIntent().getExtras();
+
+        if (currentUser.getIsHost()) {
             AppController.getInstance().addToRequestQueue(hostLobbyRequest);
         } else {
+            lobbyCode = bundle.getString("lobbyCode");
             instantiateWebsocket();
             lobbyWebSocket.connect();
         }

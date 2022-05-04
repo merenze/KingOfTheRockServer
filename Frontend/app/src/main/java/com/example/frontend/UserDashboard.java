@@ -6,6 +6,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.frontend.Entities.IUser;
+
 /**
  * Class for the logic of the dashboard screen of a non-admin type user
  *
@@ -13,11 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 
 public class UserDashboard extends AppCompatActivity {
+    private IUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_dashboard);
+
+        currentUser = LoginScreen.getCurrentUser();
 
         Button buttonToFindUser = findViewById(R.id.user_dashboard_find_user_button);
 
@@ -30,9 +35,8 @@ public class UserDashboard extends AppCompatActivity {
         Button buttonToHostGame = findViewById(R.id.user_dashboard_host_game_button);
 
         buttonToHostGame.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), Lobby.class);
-            intent.putExtra("isHost", true);
-            startActivity(intent);
+            currentUser.setIsHost(true);
+            startActivity(new Intent(view.getContext(), Lobby.class));
         });
     }
 }

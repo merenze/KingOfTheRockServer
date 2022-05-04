@@ -3,15 +3,14 @@ package com.example.frontend;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.frontend.Entities.IUser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +27,11 @@ public class GameViewScreen extends AppCompatActivity {
     private TextView stoneQty;
     private TextView foodQty;
     private TextView woodQty;
+    private TextView myUsername;
+    private TextView username1;
+    private TextView username2;
+    private TextView username3;
+    private TextView[] usernameTVArray;
 
 //    AlertDialog.Builder dialogBuilder;
 //    AlertDialog dialog;
@@ -43,6 +47,16 @@ public class GameViewScreen extends AppCompatActivity {
         stoneQty = findViewById(R.id.activity_game_view_screen_tv_resource_stone_quantity);
         waterQty = findViewById(R.id.activity_game_view_screen_tv_resource_water_quantity);
         woodQty = findViewById(R.id.activity_game_view_screen_tv_resource_wood_quantity);
+        myUsername = findViewById(R.id.activity_game_view_tv_current_username);
+        username1 = findViewById(R.id.activity_game_view_tv_username1);
+        username2 = findViewById(R.id.activity_game_view_tv_username2);
+        username3 = findViewById(R.id.activity_game_view_tv_username3);
+
+        usernameTVArray = new TextView[3];
+        usernameTVArray[0] = username1;
+        usernameTVArray[1] = username2;
+        usernameTVArray[2] = username3;
+
 
         currentUser = LoginScreen.getCurrentUser();
 
@@ -51,12 +65,11 @@ public class GameViewScreen extends AppCompatActivity {
 
         try {
             jsonGameObject = new JSONObject(jsonString);
+            initialTextUpdate();
         } catch (JSONException e) {
             Log.d(GameViewScreen.class.toString(), "Error converting JSON string to JSON");
             e.printStackTrace();
         }
-
-        initialTextUpdate();
 
         Button tradeButton = (Button) findViewById(R.id.activity_game_view_screen_button_trade);
         tradeButton.setOnClickListener(view -> startActivity(new Intent(view.getContext(), TradeScreen.class)));
@@ -79,13 +92,34 @@ public class GameViewScreen extends AppCompatActivity {
     }
 
     public void initialTextUpdate() {
-//        View myView = findViewById(android.R.id.content).getRootView();
-//        myView.postInvalidate();
-        foodQty.setText(0);
-        woodQty.setText(0);
-        stoneQty.setText(0);
-        waterQty.setText(0);
+        try {
+            JSONArray playerArray = jsonGameObject.getJSONObject("game").getJSONArray("players");
+
+            int userCount = 0;
+            boolean pastMe = false;
+            for (int i = 0; i < playerArray.length(); i++) {
+                JSONObject playerObject = (JSONObject) playerArray.get(i);
+                Log.d("Currentplayer", playerObject.getString("username"));
+                if (currentUser.getUsername().equals(playerObject.getString("username")) && !pastMe) {
+                    myUsername.setText("King " + playerObject.getString("username"));
+                    Log.d("My username: ", playerObject.getString("username"));
+                    pastMe = true;
+                } else {
+                    TextView currentTV = usernameTVArray[userCount];
+                    userCount++;
+                    currentTV.setText("King " + playerObject.getString("username"));
+                    Log.d("Other username: ", playerObject.getString("username"));
+                }
+            }
+        } catch (JSONException e) {
+            Log.d(GameViewScreen.class.toString(), "Error getting player array from game object");
+        }
+        foodQty.setText("0");
+        woodQty.setText("0");
+        stoneQty.setText("0");
+        waterQty.setText("0");
     }
+
     /*
     public void createChatBoxDialog() {
         dialogBuilder = new AlertDialog.Builder(this);

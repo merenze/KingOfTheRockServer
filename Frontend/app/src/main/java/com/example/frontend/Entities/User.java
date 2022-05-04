@@ -5,11 +5,13 @@ public class User implements IUser {
     private String authToken;
     private String username;
     private boolean isAdmin;
+    private boolean isHost;
 
     public User(String authToken, String username, boolean isAdmin) {
         this.authToken = authToken;
         this.username = username;
         this.isAdmin = isAdmin;
+        isHost = false;
     }
 
     @Override
@@ -40,6 +42,16 @@ public class User implements IUser {
     @Override
     public void setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    @Override
+    public boolean getIsHost() {
+        return isHost;
+    }
+
+    @Override
+    public void setIsHost(boolean isHost) {
+        this.isHost = isHost;
     }
 
     @Override

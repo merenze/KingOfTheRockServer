@@ -103,13 +103,13 @@
         android:id="@+id/activity_game_view_tv_current_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="[Insert CurrentUsername]'s Kingdom"
+        android:text="[Insert CurrentUsername]"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.118"
+        app:layout_constraintHorizontal_bias="0.075"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.244" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_game_view_tv_username3"
+        app:layout_constraintVertical_bias="0.05" />
 
     <TextView
         android:id="@+id/activity_game_view_tv_username3"
@@ -117,11 +117,9 @@
         android:layout_height="wrap_content"
         android:text="[Insert Username3]"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.075"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/activity_game_view_tv_current_username"
         app:layout_constraintTop_toBottomOf="@+id/activity_game_view_tv_username2"
-        app:layout_constraintVertical_bias="0.045" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <TextView
         android:id="@+id/activity_game_view_tv_username2"
@@ -129,11 +127,9 @@
         android:layout_height="wrap_content"
         android:text="[Insert Username2]"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.076"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/activity_game_view_tv_username3"
         app:layout_constraintTop_toBottomOf="@+id/activity_game_view_tv_username1"
-        app:layout_constraintVertical_bias="0.039" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <TextView
         android:id="@+id/activity_game_view_tv_username1"
@@ -141,9 +137,7 @@
         android:layout_height="wrap_content"
         android:text="[Insert Username1]"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.076"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/activity_game_view_tv_username2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05" />
 
@@ -209,4 +203,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_game_view_screen_tv_resource_wood_label"
         app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="19dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
