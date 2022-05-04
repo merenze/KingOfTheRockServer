@@ -54,5 +54,6 @@ public class BuildLogic implements IVolleyListener {
     @Override
     public void onError(String errorMessage) {
         r.logText(errorMessage);
+        r.makeToast("Unable to build " + structureToBuild.substring(0, 1).toUpperCase() + structureToBuild.substring(1));
     }
 }
