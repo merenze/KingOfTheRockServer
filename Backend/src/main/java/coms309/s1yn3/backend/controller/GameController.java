@@ -437,8 +437,8 @@ public class GameController extends AbstractController {
 		// Build the decline message
 		JSONObject message = new JSONObject()
 				.put("type", "trade-decline")
-				.put("from", trade.fromUser)
-				.put("to", trade.toUser)
+				.put("from", trade.fromUser.getUsername())
+				.put("to", trade.toUser.getUsername())
 				.put("id", tradeId);
 		GameServer.message(trade.fromUser, message);
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
@@ -470,8 +470,8 @@ public class GameController extends AbstractController {
 		}
 		// Check target user connection
 		Trade trade = trades.get(tradeId);
-		User targetUser = trade.toUser;
-		checkConnection = checkConnection(targetUser, gameId);
+		User other = trade.getOther(user);
+		checkConnection = checkConnection(other, gameId);
 		if (!checkConnection.getBoolean("pass")) {
 			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
@@ -526,7 +526,7 @@ public class GameController extends AbstractController {
 				.put("offer", new JSONObject(
 						trade.offers.get(user.getId())
 				));
-		GameServer.message(trade.getOther(user), message);
+		GameServer.message(other, message);
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
@@ -543,7 +543,6 @@ public class GameController extends AbstractController {
 			return (ResponseEntity) checkConnection.get("response");
 		}
 		User user = (User) checkConnection.get("user");
-		Game game = (Game) checkConnection.get("game");
 		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
 		// Check existence of trade
 		if (!trades.containsKey(tradeId)) {
@@ -556,8 +555,8 @@ public class GameController extends AbstractController {
 		}
 		// Check target user connection
 		Trade trade = trades.get(tradeId);
-		User targetUser = trade.toUser;
-		checkConnection = checkConnection(targetUser, gameId);
+		User other = trade.getOther(user);
+		checkConnection = checkConnection(other, gameId);
 		if (!checkConnection.getBoolean("pass")) {
 			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
@@ -599,7 +598,7 @@ public class GameController extends AbstractController {
 				.put("offer", new JSONObject(
 						trade.offers.get(user.getId())
 				));
-		GameServer.message(trade.getOther(user), message);
+		GameServer.message(other, message);
 		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
@@ -616,7 +615,6 @@ public class GameController extends AbstractController {
 			return (ResponseEntity) checkConnection.get("response");
 		}
 		User user = (User) checkConnection.get("user");
-		Game game = (Game) checkConnection.get("game");
 		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
 		// Check existence of trade
 		if (!trades.containsKey(tradeId)) {
@@ -629,8 +627,8 @@ public class GameController extends AbstractController {
 		}
 		// Check target user connection
 		Trade trade = trades.get(tradeId);
-		User targetUser = trade.toUser;
-		checkConnection = checkConnection(targetUser, gameId);
+		User other = trade.getOther(user);
+		checkConnection = checkConnection(other, gameId);
 		if (!checkConnection.getBoolean("pass")) {
 			trades.remove(tradeId);
 			return (ResponseEntity) checkConnection.get("response");
@@ -650,7 +648,86 @@ public class GameController extends AbstractController {
 			);
 		}
 		trade.confirm(user);
-		// TODO Update player inventories
+		// If the other user has confirmed the trade
+		if (trade.confirmed(trade.getOther(user))) {
+			GameUserRelation otherGameUserRelation = (GameUserRelation) checkConnection.get("relation");
+			// For each material in the user's offer,
+			Map<String, Integer> offer = trade.offers.get(user.getId());
+			for (String materialName : offer.keySet()) {
+				// Get the material
+				Material material =
+						entityProviders()
+								.getMaterialProvider()
+								.findByName(materialName);
+				// Get the user's inventory
+				GameUserMaterialRelation userInventory =
+						entityProviders()
+								.getGameUserMaterialProvider()
+								.findByGameUserRelationAndMaterial(gameUserRelation, material);
+				// Get the other's inventory
+				GameUserMaterialRelation otherInventory =
+						entityProviders()
+								.getGameUserMaterialProvider()
+								.findByGameUserRelationAndMaterial(otherGameUserRelation, material);
+				// Move the materials from user to other
+				userInventory.remove(offer.get(materialName));
+				otherInventory.add(offer.get(materialName));
+			}
+			// For each material in the other's offer,
+			offer = trade.offers.get(other.getId());
+			for (String materialName : offer.keySet()) {
+				// Get the material
+				Material material =
+						entityProviders()
+								.getMaterialProvider()
+								.findByName(materialName);
+				// Get the user's inventory
+				GameUserMaterialRelation userInventory =
+						entityProviders()
+								.getGameUserMaterialProvider()
+								.findByGameUserRelationAndMaterial(gameUserRelation, material);
+				// Get the other's inventory
+				GameUserMaterialRelation otherInventory =
+						entityProviders()
+								.getGameUserMaterialProvider()
+								.findByGameUserRelationAndMaterial(otherGameUserRelation, material);
+				// Move the materials from other to user
+				otherInventory.remove(offer.get(materialName));
+				userInventory.add(offer.get(materialName));
+				// Save the inventories
+				repositories().getGameUserMaterialRepository().save(userInventory);
+				repositories().getGameUserMaterialRepository().save(otherInventory);
+			}
+			// Remove the trade
+			trades.remove(tradeId);
+			// Build the confirm message for the other
+			JSONObject message = new JSONObject()
+					.put("type", "trade-confirm")
+					.put("trade-id", tradeId)
+					.put("inventory", new JSONObject());
+			for (GameUserMaterialRelation gameUserMaterialRelation :
+					repositories()
+							.getGameUserMaterialRepository()
+							.findByGameUserRelation(otherGameUserRelation)) {
+				message.getJSONObject("inventory").put(
+						gameUserMaterialRelation.getMaterial().getName(),
+						gameUserMaterialRelation.getAmount()
+				);
+			}
+			GameServer.message(other, message);
+			// Rebuild the confirm message for the user
+			message.put("inventory", new JSONObject());
+			for (GameUserMaterialRelation gameUserMaterialRelation :
+					repositories()
+							.getGameUserMaterialRepository()
+							.findByGameUserRelation(gameUserRelation)) {
+				message.getJSONObject("inventory").put(
+						gameUserMaterialRelation.getMaterial().getName(),
+						gameUserMaterialRelation.getAmount()
+				);
+			}
+			return new ResponseEntity(message.toMap(), HttpStatus.OK);
+		}
 
 		JSONObject message = new JSONObject()
 				.put("type", "trade-confirm")
@@ -779,7 +856,7 @@ public class GameController extends AbstractController {
 			fromConfirmed = false;
 			toConfirmed = false;
 			Map<String, Integer> offer = offers.get(user.getId());
-			offer.put(material.getName(), offer.get(material) - 1);
+			offer.put(material.getName(), offer.get(material.getName()) - 1);
 		}
 
 		/**
@@ -800,14 +877,17 @@ public class GameController extends AbstractController {
 
 		/**
 		 * Confirm (finalize) the trade for the given User.
+		 *
 		 * @param user User confirming the trade.
 		 */
 		void confirm(User user) {
 			if (user.equals(fromUser)) {
 				fromConfirmed = true;
+				return;
 			}
 			if (user.equals(toUser)) {
 				toConfirmed = true;
+				return;
 			}
 			throw new IllegalArgumentException("User must be associated with the trade.");
 		}
