@@ -450,7 +450,49 @@ public class GameController extends AbstractController {
 			@PathVariable int tradeId,
 			@PathVariable String materialName
 	) {
+		// Check connection
+		JSONObject checkConnection = checkConnection(sender(request), gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			return (ResponseEntity) checkConnection.get("response");
+		}
+		User user = (User) checkConnection.get("user");
+		Game game = (Game) checkConnection.get("game");
+		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
+		// Check existence of trade
+		if (!trades.containsKey(tradeId)) {
+			return new ResponseEntity(
+					new JSONObject()
+							.put("message", String.format("No trade found with id <%s>", tradeId))
+							.toMap(),
+					HttpStatus.NOT_FOUND
+			);
+		}
+		// Check target user connection
+		Trade trade = trades.get(tradeId);
+		User targetUser = trade.toUser;
+		checkConnection = checkConnection(targetUser, gameId);
+		if (!checkConnection.getBoolean("pass")) {
+			trades.remove(tradeId);
+			return (ResponseEntity) checkConnection.get("response");
+		}
+		// TODO update amount
+		// Build update message
+		JSONObject message = new JSONObject()
+				.put("type", "trade-update")
+				.put("trade-id", tradeId)
+				.put("send", "TODO")
+				.put("receive", "TODO");
+		// TODO
+		return new ResponseEntity(message.toMap(), HttpStatus.OK);
+	}
 
+	@PostMapping("/game/trade/{gameId}/remove/{tradeId}/{materialName")
+	public ResponseEntity removeFromTrade(
+			HttpServletRequest request,
+			@PathVariable int gameId,
+			@PathVariable int tradeId,
+			@PathVariable String materialName
+	) {
 		// Check connection
 		JSONObject checkConnection = checkConnection(sender(request), gameId);
 		if (!checkConnection.getBoolean("pass")) {
