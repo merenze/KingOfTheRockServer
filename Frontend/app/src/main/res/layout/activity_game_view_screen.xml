@@ -555,8 +555,36 @@
         android:text=" 0 "
         android:textColor="#000000"
         android:textSize="10sp"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon1"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user1_icon1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user1_icon1"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon1"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user1_icon2_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        tools:layout_editor_absoluteX="198dp"
+        tools:layout_editor_absoluteY="21dp" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user1_icon3_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        tools:layout_editor_absoluteX="231dp"
+        tools:layout_editor_absoluteY="21dp" />
 
     <TextView
         android:id="@+id/activity_game_view_screen_tv_structure_pickaxe_quantity"
