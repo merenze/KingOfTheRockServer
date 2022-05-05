@@ -39,7 +39,7 @@ public class GameController extends AbstractController {
 	public ResponseEntity chooseSpawners(
 			HttpServletRequest request,
 			@PathVariable int gameId,
-			@RequestBody Map<String, int[]> requestBody
+			@RequestBody Map<String, Map<String, Integer>[]> requestBody
 	) {
 		// Check connection
 		JSONObject checkConnection = checkConnection(sender(request), gameId);
@@ -106,8 +106,19 @@ public class GameController extends AbstractController {
 		repositories().getGameUserRepository().save(gameUserRelation);
 		// TODO this should be called at the same time for everyone, after all requests are in
 		GameServer.CollectionTimerTask.add(game, user);
+
+		JSONArray spawners = new JSONArray();
+		for (MaterialSpawner materialSpawner : repositories()
+				.getMaterialSpawnerRepository()
+				.findByGameUserRelation(gameUserRelation)) {
+			spawners.put(new JSONObject()
+					.put("material", materialSpawner.getMaterialName())
+					.put("spawn-number", materialSpawner.getSpawnNumber())
+			);
+
+		}
 		// Return the spawner list as a response
-		return new ResponseEntity(repositories().getMaterialSpawnerRepository().findByGameUserRelation(gameUserRelation), HttpStatus.OK);
+		return new ResponseEntity(new JSONObject().put("spawners", spawners).toMap(), HttpStatus.OK);
 	}
 
 	/**
