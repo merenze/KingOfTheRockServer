@@ -1,13 +1,13 @@
 package com.example.frontend;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.frontend.Entities.IUser;
 import com.example.frontend.Logic.LoginLogic;
@@ -36,9 +36,9 @@ public class LoginScreen extends AppCompatActivity implements IView {
         new AppController();
         setContentView(R.layout.activity_login_screen);
 
-        etUsernameOrEmail = (EditText) findViewById(R.id.activity_login_screen_et_username);
-        etPassword = (EditText) findViewById(R.id.activity_login_screen_et_password);
-        loginButton = (Button) findViewById(R.id.activity_login_screen_button_login);
+        etUsernameOrEmail = (EditText)findViewById(R.id.activity_login_screen_et_username);
+        etPassword = (EditText)findViewById(R.id.activity_login_screen_et_password);
+        loginButton = (Button)findViewById(R.id.activity_login_screen_button_login);
 
         ServerRequest serverRequest = new ServerRequest();
         logic = new LoginLogic(this, serverRequest);
@@ -74,7 +74,6 @@ public class LoginScreen extends AppCompatActivity implements IView {
     public void switchActivity() {
         currentUser = logic.getCurrentUser();
         Log.d("LoginScreen", currentUser.toString());
-        startActivity(new Intent(getApplicationContext(), GameViewScreen.class));
         if (currentUser.getIsAdmin()) {
             startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
         } else {

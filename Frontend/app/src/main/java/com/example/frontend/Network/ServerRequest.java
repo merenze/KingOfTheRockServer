@@ -6,6 +6,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
+
+import com.example.frontend.SupportingClasses.AppController;
 import com.example.frontend.Logic.IVolleyListener;
 import com.example.frontend.SupportingClasses.AppController;
 
@@ -45,14 +49,12 @@ public class ServerRequest implements IServerRequest {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("ServerRequest", "in onErrorResponse method");
 
-                        //my original code, doesn't handle all errors
-//                        if (error.getMessage() != null){
-//                            l.onError(error.getMessage());
-//                        } else {
-//                            l.onError("Error, no error message received");
-//                        }
+                        if (error.getMessage() != null){
+                            l.onError("Volley Error, " + error.getMessage());
+                        } else {
+                            l.onError("Volley Error, null");
+                        }
 
-                        l.onError("Invalid login credentials");
                     }
                 }
         );

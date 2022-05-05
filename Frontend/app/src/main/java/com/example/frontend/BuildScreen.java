@@ -38,13 +38,15 @@ public class BuildScreen extends AppCompatActivity implements IView {
         ServerRequest serverRequest = new ServerRequest();
         logic = new BuildLogic(this, serverRequest, getCurrentUser());
 
+        Bundle bundle = getIntent().getExtras();
+        String gameObjectString = bundle.getString("game-object-string");
 
         Button townButton = (Button) findViewById(R.id.activity_build_screen_button_structure_town);
         townButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    logic.buildStructure("town");
+                    logic.buildStructure("town", gameObjectString);
                 } catch (JSONException exception) {
                     exception.printStackTrace();
                 }
@@ -56,7 +58,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             @Override
             public void onClick(View view) {
                 try {
-                    logic.buildStructure("house");
+                    logic.buildStructure("house", gameObjectString);
                 } catch (JSONException exception) {
                     exception.printStackTrace();
                 }
@@ -68,7 +70,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             @Override
             public void onClick(View view) {
                 try {
-                    logic.buildStructure("mine");
+                    logic.buildStructure("mine", gameObjectString);
                 } catch (JSONException exception) {
                     exception.printStackTrace();
                 }
@@ -80,7 +82,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             @Override
             public void onClick(View view) {
                 try {
-                    logic.buildStructure("lumberyard");
+                    logic.buildStructure("lumberyard", gameObjectString);
                 } catch (JSONException exception) {
                     exception.printStackTrace();
                 }
@@ -92,7 +94,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             @Override
             public void onClick(View view) {
                 try {
-                    logic.buildStructure("garden");
+                    logic.buildStructure("garden", gameObjectString);
                 } catch (JSONException exception) {
                     exception.printStackTrace();
                 }
@@ -104,7 +106,7 @@ public class BuildScreen extends AppCompatActivity implements IView {
             @Override
             public void onClick(View view) {
                 try {
-                    logic.buildStructure("well");
+                    logic.buildStructure("well", gameObjectString);
                 } catch (JSONException exception) {
                     exception.printStackTrace();
                 }

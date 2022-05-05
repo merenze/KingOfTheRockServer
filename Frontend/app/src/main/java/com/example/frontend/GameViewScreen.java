@@ -1,8 +1,11 @@
 package com.example.frontend;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -22,6 +25,7 @@ import org.json.JSONObject;
 public class GameViewScreen extends AppCompatActivity {
 
     private IUser currentUser;
+    private JSONObject jsonGameObject;
 
     private TextView waterQty;
     private TextView stoneQty;
@@ -32,11 +36,6 @@ public class GameViewScreen extends AppCompatActivity {
     private TextView username2;
     private TextView username3;
     private TextView[] usernameTVArray;
-
-//    AlertDialog.Builder dialogBuilder;
-//    AlertDialog dialog;
-
-    JSONObject jsonGameObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +58,13 @@ public class GameViewScreen extends AppCompatActivity {
 
 
         currentUser = LoginScreen.getCurrentUser();
+        Log.d("GameViewScreen", currentUser.toString());
 
         Bundle bundle = getIntent().getExtras();
-        String jsonString = bundle.getString("game-object-string");
+        String jsonGameObjectString = bundle.getString("game-object-string");
 
         try {
-            jsonGameObject = new JSONObject(jsonString);
+            jsonGameObject = new JSONObject(jsonGameObjectString);
             initialTextUpdate();
         } catch (JSONException e) {
             Log.d(GameViewScreen.class.toString(), "Error converting JSON string to JSON");
@@ -74,8 +74,15 @@ public class GameViewScreen extends AppCompatActivity {
         Button tradeButton = (Button) findViewById(R.id.activity_game_view_screen_button_trade);
         tradeButton.setOnClickListener(view -> startActivity(new Intent(view.getContext(), TradeScreen.class)));
 
-        Button buildButton = (Button) findViewById(R.id.activity_game_view_screen_button_build);
-        buildButton.setOnClickListener(view -> startActivity(new Intent(view.getContext(), BuildScreen.class)));
+        Button buildButton = (Button)findViewById(R.id.activity_game_view_screen_button_build);
+        buildButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), BuildScreen.class);
+                intent.putExtra("game-object-string", jsonGameObjectString);
+                startActivity(intent);
+            }
+        });
 
         Button menuButton = (Button) findViewById(R.id.activity_game_view_screen_button_menu);
         menuButton.setOnClickListener(view -> {
