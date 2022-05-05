@@ -1,6 +1,7 @@
 package coms309.s1yn3.backend.service.entityprovider;
 
 import coms309.s1yn3.backend.entity.Lobby;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

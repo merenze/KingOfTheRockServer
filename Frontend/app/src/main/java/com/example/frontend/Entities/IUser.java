@@ -13,5 +13,9 @@ public interface IUser {
 
     public void setIsAdmin(boolean isAdmin);
 
+    public boolean getIsHost();
+
+    public void setIsHost(boolean isHost);
+
     public String toString();
 }

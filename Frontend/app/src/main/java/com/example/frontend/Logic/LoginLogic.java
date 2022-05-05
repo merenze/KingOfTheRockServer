@@ -1,9 +1,7 @@
 package com.example.frontend.Logic;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.frontend.Entities.IUser;
 import com.example.frontend.Entities.User;
 import com.example.frontend.Network.IServerRequest;
 import com.example.frontend.SupportingClasses.Constants;
@@ -28,7 +26,7 @@ public class LoginLogic implements IVolleyListener {
 
     public void loginUser(String username, String password) throws JSONException {
         Log.d("LoginLogic", "in loginUser, attempting login");
-        String url =  Constants.URL + "/login";
+        String url = Constants.URL + "/login";
         JSONObject newUserObj = new JSONObject();
 
         currentUsername = username;
@@ -40,7 +38,7 @@ public class LoginLogic implements IVolleyListener {
         serverRequest.sendToServer(url, newUserObj, "POST");
     }
 
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         return currentUser;
     }
 
@@ -57,7 +55,7 @@ public class LoginLogic implements IVolleyListener {
     }
 
     @Override
-    public void onError (String errorMessage) {
+    public void onError(String errorMessage) {
         r.logText(errorMessage);
         r.makeToast("Invalid login credentials");
     }

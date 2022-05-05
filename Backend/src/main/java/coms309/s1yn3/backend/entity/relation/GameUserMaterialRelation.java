@@ -2,7 +2,6 @@ package coms309.s1yn3.backend.entity.relation;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import coms309.s1yn3.backend.entity.Material;
-import coms309.s1yn3.backend.entity.relation.id.GameUserId;
 import coms309.s1yn3.backend.entity.relation.id.GameUserMaterialId;
 
 import javax.persistence.*;
@@ -10,44 +9,26 @@ import javax.persistence.*;
 @Entity
 @IdClass(GameUserMaterialId.class)
 public class GameUserMaterialRelation {
-	/**
-	 * This definition allows the key (game, user) to map to the game-user-relation.
-	 */
-	@EmbeddedId
-	private GameUserId gameUserId;
-
-	/**
-	 * ID of the game in the game-user relation.
-	 * Definition required in order to override the column name.
-	 */
-	@Id
 	@Column(name = "game", insertable = false, updatable = false)
-	private int gameId;
-
-	/**
-	 * ID of the user in the game-user relation.
-	 * Definition required in order to override the column name.
-	 */
 	@Id
+	int gameId;
+
 	@Column(name = "user", insertable = false, updatable = false)
-	private int userId;
-
-	/**
-	 * Name of the material used in this relation.
-	 */
 	@Id
+	int userId;
+
 	@Column(name = "material")
-	private String materialName;
+	@Id
+	String materialName;
 
 	/**
 	 * Game-User relation associated with this relation.
 	 */
 	@ManyToOne
 	@JoinColumns({
-			@JoinColumn(name = "game", referencedColumnName = "game"),
-			@JoinColumn(name = "user", referencedColumnName = "user")
+			@JoinColumn(name = "game", referencedColumnName = "game", insertable = false, updatable = false),
+			@JoinColumn(name = "user", referencedColumnName = "user", insertable = false, updatable = false)
 	})
-	@MapsId("gameUserId")
 	@JsonBackReference
 	private GameUserRelation gameUserRelation;
 
@@ -65,69 +46,25 @@ public class GameUserMaterialRelation {
 	private int amount;
 
 	/**
-	 * Embedded GameUserId used for hacky mapping.
-	 * For use by JPA.
-	 * @return
+	 * When this number is "rolled",
 	 */
-	public GameUserId getGameUserId() {
-		return gameUserId;
+
+	/**
+	 * Default constructor for use by JPA.
+	 */
+	public GameUserMaterialRelation() {
+
 	}
 
 	/**
-	 * For use by JPA.
-	 * Don't use this.
-	 * @param gameUserId
+	 * Empty constructor for use by JPA.
 	 */
-	public void setGameUserId(GameUserId gameUserId) {
-		this.gameUserId = gameUserId;
-	}
-
-	/**
-	 * @return ID of the Game associated with this relation.
-	 */
-	public int getGameId() {
-		return gameId;
-	}
-
-	/**
-	 * For use by JPA.
-	 * Don't use this.
-	 * @param gameId ID of the Game associated with this relation.
-	 */
-	public void setGameId(int gameId) {
-		this.gameId = gameId;
-	}
-
-	/**
-	 * @return ID of the User associated with this relation.
-	 */
-	public int getUserId() {
-		return userId;
-	}
-
-	/**
-	 * For use by JPA.
-	 * Don't use this.
-	 * @param userId
-	 */
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	/**
-	 * @return Name of the Material used in this relation.
-	 */
-	public String getMaterialName() {
-		return materialName;
-	}
-
-	/**
-	 * For use by JPA.
-	 * Don't use this.
-	 * @param materialName Name of the Material used in this relation.
-	 */
-	public void setMaterialName(String materialName) {
-		this.materialName = materialName;
+	public GameUserMaterialRelation(GameUserRelation gameUserRelation, Material material) {
+		this.gameUserRelation = gameUserRelation;
+		this.gameId = gameUserRelation.getGameId();
+		this.userId = gameUserRelation.getUserId();
+		this.material = material;
+		this.materialName = material.getName();
 	}
 
 	/**

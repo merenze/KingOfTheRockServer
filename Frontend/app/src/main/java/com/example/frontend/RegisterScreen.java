@@ -1,9 +1,5 @@
 package com.example.frontend;
 
-import static com.example.frontend.SupportingClasses.Constants.URL;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +8,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.frontend.Logic.RegistrationLogic;
 import com.example.frontend.Network.ServerRequest;
 import com.example.frontend.SupportingClasses.AppController;
@@ -19,10 +17,6 @@ import com.example.frontend.SupportingClasses.IView;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 
 public class RegisterScreen extends AppCompatActivity implements IView {
 
@@ -66,12 +60,12 @@ public class RegisterScreen extends AppCompatActivity implements IView {
     }
 
     @Override
-    public void makeToast(String message){
+    public void makeToast(String message) {
         Toast.makeText(RegisterScreen.this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void switchActivity(){
+    public void switchActivity() {
         startActivity(new Intent(getApplicationContext(), LoginScreen.class));
     }
 }
