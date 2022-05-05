@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+import javax.websocket.OnClose;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
@@ -67,6 +68,13 @@ public class GameServer extends AbstractWebSocketServer {
 				getSpawnerRequest(user);
 			}
 		}, 30000);
+	}
+
+	@OnClose
+	public void onClose(Session session) {
+		User user = getUser(session);
+		logger.infof("Closing connection for %s", user.getUsername());
+		removeSession(getUser(session));
 	}
 
 	/**
