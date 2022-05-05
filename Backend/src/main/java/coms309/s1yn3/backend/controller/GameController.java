@@ -220,30 +220,37 @@ public class GameController extends AbstractController {
 			GameServer.broadcast(game, message);
 			GameServer.CollectionTimerTask.remove(game);
 		}
-		// Build response body
-		JSONObject responseBody = new JSONObject();
-		responseBody.put("success", true);
-		responseBody.put("structures", new JSONObject());
-		responseBody.put("score", gameUserRelation.getScore());
+		// Build message
+		JSONObject message = new JSONObject()
+				.put("type", "score-update")
+				.put("user", user.getUsername())
+				.put("structures", new JSONObject())
+				.put("score", gameUserRelation.getScore());
+		// Add structure amounts to message
 		for (GameUserStructureRelation gusRelation : repositories()
 				.getGameUserStructureRepository()
 				.findByGameUserRelation(gameUserRelation)) {
-			responseBody.getJSONObject("structures")
+			message
+					.getJSONObject("structures")
 					.put(gusRelation.getStructureName(), gusRelation.getAmount());
 		}
-		responseBody.put("materials", new JSONObject());
+		GameServer.broadcast(game, message);
+		// Indicate successful build
+		message.put("success", true);
+		// Add inventory to message
+		message.put("materials", new JSONObject());
 		for (GameUserMaterialRelation gameUserMaterialRelation : repositories()
 				.getGameUserMaterialRepository()
 				.findByGameUserRelation(gameUserRelation)) {
-			responseBody
+			message
 					.getJSONObject("materials")
 					.put(
 							gameUserMaterialRelation.getMaterial().getName(),
 							gameUserMaterialRelation.getAmount()
 					);
 		}
-		logger.debugf("Game <%s>: <%s> now has %s", gameId, user.getUsername(), responseBody.toString());
-		return new ResponseEntity(responseBody.toMap(), HttpStatus.OK);
+		logger.debugf("Game <%s>: <%s> now has %s", gameId, user.getUsername(), message.toString());
+		return new ResponseEntity(message.toMap(), HttpStatus.OK);
 	}
 
 	/**
