@@ -257,7 +257,7 @@ public class GameController extends AbstractController {
 	public ResponseEntity wants(
 			HttpServletRequest request,
 			@PathVariable int gameId,
-			@RequestBody String[] wantsNames
+			@RequestBody Map<String, String[]> wantsNames
 	) {
 		// Check connection
 		JSONObject checkConnection = checkConnection(sender(request), gameId);
@@ -268,12 +268,13 @@ public class GameController extends AbstractController {
 		Game game = (Game) checkConnection.get("game");
 		GameUserRelation gameUserRelation = (GameUserRelation) checkConnection.get("relation");
 		// Build the response
-		JSONObject message = new JSONObject();
-		message.put("type", "material-wants");
-		message.put("user", new JSONObject());
-		message.getJSONObject("user").put("username", user.getUsername());
-		message.getJSONObject("user").put("id", user.getId());
-		message.put("wants", new JSONArray(wantsNames));
+		JSONObject message = new JSONObject()
+				.put("type", "material-wants")
+				.put("user", new JSONObject()
+						.put("username", user.getUsername())
+						.put("id", user.getId())
+				)
+				.put("wants", wantsNames.get("materials"));
 		// For each user in the game
 		for (GameUserRelation gur : game.getUserRelations()) {
 			// If the user is not the requesting user
