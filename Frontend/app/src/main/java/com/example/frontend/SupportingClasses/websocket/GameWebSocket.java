@@ -1,9 +1,9 @@
 package com.example.frontend.SupportingClasses.websocket;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.frontend.Entities.IUser;
-import com.example.frontend.Entities.User;
 import com.example.frontend.LoginScreen;
 import com.example.frontend.SupportingClasses.Constants;
 
@@ -22,11 +22,13 @@ public class GameWebSocket {
     private static final Draft DRAFT = new Draft_6455();
     private static final IUser user = LoginScreen.getCurrentUser();
 
-    private int gameId;
+    private final int gameId;
+    private Context context;
     private WebSocketClient client;
 
 
-    public GameWebSocket(int gameId) throws URISyntaxException {
+    public GameWebSocket(Context context, int gameId) throws URISyntaxException {
+        this.context = context;
         this.gameId = gameId;
     }
 
