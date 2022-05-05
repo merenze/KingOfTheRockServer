@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/textview_border_rectangle"
     android:clipChildren="false"
     tools:context=".GameViewScreen">
 
@@ -12,10 +13,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_tv_username1"
         app:layout_constraintStart_toEndOf="@+id/activity_game_view_tv_username1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.014"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -23,10 +22,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_tv_username2"
         app:layout_constraintStart_toEndOf="@+id/activity_game_view_tv_username2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.056"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -34,10 +31,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon1"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user2_icon1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.056"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -45,10 +40,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_tv_username3"
         app:layout_constraintStart_toEndOf="@+id/activity_game_view_tv_username3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.103"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -56,10 +49,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon1"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user3_icon1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.103"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -67,10 +58,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon2"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user3_icon2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.103"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -78,10 +67,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon3"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user3_icon3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.103"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -89,10 +76,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon4"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user3_icon4"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.103"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -100,10 +85,26 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon5"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user3_icon5"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.103"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/activity_gameview_screen_iv_user3_icon7"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon6"
+        app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user3_icon6"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/activity_gameview_screen_iv_current_user_icon1"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_tv_current_username"
+        app:layout_constraintStart_toEndOf="@+id/activity_game_view_tv_current_username"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -111,10 +112,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon2"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user2_icon2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.056"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -122,10 +121,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon3"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user2_icon3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.056"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -133,10 +130,8 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon4"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user2_icon4"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.056"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -144,10 +139,17 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon5"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user2_icon5"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.056"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/activity_gameview_screen_iv_user2_icon7"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon6"
+        app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user2_icon6"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -155,9 +157,9 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon1"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user1_icon1"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon1"
         app:layout_constraintVertical_bias="0.014"
         app:srcCompat="@drawable/ic_launcher_background" />
 
@@ -165,25 +167,22 @@
         android:id="@+id/activity_game_view_screen_iv_garden"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginStart="24dp"
         android:background="@drawable/textview_border_rectangle"
-        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_screen_iv_house"
-        app:layout_constraintEnd_toEndOf="@+id/activity_game_view_screen_iv_mine"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="@+id/activity_game_view_screen_iv_mine"
-        app:layout_constraintTop_toTopOf="@+id/activity_game_view_screen_iv_house"
-        app:layout_constraintVertical_bias="0.556"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_screen_iv_lumberyard"
+        app:layout_constraintStart_toEndOf="@+id/activity_game_view_screen_iv_lumberyard"
+        app:layout_constraintTop_toTopOf="@+id/activity_game_view_screen_iv_lumberyard"
         app:srcCompat="@drawable/shovel_icon_2" />
 
     <ImageView
         android:id="@+id/activity_game_view_screen_iv_well"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:background="@drawable/textview_border_rectangle"
-        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_screen_iv_mine"
-        app:layout_constraintStart_toEndOf="@+id/activity_game_view_screen_iv_mine"
-        app:layout_constraintTop_toTopOf="@+id/activity_game_view_screen_iv_mine"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_screen_iv_garden"
+        app:layout_constraintStart_toEndOf="@+id/activity_game_view_screen_iv_garden"
+        app:layout_constraintTop_toTopOf="@+id/activity_game_view_screen_iv_garden"
         app:srcCompat="@drawable/bucket_icon_5" />
 
     <ImageView
@@ -330,49 +329,49 @@
         android:id="@+id/activity_game_view_tv_current_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="[Insert CurrentUsername]"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.086"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.165" />
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="@+id/activity_game_view_tv_username3"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_game_view_tv_username3"
+        app:layout_constraintTop_toBottomOf="@+id/activity_game_view_tv_username3" />
 
     <TextView
         android:id="@+id/activity_game_view_tv_username3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="[Insert Username3]"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.075"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_game_view_tv_username2"
-        app:layout_constraintVertical_bias="0.02" />
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="@+id/activity_game_view_tv_username2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_game_view_tv_username2"
+        app:layout_constraintTop_toBottomOf="@+id/activity_game_view_tv_username2" />
 
     <TextView
         android:id="@+id/activity_game_view_tv_username2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="[Insert Username2]"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.075"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_game_view_tv_username1"
-        app:layout_constraintVertical_bias="0.017" />
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="@+id/activity_game_view_tv_username1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_game_view_tv_username1"
+        app:layout_constraintTop_toBottomOf="@+id/activity_game_view_tv_username1" />
 
     <TextView
         android:id="@+id/activity_game_view_tv_username1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="[Insert Username1]"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.075"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/activity_game_view_screen_button_trade"
@@ -428,53 +427,45 @@
 
     <ImageView
         android:id="@+id/activity_game_view_screen_iv_town"
-        android:layout_width="130dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="120dp"
+        android:layout_height="90dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/textview_border_rectangle"
-        app:layout_constraintBottom_toTopOf="@+id/activity_game_view_screen_iv_house"
-        app:layout_constraintEnd_toEndOf="@+id/activity_game_view_screen_iv_house"
-        app:layout_constraintHorizontal_bias="0.088"
-        app:layout_constraintStart_toStartOf="@+id/activity_game_view_screen_iv_house"
+        app:layout_constraintBottom_toTopOf="@+id/activity_game_view_screen_iv_mine"
+        app:layout_constraintStart_toStartOf="@+id/activity_game_view_screen_iv_mine"
         app:srcCompat="@drawable/town_icon_2" />
 
     <ImageView
         android:id="@+id/activity_game_view_screen_iv_house"
-        android:layout_width="130dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="120dp"
+        android:layout_height="90dp"
         android:background="@drawable/textview_border_rectangle"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/activity_game_view_screen_tv_resource_stone_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.067"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_screen_iv_town"
+        app:layout_constraintEnd_toEndOf="@+id/activity_game_view_screen_iv_well"
         app:srcCompat="@drawable/house_icon_6" />
 
     <ImageView
         android:id="@+id/activity_game_view_screen_iv_mine"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginEnd="316dp"
+        android:layout_marginBottom="36dp"
         android:background="@drawable/textview_border_rectangle"
-        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_screen_iv_town"
+        app:layout_constraintBottom_toTopOf="@+id/activity_game_view_screen_tv_resource_stone_label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.243"
-        app:layout_constraintStart_toEndOf="@+id/activity_game_view_screen_iv_town"
-        app:layout_constraintTop_toTopOf="@+id/activity_game_view_screen_iv_town"
-        app:layout_constraintVertical_bias="0.368"
         app:srcCompat="@drawable/pickaxe_icon_2" />
 
     <ImageView
         android:id="@+id/activity_game_view_screen_iv_lumberyard"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginStart="24dp"
         android:background="@drawable/textview_border_rectangle"
-        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_screen_iv_garden"
-        app:layout_constraintEnd_toEndOf="@+id/activity_game_view_screen_iv_well"
-        app:layout_constraintHorizontal_bias="0.958"
-        app:layout_constraintStart_toStartOf="@+id/activity_game_view_screen_iv_well"
-        app:layout_constraintTop_toTopOf="@+id/activity_game_view_screen_iv_garden"
-        app:layout_constraintVertical_bias="0.597"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_game_view_screen_iv_mine"
+        app:layout_constraintStart_toEndOf="@+id/activity_game_view_screen_iv_mine"
+        app:layout_constraintTop_toTopOf="@+id/activity_game_view_screen_iv_mine"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/axe_icon_2" />
 
     <TextView
@@ -508,46 +499,6 @@
         app:layout_constraintStart_toStartOf="@+id/activity_game_view_screen_iv_town"
         app:layout_constraintTop_toTopOf="@+id/activity_game_view_screen_iv_town"
         app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/activity_game_view_screen_tv_user1_icon1_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/textview_border_circle"
-        android:lineSpacingExtra="8sp"
-        android:text=" 0 "
-        android:textColor="#000000"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon1"
-        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user1_icon1"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user1_icon1"
-        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon1"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/activity_game_view_screen_tv_user1_icon2_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/textview_border_circle"
-        android:lineSpacingExtra="8sp"
-        android:text=" 0 "
-        android:textColor="#000000"
-        android:textSize="10sp"
-        tools:layout_editor_absoluteX="198dp"
-        tools:layout_editor_absoluteY="21dp" />
-
-    <TextView
-        android:id="@+id/activity_game_view_screen_tv_user1_icon3_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/textview_border_circle"
-        android:lineSpacingExtra="8sp"
-        android:text=" 0 "
-        android:textColor="#000000"
-        android:textSize="10sp"
-        tools:layout_editor_absoluteX="231dp"
-        tools:layout_editor_absoluteY="21dp" />
 
     <TextView
         android:id="@+id/activity_game_view_screen_tv_structure_pickaxe_quantity"
@@ -874,9 +825,9 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon2"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user1_icon2"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon2"
         app:layout_constraintVertical_bias="0.014"
         app:srcCompat="@drawable/ic_launcher_background" />
 
@@ -885,9 +836,9 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon3"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user1_icon3"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon3"
         app:layout_constraintVertical_bias="0.014"
         app:srcCompat="@drawable/ic_launcher_background" />
 
@@ -896,9 +847,9 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon4"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user1_icon4"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon4"
         app:layout_constraintVertical_bias="0.014"
         app:srcCompat="@drawable/ic_launcher_background" />
 
@@ -907,9 +858,410 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon5"
         app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user1_icon5"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon5"
         app:srcCompat="@drawable/ic_launcher_background" />
 
+    <ImageView
+        android:id="@+id/activity_gameview_screen_iv_user1_icon7"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon6"
+        app:layout_constraintStart_toEndOf="@+id/activity_gameview_screen_iv_user1_icon6"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user1_icon1_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon1"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user1_icon1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user1_icon1"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon1"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user1_icon2_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon2"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user1_icon2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user1_icon2"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon2"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user1_icon3_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon3"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user1_icon3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user1_icon3"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon3"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user1_icon4_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon4"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user1_icon4"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user1_icon4"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon4"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user1_icon5_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon5"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user1_icon5"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user1_icon5"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon5"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user1_icon6_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon6"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user1_icon6"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user1_icon6"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon6"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user1_icon7_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user1_icon7"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user1_icon7"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user1_icon7"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user1_icon7"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user2_icon1_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon1"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user2_icon1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user2_icon1"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user2_icon1"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user2_icon2_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon2"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user2_icon2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user2_icon2"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user2_icon2"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user2_icon3_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon3"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user2_icon3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user2_icon3"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user2_icon3"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user2_icon4_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon4"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user2_icon4"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user2_icon4"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user2_icon4"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user2_icon5_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon5"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user2_icon5"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user2_icon5"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user2_icon5"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user2_icon6_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon6"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user2_icon6"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user2_icon6"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user2_icon6"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user2_icon7_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user2_icon7"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user2_icon7"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user2_icon7"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user2_icon7"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user3_icon1_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon1"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user3_icon1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user3_icon1"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user3_icon1"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user3_icon2_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon2"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user3_icon2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user3_icon2"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user3_icon2"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user3_icon3_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon3"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user3_icon3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user3_icon3"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user3_icon3"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user3_icon4_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon4"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user3_icon4"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user3_icon4"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user3_icon4"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user3_icon5_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon5"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user3_icon5"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user3_icon5"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user3_icon5"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user3_icon6_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon6"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user3_icon6"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user3_icon6"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user3_icon6"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_user3_icon7_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_user3_icon7"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_user3_icon7"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_user3_icon7"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_user3_icon7"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_current_user_icon1_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border_circle"
+        android:lineSpacingExtra="8sp"
+        android:text=" 0 "
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_gameview_screen_iv_current_user_icon1"
+        app:layout_constraintEnd_toEndOf="@+id/activity_gameview_screen_iv_current_user_icon1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/activity_gameview_screen_iv_current_user_icon1"
+        app:layout_constraintTop_toTopOf="@+id/activity_gameview_screen_iv_current_user_icon1"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/textview_border_rectangle"
+        android:text=" 60 seconds "
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/activity_game_view_screen_iv_house"
+        app:layout_constraintStart_toEndOf="@+id/activity_game_view_screen_iv_town"
+        app:layout_constraintTop_toBottomOf="@+id/activity_game_view_tv_current_username" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_die1"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/textview_border_rectangle"
+        android:text="1"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/activity_game_view_screen_tv_timer"
+        app:layout_constraintTop_toBottomOf="@+id/activity_game_view_screen_tv_timer" />
+
+    <TextView
+        android:id="@+id/activity_game_view_screen_tv_die2"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/textview_border_rectangle"
+        android:text="1"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/activity_game_view_screen_tv_timer"
+        app:layout_constraintTop_toTopOf="@+id/activity_game_view_screen_tv_die1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
