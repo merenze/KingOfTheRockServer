@@ -2,7 +2,9 @@ package com.example.frontend.SupportingClasses.websocket;
 
 import android.util.Log;
 
+import com.example.frontend.Entities.IUser;
 import com.example.frontend.Entities.User;
+import com.example.frontend.LoginScreen;
 import com.example.frontend.SupportingClasses.Constants;
 
 import org.java_websocket.client.WebSocketClient;
@@ -18,14 +20,13 @@ import java.net.URISyntaxException;
 public class GameWebSocket {
     private static final String TAG = GameWebSocket.class.toString();
     private static final Draft DRAFT = new Draft_6455();
+    private static final IUser user = LoginScreen.getCurrentUser();
 
     private int gameId;
-    private User user;
     private WebSocketClient client;
 
 
-    public GameWebSocket(User user, int gameId) throws URISyntaxException {
-        this.user = user;
+    public GameWebSocket(int gameId) throws URISyntaxException {
         this.gameId = gameId;
     }
 
