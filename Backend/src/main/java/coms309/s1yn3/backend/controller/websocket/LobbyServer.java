@@ -47,7 +47,8 @@ public class LobbyServer extends AbstractWebSocketServer {
 		if (getSession(user) != null) {
 			logger.warnf("User <%s> attempted lobby connection; already connected", user.getUsername());
 			session.getBasicRemote().sendText(new JSONObject()
-					.put("message", "<%s> is already connected to a lobby or game.")
+					.put("type", "failed-connection")
+					.put("message", String.format("<%s> is already connected to a lobby or game.", user.getUsername()))
 					.toString()
 			);
 			session.close();
@@ -58,6 +59,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 		if (lobby == null) {
 			logger.infof("User <%s> attempted connection to nonexistent lobby <%s>", user, lobbyCode);
 			session.getBasicRemote().sendText(new JSONObject()
+					.put("type", "failed-connection")
 					.put("message", String.format("No lobby with code <%s>", lobbyCode))
 					.toString()
 			);
@@ -68,6 +70,7 @@ public class LobbyServer extends AbstractWebSocketServer {
 		if (lobby.getPlayers().size() >= Game.MAX_PLAYERS) {
 			logger.infof("User <%s> attempted connection to full lobby <%s>", user, lobby.getCode());
 			session.getBasicRemote().sendText(new JSONObject()
+					.put("type", "failed-connection")
 					.put("message", String.format("Lobby <%s> is already full.", lobbyCode))
 					.toString()
 			);
