@@ -60,12 +60,13 @@ public class GameViewScreen extends AppCompatActivity {
         currentUser = LoginScreen.getCurrentUser();
         Log.d("GameViewScreen", currentUser.toString());
 
-        Bundle bundle = getIntent().getExtras();
-        String jsonGameObjectString = bundle.getString("game-object-string");
+//        Bundle bundle = getIntent().getExtras();
+//        String jsonGameObjectString = bundle.getString("game-object-string");
+        String jsonGameObjectString = "game-object-string";
 
         try {
             jsonGameObject = new JSONObject(jsonGameObjectString);
-            initialTextUpdate();
+            //initialTextUpdate();
         } catch (JSONException e) {
             Log.d(GameViewScreen.class.toString(), "Error converting JSON string to JSON");
             e.printStackTrace();
@@ -82,11 +83,6 @@ public class GameViewScreen extends AppCompatActivity {
                 intent.putExtra("game-object-string", jsonGameObjectString);
                 startActivity(intent);
             }
-        });
-
-        Button menuButton = (Button) findViewById(R.id.activity_game_view_screen_button_menu);
-        menuButton.setOnClickListener(view -> {
-            //start menu pop-up
         });
 
         Button chatButton = (Button) findViewById(R.id.activity_game_view_screen_button_chat);
