@@ -1,6 +1,6 @@
 # King of the Rock - Server
 
-King of the Rock is a video game for four players, designed for Android as a student project for [COM S 309: Software Development Practices](https://www.cs.iastate.edu/courses/com-s-309) at Iowa State University. The backend is built with [Spring Boot](https://spring.io/projects/spring-boot).
+King of the Rock is a video game for four players, designed for Android by a four-student team for [COM S 309: Software Development Practices](https://www.cs.iastate.edu/courses/com-s-309) at Iowa State University. The backend is built with [Spring Boot](https://spring.io/projects/spring-boot).
 
 The objective is to collect materials through trade and random generation in order to build structures worth points.
 
