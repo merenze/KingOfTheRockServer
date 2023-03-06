@@ -6,7 +6,7 @@ The objective is to collect materials through trade and random generation in ord
 
 This project contains all the files necessary to run the server application.
 
-## A Note About This Project's Completeness
+### A Note About This Project's Completeness
 This application is the product of the spring 2022 semester.
 It was developed primarily as a vehicle for learning Spring Boot and collaborative development practices.
 It was abandoned at the semester's conclusion and is not under active development.
